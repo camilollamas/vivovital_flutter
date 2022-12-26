@@ -140,7 +140,7 @@ class LoginPage extends StatelessWidget {
           children: [
             _textFieldEmail(),
             _textFieldPassword(),
-            _buttonLogin(),
+            _buttonLogin(context),
             _textDontHaveAccount()
           ]
         ),
@@ -175,12 +175,12 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
-  Widget _buttonLogin(){
+  Widget _buttonLogin(BuildContext context){
     return Container(
       width: double.infinity,
       margin: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
       child: ElevatedButton(
-          onPressed: () => con.login(),
+          onPressed: () => con.login(context),
           style: ElevatedButton.styleFrom(
             padding: EdgeInsets.symmetric(vertical: 5)
           ),

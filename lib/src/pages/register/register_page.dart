@@ -148,6 +148,16 @@ class RegisterPage extends StatelessWidget {
     return Container(
         height: MediaQuery.of(context).size.height * 2.0,
         margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.23, left: 50, right: 50 ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.black54,
+              blurRadius: 15,
+              offset: Offset(0, 0.75)
+            )
+          ]
+        ),
         child: SingleChildScrollView(
           child: Column(
               children: [
