@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:load/load.dart';
 import 'package:vivovital_app/src/models/user.dart';
 import 'package:vivovital_app/src/pages/dates/dates_page.dart';
 import 'package:vivovital_app/src/pages/login/login_page.dart';
 import 'package:vivovital_app/src/pages/monitoring/monitoring_page.dart';
 import 'package:vivovital_app/src/pages/notifications/notifications_page.dart';
 import 'package:vivovital_app/src/pages/profile/profile_page.dart';
+import 'package:vivovital_app/src/pages/profile/update/update_profile_page.dart';
 import 'package:vivovital_app/src/pages/register/register_page.dart';
 import 'package:vivovital_app/src/pages/home/home_page.dart';
+import 'package:vivovital_app/src/pages/paid/paid_page.dart';
 
 User userSession = User.fromJson(GetStorage().read('user') ?? {});
 
 void main() async {
   await GetStorage.init();
-  runApp(const MyApp());
+  runApp(
+    LoadingProvider(
+        child: const MyApp(),
+        themeData: LoadingThemeData())
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -47,9 +54,11 @@ class _MyAppState extends State<MyApp> {
         GetPage(name: '/register', page: () => RegisterPage() ),
         GetPage(name: '/home', page: () => HomePage() ),
         GetPage(name: '/profile', page: () => ProfilePage() ),
+        GetPage(name: '/update_profile', page: () => UpdateProfilePage() ),
         GetPage(name: '/monitoring', page: () => MonitoringPage() ),
         GetPage(name: '/notifications', page: () => NotificationsPage() ),
-        GetPage(name: '/dates', page: () => DatesPage() )
+        GetPage(name: '/dates', page: () => DatesPage() ),
+        GetPage(name: '/paid', page: () => PaidPage() )
       ],
       theme: ThemeData(
         primaryColor: Color(0xff243588),

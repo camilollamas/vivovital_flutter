@@ -35,7 +35,7 @@ class Result {
   });
 
   List<Recordset>? recordset;
-  List<dynamic>? recordsets;
+  dynamic recordsets;
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
     //recordset: List<dynamic>.from(json["recordset"].map((x) => x)),

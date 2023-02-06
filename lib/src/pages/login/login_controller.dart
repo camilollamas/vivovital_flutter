@@ -1,13 +1,20 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 import 'package:vivovital_app/src/models/json.dart';
 import 'package:vivovital_app/src/models/response_api.dart';
 import 'package:vivovital_app/src/providers/json_provider.dart';
-import 'dart:convert';
+import 'package:load/load.dart';
+import 'package:vivovital_app/src/models/user.dart';
 
 class LoginController extends GetxController {
+  // User user = User.fromJson(GetStorage().read('user') ?? {});
+
+  LoginController(){
+    GetStorage().write('user', {});
+    print('=====>>>> LoginController');
+  }
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -17,15 +24,15 @@ class LoginController extends GetxController {
   void goToRegisterPage(){
     Get.toNamed('/register');
   }
-
   void login(BuildContext context) async{
-    onLoading(context, true, 'Cargando...');
+    FocusManager.instance.primaryFocus?.unfocus();
+    showLoadingDialog();
 
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
-    print('Email: ${email}');
-    print('Pass: ${password}');
+    // print('Email: ${email}');
+    // print('Pass: ${password}');
 
     if(isValidForm(email, password)){
 
@@ -39,31 +46,44 @@ class LoginController extends GetxController {
         }
       );
       //print('json:  ${json}');
+      // processDialog.close();
       ResponseApi res = await jsonProvider.json(json);
-      onLoading(context, false, '');
+      hideLoadingDialog();
+
       if(res.res == 'ok'){
 
         if(res.result?.recordset![0].ok == 'OK'){
 
           List Afiliado = res.result?.recordsets![1];
           Map afi = Afiliado[0];
-          print('Afiliado: ${afi}');
+          // print('Afiliado: ${afi}');
 
           GetStorage().write('user', afi);
           // Get.snackbar('Hola ${afi['PNOMBRE']}', 'Bienvenido!');
           goToHomePage();
         }else{
+          hideLoadingDialog();
           List Error = res.result?.recordsets![1];
           Map detail = Error[0];
-          Get.snackbar('Error: ', detail['ERROR']);
+          Get.snackbar(
+              'Aviso: ',
+              detail['ERROR'],
+              colorText: Colors.white,
+              backgroundColor: Colors.red,
+              icon: const Icon(Icons.error_outline)
+          );
         }
       }else{
+        hideLoadingDialog();
         Get.snackbar('Error: ', 'Hubo un problema con el servidor');
       }
+    }else{
+      hideLoadingDialog();
     }
   }
   void goToHomePage() {
-    Get.toNamed('/home');
+    // Get.toNamed('/home');
+    Get.offNamed('/home');
   }
   bool isValidForm(String email, String password){
 
@@ -82,15 +102,4 @@ class LoginController extends GetxController {
     }
     return true;
   }
-  void onLoading(BuildContext context,bool method, String msg){
-    ProgressDialog processDialog = ProgressDialog(context: context);
-    if(method){
-      processDialog.show(max: 100, msg: msg);
-    }else{
-      processDialog.close();
-    }
-  }
-}
-
-class ERROR {
 }

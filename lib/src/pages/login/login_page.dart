@@ -3,35 +3,36 @@ import 'package:get/get.dart';
 import 'package:vivovital_app/src/pages/login/login_controller.dart';
 
 class LoginPage extends StatelessWidget {
-  
   LoginController con = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        //bottomNavigationBar: Container(
-        //    height: 50,
-        //    child: _textDontHaveAccount()
-        //),
-        body: Stack(
+    return
+      Stack(
         children: [
           _imageBgWhite(),
-          _imageBg(),
+          Positioned.fill(
+            child:
+              _imageBg(context)
+          ),
           _bgDegrade(context),
-          _boxForm(context),
-
-
-          Column(
-            children:[
-              _imageLogo(),
-              _imageLines(),
-              _textLogin()
-          ]
-
+          Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Stack(
+              children: [
+                _boxForm(context),
+                Column(
+                  children:[
+                    _imageLogo(),
+                    _imageLines(),
+                    _textLogin(),
+                  ]
+                )
+              ]
+            )
           )
         ]
-      )
-    );
+      );
   }
 
   //Métodos Privados
@@ -57,27 +58,26 @@ class LoginPage extends StatelessWidget {
         )
     );
   }
+
   Widget _bgDegrade(BuildContext context){
     return Container(
       height: MediaQuery.of(context).size.height * 0.4,
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: Colors.transparent,
           boxShadow: <BoxShadow>[
             BoxShadow(
                 color: Colors.white,
-                blurRadius: 30,
-                offset: Offset(0, 1.75)
+                blurRadius: 10,
+                offset: Offset(0, 0)
             )
           ]
       ),
     );
   }
-  Widget _imageBg(){
-    return Container(
-
-        child: Image.asset(
-            'assets/img/background.png'
-        )
+  Widget _imageBg(BuildContext context){
+    return  Image.asset(
+      'assets/img/background.png',
+      fit: BoxFit.cover,
     );
   }
   Widget _imageBgWhite(){
@@ -87,6 +87,7 @@ class LoginPage extends StatelessWidget {
       color: Colors.white,
     );
   }
+
   Widget _textLogin(){
     return Text(
       'Iniciar Sesión',
@@ -180,7 +181,11 @@ class LoginPage extends StatelessWidget {
       width: double.infinity,
       margin: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
       child: ElevatedButton(
-          onPressed: () => con.login(context),
+          onPressed: () =>
+          {
+            // _showLoading(context)
+          con.login(context),
+          },
           style: ElevatedButton.styleFrom(
             padding: EdgeInsets.symmetric(vertical: 5)
           ),

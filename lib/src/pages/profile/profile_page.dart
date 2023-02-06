@@ -9,52 +9,113 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.menu,
-            color: Color(0xFFFFFFFF),
-            size: 30,
+    return GetBuilder<ProfileController>(
+      init: con,
+      initState: (_) {
+        con.setValues();
+      },
+      builder: (_) {
+        return
+          Stack(
+              children: [
+                _imageBgWhite(),
+                Positioned.fill(
+            child:
+            _imageBg(context)
           ),
-          onPressed: () => {scaffoldKey.currentState?.openDrawer()},
-        ),
-        title: Text(
-            'VivoVital App',
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.w300,
-              color: Color(0xFFFFFFFF),
-              fontFamily: 'AvenirReg',
-            )
-        ),
-      ),
-      body: Stack(
-        children:[
-          _boxDataPerson(context),
-          Column(
-            children: [
-              _imageAvatar(),
-              _fistName(),
-              _document(),
-            ],
-          ),
-
-        ]
-
-      ),
-      key: scaffoldKey,
-      drawer: Drawer(
-        child: _drawerList(),
-      ),
-
+                _bgDegrade(context),
+                Scaffold(
+                  backgroundColor: Colors.transparent,
+                  appBar: AppBar(
+                    leading: IconButton(
+                    icon: const Icon(
+                      Icons.menu,
+                      color: Color(0xFFFFFFFF),
+                      size: 30,
+                    ),
+                    onPressed: () => {scaffoldKey.currentState?.openDrawer()},
+                    ),
+                    title: const Text('VivoVital App',
+                      style: TextStyle(
+                        fontSize: 30, fontWeight: FontWeight.w300,
+                        color: Color(0xFFFFFFFF), fontFamily: 'AvenirReg',
+                      )
+                    ),
+                ),
+                  body: Stack(
+                    children:[
+                      _boxDataPerson(context),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          _buttonBack(),
+                          _textEditForm(),
+                        ],
+                      ),
+                    ]
+                  ),
+                  key: scaffoldKey,
+                  drawer: Drawer(
+                    child: _drawerList(),
+                  ),
+                )
+              ]
+          );
+      }
     );
   }
 
+  Widget _bannerInfo(){
+    return MaterialBanner(
+        padding: EdgeInsets.all(5),
+        leading: Icon(Icons.add_alert_outlined, color: Colors.white,),
+        backgroundColor: Colors.red,
+        content: Text(
+            'Completa tus datos personales para continuar con el proceso.',
+            style: TextStyle(
+                fontSize: 14,
+              // fontWeight: FontWeight.w300,
+              color: Colors.white,
+              fontFamily: 'AvenirReg',
+            )
+          ),
+        actions: <Widget>[
+          ElevatedButton(
+              onPressed: () {
+                con.onEditProfile();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                  shadowColor: Colors.transparent,
+                  padding: EdgeInsets.symmetric(vertical: 0)
+              ),
+              child: Text(
+                'Editar',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w300,
+                  fontFamily: 'AvenirBold',
+                ),
+              )
+          ),
+        ]
+    );
+  }
+  Widget _textTilte(){
+    return Text(
+        'Perfil',
+      style: TextStyle(
+        fontSize: 20,
+        color: Color(0xFF243588),
+        fontFamily: 'AvenirReg'
+      ),
+    );
+  }
   Widget _imageAvatar(){
     return SafeArea(
       child: Container(
-          margin: EdgeInsets.only(top: 20),
+          margin: const EdgeInsets.only(top: 20),
           alignment: Alignment.center,
           child: Image.asset(
             'assets/img/avatars/male.png',
@@ -96,6 +157,16 @@ class ProfilePage extends StatelessWidget {
           ),
         )
     );
+  }
+  Widget _divider(){
+    return
+        Divider(
+          color: Colors.black54,
+          height: 10,
+          thickness: 0,
+          indent: 10,
+          endIndent: 10,
+        );
   }
   Widget _gender(){
     return ListTile(
@@ -268,7 +339,7 @@ class ProfilePage extends StatelessWidget {
   Widget _eps(){
     return ListTile(
       leading: Icon(Icons.health_and_safety_outlined),
-      title: Text('${con.user.aseguradora}',
+      title: Text('${con.user.aseguradora != null ? con.Aseguradora.label : ''}',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w100,
@@ -310,7 +381,7 @@ class ProfilePage extends StatelessWidget {
   Widget _whoPrepaid(){
     return ListTile(
       leading: Icon(Icons.question_answer),
-      title: Text('${con.user.coberturaSalud}',
+      title: Text('${con.user.idclaseafiliacion == 'Si' ? con.prepagada.label : ''}',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w100,
@@ -321,25 +392,44 @@ class ProfilePage extends StatelessWidget {
       subtitle: Text('¿Cuál Prepagada/Póliza/Plan Complementario? '),
     );
   }
-
+  Widget _btnEdit(){
+    return Container(
+        margin: EdgeInsets.only(top: 10, left: 5, right: 0, bottom: 15 ),
+        child: FloatingActionButton.extended(
+          onPressed: () {  con.onEditProfile(); },
+          backgroundColor: Color(0xFF243588),
+          icon: Icon(Icons.edit, color: Colors.white),
+          label: Text(
+              'Editar',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w300,
+                color: Colors.white,
+                fontFamily: 'AvenirReg',
+              )
+          ),
+        )
+    );
+  }
 
   Widget _boxDataPerson(BuildContext context){
     return Container(
       height: MediaQuery.of(context).size.height * 2.0,
-      margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.23, left: 30, right: 30, bottom: 10 ),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Color(0xFF243588),
-                  blurRadius: 5,
-                  offset: Offset(0, 0)
-              )
-            ]
-        ),
-        child: SingleChildScrollView(
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.06, left: 00, right: 0, bottom: 0 ),
+      child: SingleChildScrollView(
         child: Column(
           children: [
+            // Text('okbd=> ${con.user.okbd ?? ''}'),
+
+            Visibility(
+              visible: con.user.okbd == '0',
+                child: _bannerInfo(),
+            ),
+            _imageAvatar(),
+            _fistName(),
+            _document(),
+            _divider(),
+
             _gender(),
             _yearOld(),
             _birtDay(),
@@ -356,14 +446,70 @@ class ProfilePage extends StatelessWidget {
             _epsType(),
             _prepaid(),
             _whoPrepaid(),
+            _btnEdit(),
           ]
         )
       )
     );
   }
+  Widget _buttonBack() {
+    return SafeArea(
+        child: Container(
+            margin: EdgeInsets.only(left: 20),
+            child: IconButton(
+              onPressed: () => Get.offNamed('/home'),
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Color(0xFF243588),
+                size: 20,
+              ),
+            )
+        )
+    );
+  }
+  Widget _textEditForm(){
+    return const Text(
+        'Perfil',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w300,
+          color: Color(0xFF243588),
+          fontFamily: 'AvenirReg',
+        )
+    );
+  }
+
+  Widget _bgDegrade(BuildContext context){
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.4,
+      decoration: BoxDecoration(
+          color: Colors.transparent,
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: Colors.white,
+                blurRadius: 10,
+                offset: Offset(0, 0)
+            )
+          ]
+      ),
+    );
+  }
+  Widget _imageBg(BuildContext context){
+    return  Image.asset(
+      'assets/img/background.png',
+      fit: BoxFit.cover,
+    );
+  }
+  Widget _imageBgWhite(){
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: Colors.white,
+    );
+  }
+
 
   Widget _drawerList(){
     return CustomDrawerMenu();
   }
-
 }

@@ -2,23 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:vivovital_app/src/utils/utils_controller.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:vivovital_app/src/models/user.dart';
+
 
 class CustomDrawerMenu extends StatelessWidget {
   UtilController con = Get.put(UtilController());
+
+  User user = User.fromJson(GetStorage().read('user') ?? {});
 
   @override
   Widget build(BuildContext context) {
     var route = ModalRoute.of(context);
     final drawerHeader = UserAccountsDrawerHeader(
       accountName: Text(
-        '${con.user.pnombre!} ${con.user.snombre!} '
-        '${con.user.papellido!} ${con.user.sapellido!} ',
+        '${user.pnombre! ?? ''} ${user.snombre! ?? ''} '
+        '${user.papellido! ?? ''} ${user.sapellido! ?? ''} ',
       ),
       accountEmail: Text(
-        '${con.user.email!}',
+        '${user.email! ?? ''}'
+        ' ${user.noadmision! ?? ''}',
       ),
       currentAccountPicture: CircleAvatar(
-        backgroundImage: con.user.sexo == 'Masculino'
+        backgroundImage: user.sexo == 'Masculino'
             ? AssetImage('assets/img/avatars/male.png') as ImageProvider
             : AssetImage('assets/img/avatars/female.png') as ImageProvider,
         //child: FlutterLogo(size: 42.0),
@@ -64,8 +70,8 @@ class CustomDrawerMenu extends StatelessWidget {
                 'Perfil',
                 style: TextStyle(
                   fontSize: 20,
-                  // color: '/profile' == route?.settings.name
-                  //     ? Colors.white :Color(0xFF243588),
+                  color: '/profile' == route?.settings.name
+                      ? Colors.white :Color(0xFF243588),
                   fontWeight: FontWeight.w300,
                   fontFamily: 'AvenirReg',
                 ),
@@ -165,7 +171,9 @@ class CustomDrawerMenu extends StatelessWidget {
               color: Color(0xFF243588),
               size: 30,
             ),
-            onTap: () => con.LogOut(),
+            onTap: () => {
+              con.LogOut()
+            },
           )
         ]
     );
