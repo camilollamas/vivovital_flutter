@@ -47,6 +47,9 @@ dependencies:
   flutter_credit_card: ^3.0.5
   intl: ^0.17.0
   video_player: ^2.5.1
+  appinio_video_player: ^1.2.0
+  pdf: ^3.6.0
+  permission_handler: ^8.2.2
 
 dev_dependencies:
   flutter_test:

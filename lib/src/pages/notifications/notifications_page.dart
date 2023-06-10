@@ -1,20 +1,74 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:load/load.dart';
 import 'package:vivovital_app/src/pages/notifications/notifications_controller.dart';
 import 'package:vivovital_app/src/utils/drawer_menu.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/alerta.dart';
 
-class NotificationsPage extends StatelessWidget {
+import 'package:appinio_video_player/appinio_video_player.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+
+String longVideo = "http://192.168.1.11:90/docs/0DA29342-FC20-4405-A5C2-CFD24F629B11.mp4"; //con.urlVideo.value!;
+
+class NotificationsPage extends StatefulWidget {
+  @override
+  State<NotificationsPage> createState() => _NotificationsPageState();
+}
+class NotificationsPageState extends StatefulWidget {
+  @override
+  _NotificationsPageState createState() => _NotificationsPageState();
+}
+
+class _NotificationsPageState extends State<NotificationsPage>
+  with SingleTickerProviderStateMixin {
+  late final _tabController = TabController(length: 2, vsync: this);
+
   NotificationsController con = Get.put(NotificationsController());
+
+
+
+
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
+// ==============================
+  late VideoPlayerController _videoPlayerController;
+  late CustomVideoPlayerController _customVideoPlayerController;
+  late CustomVideoPlayerWebController _customVideoPlayerWebController;
+  final CustomVideoPlayerSettings _customVideoPlayerSettings =
+  const CustomVideoPlayerSettings();
+
+  final CustomVideoPlayerWebSettings _customVideoPlayerWebSettings =
+  CustomVideoPlayerWebSettings(
+    src: longVideo,
+  );
+
+  @override
+  void dispose() {
+    _customVideoPlayerController.dispose();
+  }
+
+// ====================== 75BD18E8-75B6-48CC-84F2-CA1F240F274A.mp4
   @override
   Widget build(BuildContext context) {
+   //..initialize().then((value) => con.updates());
     return GetBuilder<NotificationsController>(
         init: con,
         initState: (_) {
+          _videoPlayerController = VideoPlayerController.network(longVideo);
+          // _customVideoPlayerController = CustomVideoPlayerController(
+          //   context: context,
+          //   videoPlayerController: _videoPlayerController,
+          //   customVideoPlayerSettings: _customVideoPlayerSettings,
+          //   additionalVideoSources: { "720p": _videoPlayerController },
+          // );
+
+          _customVideoPlayerWebController = CustomVideoPlayerWebController(
+            webVideoPlayerSettings: _customVideoPlayerWebSettings,
+          );
+
           con.getDay();
         },
         builder: (_) {
@@ -27,69 +81,173 @@ class NotificationsPage extends StatelessWidget {
                       _imageBg(context)
                   ),
                   _bgDegrade(context),
-                  Scaffold(
-                    backgroundColor: Colors.transparent,
-                    appBar: AppBar(
-                      leading: IconButton(
-                        icon: Icon(
-                          Icons.menu,
-                          color: Color(0xFFFFFFFF),
-                          size: 30,
-                        ),
-                        onPressed: () => {scaffoldKey.currentState?.openDrawer()},
-                      ),
-                      title: Text(
-                          'VivoVital App',
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.w300,
+                  DefaultTabController(
+                    initialIndex: 0,
+                    length: 2,
+                    child: Scaffold(
+                      backgroundColor: Colors.transparent,
+                      appBar: AppBar(
+                        leading: IconButton(
+                          icon: const Icon(
+                            Icons.menu,
                             color: Color(0xFFFFFFFF),
-                            fontFamily: 'AvenirReg',
-                          )
+                            size: 30,
+                          ),
+                          onPressed: () => {scaffoldKey.currentState?.openDrawer()},
+                        ),
+                        title: const Text(
+                            'VivoVital App',
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w300,
+                              color: Color(0xFFFFFFFF),
+                              fontFamily: 'AvenirReg',
+                            )
+                        ),
                       ),
-                    ),
-                    body: Stack(
-                        children:[
-                          Container(
-                              height: MediaQuery.of(context).size.height * 2.0,
-                              margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.12, left: 0, right: 0, bottom: 0),
-                                child: Column(
-                                  children: [
-                                    _listView()
-                                  ]
-                              )
+                      body: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          Stack(
+                            children:[
+                              Container(
+                                  height: MediaQuery.of(context).size.height * 2.0,
+                                  margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.12, left: 0, right: 0, bottom: 0),
+                                    child: Column(
+                                      children: [
+                                        _listView()
+                                      ]
+                                  )
+                              ),
+                              Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      _buttonBack(),
+                                      _textTitlePage(),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      _TextDate(),
+                                    ],
+                                  ),
+                                  _divider()
+                                ],
+                              ),
+                            ]
                           ),
-                          Column(
+                          Stack(
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  _buttonBack(),
-                                  _textTitlePage(),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  _TextDate(),
-                                ],
-                              ),
-                              _divider()
-                            ],
-                          ),
+                              CupertinoPageScaffold(
+                                child: SafeArea(
+                                  child: ListView(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                              margin: EdgeInsets.only(left: 20),
+                                              child: IconButton(
+                                                onPressed: () => {
+                                                  setState(() {
+                                                  _videoPlayerController.pause();
+                                                  // _videoPlayerController.dispose(),
+                                                    _tabController.index = 0;
+                                                  }),
 
-                          // _buttonDatePicker(),
-                        ]
-                    ),
-                    key: scaffoldKey,
-                    drawer: Drawer(
-                      child: _drawerList(),
+                                                },
+                                                icon: Icon(
+                                                  Icons.arrow_back_ios,
+                                                  color: Color(0xFF243588),
+                                                  size: 20,
+                                                ),
+                                              )
+                                          ),
+                                          Text('${con.titleVideo.value ?? ''}',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w300,
+                                                color: Color(0xFF243588),
+                                                fontFamily: 'AvenirReg',
+                                              ),
+                                          ),
+
+                                        ],
+                                      ),
+                                      // Text('${_videoPlayerController}'),
+
+                                      // kIsWeb ? Expanded(
+                                      //   child: CustomVideoPlayerWeb(
+                                      //           customVideoPlayerWebController:
+                                      //           _customVideoPlayerWebController,
+                                      //         ),
+                                      //   )
+                                      _videoPlayerController.value.isInitialized ? CustomVideoPlayer(
+                                          customVideoPlayerController: _customVideoPlayerController )
+                                      : Container(),
+                                      // CustomVideoPlayer(
+                                      //     customVideoPlayerController: _customVideoPlayerController ,
+                                      //   ),
+                                      // CustomVideoPlayer(
+                                      //     customVideoPlayerController: _customVideoPlayerController
+                                      // ),
+                                      CupertinoButton(
+                                        child: _videoPlayerController.value.isInitialized ? const Text("Ver en pantalla completa") : Container(),
+                                          onPressed: () {
+                                            if (kIsWeb) {
+                                              _customVideoPlayerWebController.setFullscreen(true);
+                                              _customVideoPlayerWebController.play();
+                                            } else {
+                                              _customVideoPlayerController.setFullscreen(true);
+                                              _customVideoPlayerController.videoPlayerController.play();
+                                            }
+                                          },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                      key: scaffoldKey,
+                      drawer: Drawer(
+                        child: _drawerList(),
+                      ),
                     ),
                   )
                 ]
             );
         }
     );
+  }
+
+  void setVideoController(String? urlVideo){
+    // print('${_videoPlayerController}'),
+    // Future.delayed(const Duration(seconds: 4), () {
+    setState(() {
+        _videoPlayerController = VideoPlayerController.network(
+          "http://192.168.1.11:90/docs/${urlVideo}.mp4",
+        )..initialize().then((value) => con.updates());
+
+        _customVideoPlayerController = CustomVideoPlayerController(
+          context: context,
+          videoPlayerController: _videoPlayerController,
+          customVideoPlayerSettings: _customVideoPlayerSettings,
+          additionalVideoSources: { "720p": _videoPlayerController },
+        );
+        _customVideoPlayerWebController = CustomVideoPlayerWebController(
+          webVideoPlayerSettings: _customVideoPlayerWebSettings,
+        );
+    });
+      // _videoPlayerController.play();
+    // });
+
+
   }
 
   Widget _listView(){
@@ -191,7 +349,21 @@ class NotificationsPage extends StatelessWidget {
                         Visibility(
                           visible: alerta.tipo  == 'Video',
                             child: FloatingActionButton.extended(
-                                onPressed: () => { con.getVideo(context,alerta.iddocs) },
+                                onPressed: () => {
+                                  con.getVideo(context,alerta.iddocs, alerta.titulo, alerta.descripcion),
+                                  showLoadingDialog(),
+                                  setState(() {
+                                    setVideoController(alerta.iddocs);
+                                    Future.delayed(const Duration(seconds: 3), (){
+                                      hideLoadingDialog();
+                                      // con.getVideo(context,alerta.iddocs, alerta.titulo, alerta.descripcion);
+                                      _tabController.index = 1;
+                                      _videoPlayerController.play();
+
+                                    });
+                                  })
+
+                                },
                                 icon: Icon(Icons.play_arrow, color: Colors.white),
                                 backgroundColor: Color(0xFF03a9f4),
                                 label: const Text(
@@ -320,6 +492,7 @@ class NotificationsPage extends StatelessWidget {
       ],
     );
   }
+
   Widget _divider(){
     return
       Divider(
@@ -346,12 +519,14 @@ class NotificationsPage extends StatelessWidget {
       ),
     );
   }
+
   Widget _imageBg(BuildContext context){
     return  Image.asset(
       'assets/img/background.png',
       fit: BoxFit.cover,
     );
   }
+
   Widget _imageBgWhite(){
     return Container(
       width: double.infinity,
@@ -359,6 +534,7 @@ class NotificationsPage extends StatelessWidget {
       color: Colors.white,
     );
   }
+
   Widget _buttonBack() {
     return SafeArea(
         child: Container(
@@ -374,20 +550,22 @@ class NotificationsPage extends StatelessWidget {
         )
     );
   }
+
   Widget _textTitlePage(){
-    return const Text(
-        'Notificaciones',
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w300,
-          color: Color(0xFF243588),
-          fontFamily: 'AvenirReg',
-        )
+    return Container(
+      child: const Text(
+          'Notificaciones',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w300,
+            color: Color(0xFF243588),
+            fontFamily: 'AvenirReg',
+          )
+      ),
     );
   }
 
   Widget _drawerList(){
     return CustomDrawerMenu();
   }
-
 }

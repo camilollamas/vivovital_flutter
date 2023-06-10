@@ -16,7 +16,13 @@ class NotificationsController extends GetxController {
   User user = User.fromJson(GetStorage().read('user') ?? {});
   JsonProvider jsonProvider = JsonProvider();
   Notificacion notificacion = Notificacion();
+  late final tabController;
+
   List<Alerta> notify = [];
+
+  var titleVideo= ''.obs;
+  var descVideo= ''.obs;
+  var urlVideo= ''.obs;
 
   var selectedDate = DateTime.now().obs;
   var showNotify = false.obs;
@@ -108,8 +114,15 @@ class NotificationsController extends GetxController {
     return notify;
   }
 
-  void getVideo(context, String? iddoc) async{
+  Future<bool> getVideo(context, String? iddoc, String? title, String? desc) async{
+
+    titleVideo.value=title!;
+    descVideo.value=desc!;
+    update();
+
     print('===>>> getVideo <<<=== ${iddoc}');
+
+    return true;
 
     showLoadingDialog();
     Json json = Json(
@@ -119,7 +132,6 @@ class NotificationsController extends GetxController {
     );
 
     ResponseApi res = await jsonProvider.json(json);
-
 
     var result = res.result!.recordsets[0][0];
     print('=>>> ${result}');
@@ -139,16 +151,23 @@ class NotificationsController extends GetxController {
     hideLoadingDialog();
     if(resp['res'] == 'ok'){
       print('RESP=> ${resp['result']}');
-      String urlVideo = resp['result']['sourcePath'];
-      print('urlVideo ${urlVideo}');
-      showVideo(context, urlVideo);
+      urlVideo.value = 'http://192.168.1.11:90/${resp['result']['sourcePath']}';
+      print('urlVideo ${urlVideo.value}');
+      return true;
+      // showVideo(context, urlVideo);
     }
-
-
-
+    return false;
   }
 
   void showVideo (context, String? url) {
+    late VideoPlayerController urlVideo;
+    urlVideo = VideoPlayerController.network('http://192.168.1.11:90/docs/0DA29342-FC20-4405-A5C2-CFD24F629B11.mp4')
+    ..initialize().then((_) {
+    // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+      super.refresh();
+    });
+
+    print('urlVideo => ${urlVideo.value.aspectRatio}');
     showDialog(
         context: context,
         builder: (_) => SimpleDialog(
@@ -175,6 +194,34 @@ class NotificationsController extends GetxController {
                       fontFamily: 'AvenirReg'
                   ),
                 ),
+                true //urlVideo.value.isInitialized
+                  ? AspectRatio(aspectRatio: urlVideo.value.aspectRatio, child: VideoPlayer(urlVideo),
+                  ) : Container(child: Text('No mostrar ${urlVideo}')),
+                Container(
+                    child: VideoProgressIndicator(
+                        urlVideo,
+                        allowScrubbing: true,
+                        colors:VideoProgressColors(
+                          backgroundColor: Colors.redAccent,
+                          playedColor: Colors.green,
+                          bufferedColor: Colors.purple,
+                        )
+                    )
+                ),
+                Text('info ${urlVideo}'),
+                Container( //duration of video
+                  child: Text("Total Duration: " + urlVideo.value.duration.toString()),
+                ),
+                FloatingActionButton(
+                  onPressed: () {
+                    urlVideo.value.isPlaying ? urlVideo.pause() : urlVideo.play();
+                    super.refresh();
+                  },
+                  backgroundColor: Colors.greenAccent,
+                  child: Icon(
+                    urlVideo.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                  ),
+                ),
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                   child: Row(
@@ -190,7 +237,7 @@ class NotificationsController extends GetxController {
                           child: const Text(
                             'Cerrar',
                             style: TextStyle(
-                              color: Colors.redAccent,
+                              color: Colors.red,
                               fontSize: 18,
                               fontFamily: 'AvenirReg',
                             ),
@@ -205,6 +252,21 @@ class NotificationsController extends GetxController {
         )
     );
   }
+
+  void updates(){
+    super.refresh();
+  }
+  void disposes(){
+    super.dispose();
+  }
+
+  void changeTab(context, int? tab){
+    print('contexto => ${context}');
+    DefaultTabController.of(context)?.animateTo(1);
+    updates();
+  }
+
+
 
   NotificationsController(){
     print('Notifications Controller -> User -> : ${user.toJson()}');

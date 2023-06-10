@@ -44,6 +44,7 @@ class MonitoringPage extends StatelessWidget {
                 ),
                 body: Stack(
                     children:[
+                      _boxSeguimiento(context),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -52,7 +53,7 @@ class MonitoringPage extends StatelessWidget {
                         ],
                       ),
                     ]
-                ),
+                  ),
                 key: scaffoldKey,
                 drawer: Drawer(
                   child: _drawerList(),
@@ -64,6 +65,24 @@ class MonitoringPage extends StatelessWidget {
     );
   }
 
+
+  Widget _boxSeguimiento(BuildContext context){
+    return Container(
+      height: MediaQuery.of(context).size.height * 2.0,
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.06, left: 00, right: 0, bottom: 0 ),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            _textTitleLabs(),
+            _textdescLabs(),
+            _btnDownloadFile(),
+            // _fistName(),
+           
+          ]
+        )
+      )
+    );
+  }
 
 
   Widget _bgDegrade(BuildContext context){
@@ -117,6 +136,72 @@ class MonitoringPage extends StatelessWidget {
           fontWeight: FontWeight.w300,
           color: Color(0xFF243588),
           fontFamily: 'AvenirReg',
+        )
+    );
+  }
+
+
+  //Widget do download file pdf
+  Widget _textTitleLabs(){
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 20),
+            alignment: Alignment.center,
+            child: const Text(
+              'Exámenes de laboratorio',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w300,
+                color: Color(0xFF243588),
+                fontFamily: 'AvenirBold',
+              )
+            ),
+          )
+        ],
+      ),
+    );
+  }
+  Widget _textdescLabs(){
+    return Container(
+      margin: EdgeInsets.only(top: 0),
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 0, left: 30, right: 5),
+            alignment: Alignment.center,
+            child: const Text(
+              'Los resultados de los exámenes deben tener una vigencia inferior a 30 días hábiles y deben estar en formato PDF',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w300,
+                color: Color(0xFF243588),
+                fontFamily: 'AvenirReg',
+              )
+            ),
+          )
+        ],
+      ),
+    );
+  }
+  Widget _btnDownloadFile(){
+    return Container(
+      margin: EdgeInsets.only(top: 10, left: 5, right: 0, bottom: 15 ),
+        child: FloatingActionButton.extended(
+          onPressed: () { con.genPDfLabs(); },
+          backgroundColor: Color(0xFF243588),
+          icon: Icon(Icons.download, color: Colors.white),
+          label: Text(
+              'Descargar Orden en PDF',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w300,
+                color: Colors.white,
+                fontFamily: 'AvenirReg',
+              )
+          ),
         )
     );
   }

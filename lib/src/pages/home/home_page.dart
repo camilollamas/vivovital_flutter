@@ -354,11 +354,11 @@ class HomePage extends StatelessWidget {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
-          return Dialog(
+          return const Dialog(
             backgroundColor: Colors.blue,
             insetAnimationDuration: Duration.zero,
             insetAnimationCurve: Curves.decelerate,
-            child: const Text('Esto e sun dialogo.'),
+            child: Text('Esto e sun dialogo.'),
           );
           //   AlertDialog(
           //   title: const Text('Tratamiento de Datos Personales'),
@@ -404,7 +404,7 @@ class FullScreenDialog extends StatelessWidget {
             margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Column(
                 children: [
-                  Text('Autorización para el tratamiento de datos personales de',
+                  const Text('Autorización para el tratamiento de datos personales de',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Color(0xff243588),
@@ -412,7 +412,7 @@ class FullScreenDialog extends StatelessWidget {
                       fontFamily: 'AvenirBold',
                     ),
                   ),
-                  Text('CONCIENCIA PURA SAS.',
+                  const Text('CONCIENCIA PURA SAS.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Color(0xff243588),
@@ -420,7 +420,7 @@ class FullScreenDialog extends StatelessWidget {
                       fontFamily: 'AvenirBold',
                     ),
                   ),
-                  Text('Declaro que he sido informado que CONCIENCIA PURA S.A.S es el responsable del tratamiento de mis datos personales que estoy proveyendo a través del diligenciamiento del presente formulario, chat, correo electrónico o a través de cualquier contacto verbal, escrito o telefónico con dicha empresa, y declaro que he leído las Políticas de Tratamiento de Datos Personales disponibles en el sitio web www.vivovital.com.co',
+                  const Text('Declaro que he sido informado que CONCIENCIA PURA S.A.S es el responsable del tratamiento de mis datos personales que estoy proveyendo a través del diligenciamiento del presente formulario, chat, correo electrónico o a través de cualquier contacto verbal, escrito o telefónico con dicha empresa, y declaro que he leído las Políticas de Tratamiento de Datos Personales disponibles en el sitio web www.vivovital.com.co',
                     textAlign: TextAlign.justify,
                     style: TextStyle(
                       color: Colors.black,
@@ -428,7 +428,7 @@ class FullScreenDialog extends StatelessWidget {
                       fontFamily: 'AvenirReg',
                     ),
                   ),
-                  Text('Por ello, consiento y autorizo de manera previa, expresa e inequívoca que mis datos personales sean tratados con sujeción a lo establecido en sus Políticas de Protección de Datos Personales, atendiendo a las finalidades allí señaladas según mi vinculación con la empresa.',
+                  const Text('Por ello, consiento y autorizo de manera previa, expresa e inequívoca que mis datos personales sean tratados con sujeción a lo establecido en sus Políticas de Protección de Datos Personales, atendiendo a las finalidades allí señaladas según mi vinculación con la empresa.',
                     textAlign: TextAlign.justify,
                     style: TextStyle(
                       color: Colors.black,
@@ -436,7 +436,7 @@ class FullScreenDialog extends StatelessWidget {
                       fontFamily: 'AvenirReg',
                     ),
                   ),
-                  Text('Como Titular de esta información tengo derecho a conocer, actualizar y rectificar mis datos personales, solicitar prueba de la autorización otorgada para su tratamiento, ser informado sobre el uso que se ha dado a los mismos, presentar quejas ante la SIC por infracción a la ley, revocar la autorización y/o solicitar la supresión de mis datos en los casos en que sea procedente y acceder en forma gratuita a los mismos mediante solicitud por escrito dirigida a CONCIENCIA PURA S.A.S al correo electrónico: servicioalcliente@vivovital.com.co',
+                  const Text('Como Titular de esta información tengo derecho a conocer, actualizar y rectificar mis datos personales, solicitar prueba de la autorización otorgada para su tratamiento, ser informado sobre el uso que se ha dado a los mismos, presentar quejas ante la SIC por infracción a la ley, revocar la autorización y/o solicitar la supresión de mis datos en los casos en que sea procedente y acceder en forma gratuita a los mismos mediante solicitud por escrito dirigida a CONCIENCIA PURA S.A.S al correo electrónico: servicioalcliente@vivovital.com.co',
                     textAlign: TextAlign.justify,
                     style: TextStyle(
                       color: Colors.black,
@@ -448,7 +448,7 @@ class FullScreenDialog extends StatelessWidget {
                     margin: EdgeInsets.symmetric(horizontal: 0, vertical: 15),
                     child: Column(
                       children: [
-                        Text('Firmar: ',
+                        const Text('Firmar: ',
                           // textAlign: TextAlign.left,
                           style: TextStyle(
                             color: Color(0xff243588),

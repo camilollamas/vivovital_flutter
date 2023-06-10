@@ -16,10 +16,12 @@ import 'package:vivovital_app/src/models/response_api.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'package:money2/money2.dart';
+import 'package:vivovital_app/src/enviroment/enviroment.dart';
 
 class HomeController extends GetxController {
   User user = User.fromJson(GetStorage().read('user') ?? {});
   JsonProvider jsonProvider = JsonProvider();
+  String api_url = '${Enviroment.API_URL}';
   var p1ConsInf = '';
   var statusUser = {};
   var refWompi = ''.obs;
@@ -134,7 +136,7 @@ class HomeController extends GetxController {
 
     final signature = await exportSignature();
 
-    var request = http.MultipartRequest('POST', Uri.parse('https://vivovital.app/api/upload/archivoMpld'));
+    var request = http.MultipartRequest('POST', Uri.parse('${api_url}upload/archivoMpld'));
     request.fields['DocTipo'] = document == 'CONSENTIMIENTO' ? 'CONSENTIMIENTO' : 'TRATAMIENTO';
     request.fields['DocCnsAuxiliar'] = '${usuario['IDAFILIADO']}';
     request.fields['DocConsecutivo'] = '${usuario['IDAFILIADO']}';
@@ -192,7 +194,7 @@ class HomeController extends GetxController {
     };
 
     var dio = Dio();
-    var response = await dio.post('https://vivovital.app/api/json', data: datos);
+    var response = await dio.post('${api_url}json', data: datos);
 
     // print('response DIO : ${response}');
     changeValue('1');
@@ -209,7 +211,7 @@ class HomeController extends GetxController {
   }
   void SedImage(data) async{
     Dio dio = new Dio();
-    dio.post('https://vivovital.app/api/upload/archivoMpld', data: data).then((response) {
+    dio.post('${api_url}upload/archivoMpld', data: data).then((response) {
       var jsonResponse = jsonDecode(response.toString());
       // print(jsonResponse);
       // var testData = jsonResponse['histogram_counts'].cast<double>();

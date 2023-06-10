@@ -104,18 +104,18 @@ class UpdatePropfileController extends GetxController {
     MontBird.value = mesSel.id!;
 
     phoneController.text= user.celular!;
-    otherPhoneController.text= user!.telefonores!;
+    otherPhoneController.text= user.telefonores!;
     emailController.text= user.email!;
     idDepartamento.value= user.dpto!;
     getCityes(user.dpto!, user.ciudad!);
     addressController.text= user.direccion!;
-    civilStat = user.estadoCivil!;
+    civilStat = user.estadoCivil ?? '';
 
 
-    companyController.text = user.empresa!;
+    companyController.text = user.empresa ?? '';
 
     if(user.idclaseafiliacion != null) {
-      prepaid.value = user.idclaseafiliacion!;
+      prepaid.value = user.idclaseafiliacion ?? '';
     }
 
 

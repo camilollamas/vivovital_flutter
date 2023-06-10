@@ -282,9 +282,9 @@ class ProfilePage extends StatelessWidget {
   }
   Widget _civilStatus(){
     return ListTile(
-      leading: Icon(Icons.person_outline),
-      title: Text('${con.user.estadoCivil}',
-          style: TextStyle(
+      leading: const Icon(Icons.person_outline),
+      title: Text('${con.user.estadoCivil ?? ''}',
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w100,
             color: Color(0xFF243588),
@@ -297,7 +297,7 @@ class ProfilePage extends StatelessWidget {
   Widget _ocupations(){
     return ListTile(
       leading: Icon(Icons.work),
-      title: Text('${con.user.ocupacion}',
+      title: Text('${con.user.ocupacion ?? ''}',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w100,
@@ -311,7 +311,7 @@ class ProfilePage extends StatelessWidget {
   Widget _enterprice(){
     return ListTile(
       leading: Icon(Icons.location_city),
-      title: Text('${con.user.empresa}',
+      title: Text('${con.user.empresa ?? ''}',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w100,
@@ -325,7 +325,7 @@ class ProfilePage extends StatelessWidget {
   Widget _education(){
     return ListTile(
       leading: Icon(Icons.school_outlined),
-      title: Text('${con.user.escolaridad}',
+      title: Text('${con.user.escolaridad ?? ''}',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w100,
@@ -353,7 +353,7 @@ class ProfilePage extends StatelessWidget {
   Widget _epsType(){
     return ListTile(
       leading: Icon(Icons.healing),
-      title: Text('${con.user.tipoafiliacion}',
+      title: Text('${con.user.tipoafiliacion ?? ''}',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w100,
@@ -367,7 +367,7 @@ class ProfilePage extends StatelessWidget {
   Widget _prepaid(){
     return ListTile(
       leading: Icon(Icons.attach_money),
-      title: Text('${con.user.idclaseafiliacion}',
+      title: Text('${con.user.idclaseafiliacion ?? ''}',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w100,
