@@ -90,13 +90,17 @@ class UpdatePropfileController extends GetxController {
     snombreController.text = user.snombre!;
     papellidoController.text = user.papellido!;
     sapellidoController.text = user.sapellido!;
-    docType.value = user.tipoDoc!.trim();
-    numberDocumentController.text = user.docidafiliado!;
-    gender.value = user.sexo!.trim();
+    docType.value = user.tipodoc!.trim();
+    numberDocumentController.text = user.ndocumento!;
+    gender.value = user.genero!.trim();
 
-    int day = int.parse(user.fnacimiento!.substring(8,10));
-    int month = int.parse(user.fnacimiento!.substring(5, 7));
-    int year = int.parse(user.fnacimiento!.substring(0,4));
+    // int day = int.parse(user.fnacimiento!.substring(8,10));
+    // int month = int.parse(user.fnacimiento!.substring(5, 7));
+    // int year = int.parse(user.fnacimiento!.substring(0,4));
+
+    int day = 06; //int.parse(user.fnacimiento);
+    int month = 03; //int.parse(user.fnacimiento!.substring(5, 7));
+    int year = 1992;//int.parse(user.fnacimiento!.substring(0,4));
 
     dayBird.value= '${day}';
     yearBird.value= '${year}';
@@ -104,18 +108,18 @@ class UpdatePropfileController extends GetxController {
     MontBird.value = mesSel.id!;
 
     phoneController.text= user.celular!;
-    otherPhoneController.text= user.telefonores!;
+    otherPhoneController.text= user.celular!;
     emailController.text= user.email!;
-    idDepartamento.value= user.dpto!;
-    getCityes(user.dpto!, user.ciudad!);
+    idDepartamento.value= user.departamento!;
+    getCityes(user.departamento!, user.ciudad!);
     addressController.text= user.direccion!;
     civilStat = user.estadoCivil ?? '';
 
 
     companyController.text = user.empresa ?? '';
 
-    if(user.idclaseafiliacion != null) {
-      prepaid.value = user.idclaseafiliacion ?? '';
+    if(user.prepagada != null) {
+      prepaid.value = user.prepagada ?? '';
     }
 
 
@@ -186,7 +190,7 @@ class UpdatePropfileController extends GetxController {
       var result = Tgensel.fromJsonList(res.result?.recordsets![0]);
       ocupations.addAll(result);
       if(user.ocupacion != null) {
-        ocupation.value = user.idocupacion!;
+        ocupation.value = user.ocupacion!;
       }
       updateValues();
     }
@@ -206,8 +210,8 @@ class UpdatePropfileController extends GetxController {
       print('Respuesta res  -> ${res.result?.recordsets![0]}');
       var result = Tgensel.fromJsonList(res.result?.recordsets![0]);
       schools.addAll(result);
-      if(user.idescolaridad != null) {
-        school.value = user.idescolaridad!;
+      if(user.escolaridad != null) {
+        school.value = user.escolaridad!;
       }
       updateValues();
     }
@@ -227,11 +231,11 @@ class UpdatePropfileController extends GetxController {
       print('Respuesta res  -> ${res.result?.recordsets![0]}');
       var result = Tgensel.fromJsonList(res.result?.recordsets![0]);
       epss.addAll(result);
-      if(user.aseguradora != null) {
-        eps.value = user.aseguradora!;
+      if(user.eps != null) {
+        eps.value = user.eps!;
       }
-      if(user.coberturaSalud != null) {
-        prepaidEps.value = user.coberturaSalud!;
+      if(user.tipoeps != null) {
+        prepaidEps.value = user.tipoeps!;
       }
 
       updateValues();
@@ -252,8 +256,8 @@ class UpdatePropfileController extends GetxController {
       print('Respuesta res  -> ${res.result?.recordsets![0]}');
       var result = Tgensel.fromJsonList(res.result?.recordsets![0]);
       typesAfi.addAll(result);
-      if(user.idtipoafiliacion != null) {
-        typeAfi.value = user.idtipoafiliacion!;
+      if(user.tipoeps != null) {
+        typeAfi.value = user.tipoeps!;
       }
       updateValues();
     }
@@ -277,7 +281,7 @@ class UpdatePropfileController extends GetxController {
     String mes = MontBird.value.length == 1 ? '0'+MontBird.value : MontBird.value;
 
     userData = {
-      'IDAFILIADO':    '${user.idafiliado} ',
+      'IDAFILIADO':    '${user.id} ',
       'TIPO_DOC':      '${docType.trim()} ',
       'DOCIDAFILIADO': '${numberDocument}',
       'PNOMBRE':       '${firstName}',

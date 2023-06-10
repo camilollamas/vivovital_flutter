@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:vivovital_app/src/models/json.dart';
 import 'package:vivovital_app/src/models/response_api.dart';
 import 'package:vivovital_app/src/providers/json_provider.dart';
+import 'package:vivovital_app/src/providers/login_provider.dart';
 import 'package:load/load.dart';
 import 'package:vivovital_app/src/models/user.dart';
 
@@ -19,6 +20,7 @@ class LoginController extends GetxController {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   JsonProvider jsonProvider = JsonProvider();
+  LoginProvider loginProvider = LoginProvider();
 
   //
   void goToRegisterPage(){
@@ -35,47 +37,27 @@ class LoginController extends GetxController {
     // print('Pass: ${password}');
 
     if(isValidForm(email, password)){
-
-      // Get.snackbar('Válido: ', 'Iniciando Sesión...');
-      Json json = Json(
-        modelo: 'VIVO_AFI_APP',
-        metodo: 'LOGIN',
-        parametros: {
-          'EMAIL': '${email}',
-          'CLAVE': '${password}'
-        }
-      );
-      //print('json:  ${json}');
-      // processDialog.close();
-      ResponseApi res = await jsonProvider.json(json);
+      Object json2 = {
+          'email': '${email}',
+          'clave': '${password}',
+          'roll': 'Paciente'
+      };
+      Object res = await loginProvider.login(json2);
       hideLoadingDialog();
+      
 
-      if(res.res == 'ok'){
 
-        if(res.result?.recordset![0].ok == 'OK'){
+      if(res != 'error'){
+        dynamic afi = res;
+        print('resdesde login_controller afi: ${afi['usuario']}');
 
-          List Afiliado = res.result?.recordsets![1];
-          Map afi = Afiliado[0];
-          // print('Afiliado: ${afi}');
-
-          GetStorage().write('user', afi);
-          // Get.snackbar('Hola ${afi['PNOMBRE']}', 'Bienvenido!');
-          goToHomePage();
-        }else{
-          hideLoadingDialog();
-          List Error = res.result?.recordsets![1];
-          Map detail = Error[0];
-          Get.snackbar(
-              'Aviso: ',
-              detail['ERROR'],
-              colorText: Colors.white,
-              backgroundColor: Colors.red,
-              icon: const Icon(Icons.error_outline)
-          );
-        }
+        GetStorage().write('user', afi['usuario']);
+        // Get.snackbar('Hola ${afi['pnombre']}', 'Bienvenido!');
+        goToHomePage();
+        // }
       }else{
         hideLoadingDialog();
-        Get.snackbar('Error: ', 'Hubo un problema con el servidor');
+        // Get.snackbar('Error: ', 'Hubo un problema con el servidor');
       }
     }else{
       hideLoadingDialog();

@@ -41,7 +41,7 @@ class HomeController extends GetxController {
     p1ConsInf = '${user.pnombre}';
 
     // GetStatusUser();
-    // print('Home_Controller -> User : ${user.toJson()}');
+    print('Home_Controller -> User : ${user.toJson()}');
     // update();
 
   }

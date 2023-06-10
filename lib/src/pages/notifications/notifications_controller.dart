@@ -82,7 +82,7 @@ class NotificationsController extends GetxController {
     print('====> getDay <====');
     String date = selectedDate.value.toString();
     print('====> FECHA: ${date.substring(0,10)}');
-    print('====> IDAFILIADO: ${user.idafiliado}');
+    print('====> IDAFILIADO: ${user.id}');
 
     showLoadingDialog();
     Json json = Json(
@@ -90,7 +90,7 @@ class NotificationsController extends GetxController {
         metodo: 'GET_DIA',
         parametros: {
           "FECHA": "${date.substring(0,10)}",
-          "IDAFILIADO": "${user.idafiliado}"
+          "IDAFILIADO": "${user.id}"
         }
     );
 

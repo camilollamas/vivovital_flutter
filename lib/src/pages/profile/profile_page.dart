@@ -147,7 +147,7 @@ class ProfilePage extends StatelessWidget {
           margin: EdgeInsets.only(top: 0),
           alignment: Alignment.center,
           child: Text(
-              '${con.user.tipoDoc} ${con.user.docidafiliado}',
+              '${con.user.tipodoc} ${con.user.ndocumento}',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w300,
@@ -170,8 +170,8 @@ class ProfilePage extends StatelessWidget {
   }
   Widget _gender(){
     return ListTile(
-      leading: Icon(con.user.sexo == 'Masculino' ? Icons.male : Icons.female),
-      title: Text('${con.user.sexo}',
+      leading: Icon(con.user.genero == 'Masculino' ? Icons.male : Icons.female),
+      title: Text('${con.user.genero}',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w100,
@@ -185,7 +185,7 @@ class ProfilePage extends StatelessWidget {
   Widget _yearOld(){
     return ListTile(
               leading: Icon(Icons.cake_outlined),
-              title: Text('${con.user.edad}',
+              title: Text('Sin Edad',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w100,
@@ -255,7 +255,7 @@ class ProfilePage extends StatelessWidget {
   Widget _city(){
     return ListTile(
       leading: Icon(Icons.location_city_outlined),
-      title: Text('${con.user.nombreciu}',
+      title: Text('${con.user.ciudad}',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w100,
@@ -339,7 +339,7 @@ class ProfilePage extends StatelessWidget {
   Widget _eps(){
     return ListTile(
       leading: Icon(Icons.health_and_safety_outlined),
-      title: Text('${con.user.aseguradora != null ? con.Aseguradora.label : ''}',
+      title: Text('${con.user.eps != null ? con.Aseguradora.label : ''}',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w100,
@@ -353,7 +353,7 @@ class ProfilePage extends StatelessWidget {
   Widget _epsType(){
     return ListTile(
       leading: Icon(Icons.healing),
-      title: Text('${con.user.tipoafiliacion ?? ''}',
+      title: Text('${con.user.tipoeps ?? ''}',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w100,
@@ -367,7 +367,7 @@ class ProfilePage extends StatelessWidget {
   Widget _prepaid(){
     return ListTile(
       leading: Icon(Icons.attach_money),
-      title: Text('${con.user.idclaseafiliacion ?? ''}',
+      title: Text('${con.user.prepagada ?? ''}',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w100,
@@ -381,7 +381,7 @@ class ProfilePage extends StatelessWidget {
   Widget _whoPrepaid(){
     return ListTile(
       leading: Icon(Icons.question_answer),
-      title: Text('${con.user.idclaseafiliacion == 'Si' ? con.prepagada.label : ''}',
+      title: Text('${con.user.prepagada == 'Si' ? con.prepagada.label : ''}',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w100,
@@ -422,7 +422,7 @@ class ProfilePage extends StatelessWidget {
             // Text('okbd=> ${con.user.okbd ?? ''}'),
 
             Visibility(
-              visible: con.user.okbd == '0',
+              visible: con.user.id! > 1,
                 child: _bannerInfo(),
             ),
             _imageAvatar(),

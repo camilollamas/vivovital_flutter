@@ -624,7 +624,7 @@ class ConInfDialog extends StatelessWidget{
                       fontFamily: 'AvenirReg',
                     ),
                   ),
-                  Text('Con ${con.user.documentocompleto ?? ''}',
+                  Text('Con ${con.user.ndocumento ?? ''}',
                     textAlign: TextAlign.justify,
                     style: TextStyle(
                       color: Colors.black,

@@ -30,9 +30,9 @@ class ProfileController extends GetxController {
 
   void setValues(){
     print('====>  setValuesProfile <====');
-    print('user.EPS => ${user.aseguradora}');
+    print('user.EPS => ${user.eps}');
 
-    if(user.aseguradora != null){
+    if(user.eps != null){
       getEPS();
     }
 
@@ -52,11 +52,11 @@ class ProfileController extends GetxController {
     if(res.res == 'ok'){
       var result = Tgensel.fromJsonList(res.result?.recordsets![0]);
       epss.addAll(result);
-      epSel.addAll(epss.where((e) => e.value == user.aseguradora));
+      epSel.addAll(epss.where((e) => e.value == user.eps));
       Aseguradora = epSel[0];
 
-      if(user.idclaseafiliacion == 'Si'){
-        epsPrep.addAll(epss.where((e) => e.value == user.coberturaSalud));
+      if(user.eps == 'Si'){
+        epsPrep.addAll(epss.where((e) => e.value == user.eps));
         prepagada = epsPrep[0];
       }
       super.refresh();

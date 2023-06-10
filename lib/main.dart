@@ -6,14 +6,15 @@ import 'package:vivovital_app/src/models/user.dart';
 import 'package:vivovital_app/src/pages/dates/dates_page.dart';
 import 'package:vivovital_app/src/pages/login/login_page.dart';
 import 'package:vivovital_app/src/pages/monitoring/monitoring_page.dart';
-import 'package:vivovital_app/src/pages/notifications/notifications_page.dart';
 import 'package:vivovital_app/src/pages/profile/profile_page.dart';
 import 'package:vivovital_app/src/pages/profile/update/update_profile_page.dart';
 import 'package:vivovital_app/src/pages/register/register_page.dart';
 import 'package:vivovital_app/src/pages/home/home_page.dart';
-import 'package:vivovital_app/src/pages/paid/paid_page.dart';
+// import 'package:vivovital_app/src/pages/notifications/notifications_page.dart';
+// import 'package:vivovital_app/src/pages/paid/paid_page.dart';
 
 User userSession = User.fromJson(GetStorage().read('user') ?? {});
+
 
 void main() async {
   await GetStorage.init();
@@ -43,12 +44,12 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     //Cosntruye las vistas de la app
-    print('Afiliado: ${userSession.idafiliado}');
+    print('Paciente ===>> : ${userSession}');
 
     return GetMaterialApp(
       title: 'Vivo Vital App',
       debugShowCheckedModeBanner: false,
-      initialRoute: userSession.idafiliado != null  ? '/home' :  '/',
+      initialRoute: userSession != null  ? '/home' :  '/',
       getPages: [
         GetPage(name: '/', page: () => LoginPage() ),
         GetPage(name: '/register', page: () => RegisterPage() ),
@@ -56,13 +57,13 @@ class _MyAppState extends State<MyApp> {
         GetPage(name: '/profile', page: () => ProfilePage() ),
         GetPage(name: '/update_profile', page: () => UpdateProfilePage() ),
         GetPage(name: '/monitoring', page: () => MonitoringPage() ),
-        GetPage(name: '/notifications', page: () => NotificationsPage() ),
         GetPage(name: '/dates', page: () => DatesPage() ),
-        GetPage(name: '/paid', page: () => PaidPage() )
+        // GetPage(name: '/notifications', page: () => NotificationsPage() ),
+        // GetPage(name: '/paid', page: () => PaidPage() )
       ],
       theme: ThemeData(
-        primaryColor: Color(0xff243588),
-        colorScheme: ColorScheme(
+        primaryColor: const Color(0xff243588),
+        colorScheme: const ColorScheme(
             primary: Color(0xff243588),
             secondary: Color(0xff72246c),
             error: Color(0xffC10015),

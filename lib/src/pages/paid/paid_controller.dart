@@ -292,15 +292,15 @@ class PaidController extends GetxController {
         "customer_data": {
           "phone_number": "57${user.celular}",
           "full_name": "${user.pnombre} ${user.snombre ?? ''} ${user.papellido ?? ''} ${user.sapellido ?? ''}",
-          "legal_id": "${user.docidafiliado}",
-          "legal_id_type": "${user.tipoDoc!.trim()}"
+          "legal_id": "${user.ndocumento}",
+          "legal_id_type": "${user.tipodoc!.trim()}"
         },
         "shipping_address": {
           "address_line_1": "${user.direccion}",
           "address_line_2": "${user.direccion}",
           "country": "CO",
           "region": "${user.departamento}",
-          "city": "${user.nombreciu}",
+          "city": "${user.ciudad}",
           "name": "${user.pnombre} ${user.snombre} ${user.papellido} ${user.sapellido}",
           "phone_number": "57${user.celular}",
           "postal_code": "250001"

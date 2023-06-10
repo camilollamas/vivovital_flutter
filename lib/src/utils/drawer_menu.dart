@@ -11,6 +11,7 @@ class CustomDrawerMenu extends StatelessWidget {
 
   User user = User.fromJson(GetStorage().read('user') ?? {});
 
+
   @override
   Widget build(BuildContext context) {
     var route = ModalRoute.of(context);
@@ -21,10 +22,9 @@ class CustomDrawerMenu extends StatelessWidget {
       ),
       accountEmail: Text(
         '${user.email! ?? ''}'
-        ' ${user.noadmision! ?? ''}',
       ),
       currentAccountPicture: CircleAvatar(
-        backgroundImage: user.sexo == 'Masculino'
+        backgroundImage: user.genero == 'Masculino'
             ? AssetImage('assets/img/avatars/male.png') as ImageProvider
             : AssetImage('assets/img/avatars/female.png') as ImageProvider,
         //child: FlutterLogo(size: 42.0),
