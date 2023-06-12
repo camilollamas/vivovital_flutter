@@ -1,17 +1,19 @@
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:load/load.dart';
 
-import 'package:vivovital_app/src/models/json.dart';
-import 'package:vivovital_app/src/models/response_api.dart';
+// import 'package:vivovital_app/src/models/json.dart';
+// import 'package:vivovital_app/src/models/response_api.dart';
 import 'package:vivovital_app/src/providers/json_provider.dart';
+import 'package:vivovital_app/src/providers/generic_provider.dart';
 import 'package:vivovital_app/src/models/departamentos.dart';
 import 'package:vivovital_app/src/models/ciudad.dart';
 import 'package:vivovital_app/src/models/mes.dart';
 
 class RegisterController extends GetxController {
   JsonProvider jsonProvider = JsonProvider();
+  GenericProvider genericProvider = GenericProvider();
 
   List documentTypes=['CC','PS','CE'];
   var docType = ''.obs;
@@ -58,27 +60,17 @@ class RegisterController extends GetxController {
   Map userData = {};
 
   RegisterController (){
-    print('RegisterController -> Procede a consultar Departamentos -> 2');
     getCountries();
-
   }
   void getCountries() async{
     idCiudad= ''.obs;
     ciuOpt.clear();
-
     deptos.clear();
 
-    Json json = Json(
-        modelo: 'VIVO_AFI_APP',
-        metodo: 'DEPARTAMENTOS',
-        parametros: {}
-    );
-    print('getCountries -> json:  ${json}');
-    ResponseApi res = await jsonProvider.json(json);
-
-    if(res.res == 'ok'){
-      // print('Respuesta res  -> ${res.result?.recordsets![0]}');
-      var result = Departamentos.fromJsonList(res.result?.recordsets![0]);
+    Object resDeptos = await genericProvider.generic({"cod_pais":"CO"},'users/departamentos');
+    if(resDeptos != 'error'){
+      dynamic dep = resDeptos;
+      var result = Departamentos.fromJsonList(dep['departamentos']);
       deptos.addAll(result);
     }
   }
@@ -86,24 +78,13 @@ class RegisterController extends GetxController {
     showLoadingDialog();
     idCiudad= ''.obs;
     ciuOpt.clear();
-    print('Consultar ciudades de  ${depto}');
-    Json json = Json(
-        modelo: 'VIVO_AFI_APP',
-        metodo: 'CIUDADES',
-        parametros: {
-          "DEPARTAMENTO":"${depto}"
-        }
-    );
-    //print('json:  ${json}');
-    ResponseApi res = await jsonProvider.json(json);
-    hideLoadingDialog();
-
-    if(res.res == 'ok'){
-      print('Respuesta res  -> ${res.result?.recordsets![0]}');
-      var ciu = res.result?.recordsets![0];
-      var result = Ciudad.fromJsonList(res.result?.recordsets![0]);
-      ciuOpt.addAll(result);
+    Object resCius = await genericProvider.generic({"cod_departamento":"$depto"},'users/ciudades');
+    if(resCius != 'error'){
+      dynamic ciu = resCius;
+      var resultCiu = Ciudad.fromJsonList(ciu['ciudades']);
+      ciuOpt.addAll(resultCiu);
     }
+    hideLoadingDialog();
   }
 
   TextEditingController firstNameController   = TextEditingController();
@@ -140,53 +121,28 @@ class RegisterController extends GetxController {
     String password = passwordController.text.trim();
     String confirmPassword = confirmPasswordController.text.trim();
 
-    print('firstName ${firstName}');
-    print('secName ${secName}');
-    print('lastName ${lastName}');
-    print('secondLastname ${secondLastname}');
-    print('docType ${docType}');
-    print('numberDocument ${numberDocument}');
-    print('gender ${gender}');
-
-    print('dayBird ${dayBird}');
-    print('MontBird ${MontBird}');
-    print('yearBird ${yearBird}');
-
-    print('phone ${phone}');
-    print('otherPhone ${otherPhone}');
-
-    print('email ${email}');
-    print('confirmEmail ${confirmEmail}');
-
-    print('idDepartamento ${idDepartamento}');
-    print('idCiudad ${idCiudad}');
-    print('address ${address}');
-
-    print('password ${password}');
-    print('confirmPassword ${confirmPassword}');
-
-    print('terms ${terms}');
-    print('exclusion ${exclusion}');
-
     userData = {
-      'TIPO_DOC':      '${docType} ',
-      'DOCIDAFILIADO': '${numberDocument}',
-      'PNOMBRE':       '${firstName}',
-      'SNOMBRE':       '${secName}',
-      'PAPELLIDO':     '${lastName}',
-      'SAPELLIDO':     '${secondLastname}',
-      'SEXO':          '${gender}',
-      'FDIA':          '${dayBird}',
-      'FMES':          '${MontBird}',
-      'FANIO':         '${yearBird}',
-      'EMAIL':         '${email}',
-      'CELULAR':       '${phone}',
-      'CELULAR2':      '${otherPhone}',
-      'PAIS':          'CO',
-      'DEPARTAMENTO':  '${idDepartamento}',
-      'CIUDAD':        '${idCiudad}',
-      'DIRECCION':     '${address}',
-      'CLAVE':         '${password}'
+      'tipodoc':       '${docType} ',
+      'ndocumento':    '${numberDocument}',
+      'pnombre':       '${firstName}',
+      'snombre':       '${secName}',
+      'papellido':     '${lastName}',
+      'sapellido':     '${secondLastname}',
+      'genero':        '${gender}',
+
+      'fdia':          '$dayBird',
+      'fmes':          '$MontBird',
+      'fanio':         '$yearBird',
+
+      'email':         '${email}',
+      'celular':       '${phone}',
+      'telefono':      '${otherPhone}',
+      'pais':          'CO',
+      'departamento':  '${idDepartamento}',
+      'ciudad':        '${idCiudad}',
+      'direccion':     '${address}',
+      'clave':         '${password}',
+      'roll':          'Paciente'
     };
 
     if(
@@ -235,7 +191,8 @@ class RegisterController extends GetxController {
       password,
       confirmPassword,
       terms, exclusion
-      ){
+      )
+    {
 
    if(firstName == '' || firstName.isEmpty) {
      Get.snackbar(
@@ -457,53 +414,26 @@ class RegisterController extends GetxController {
 
   void ValidateAccount (docType, numberDocument, email, phone, context) async{
     showLoadingDialog();
-
-    Json json = Json(
-        modelo: 'VIVO_AFI_APP',
-        metodo: 'VALIDAR',
-        parametros: {
-          'TIPO_DOC': '${docType}',
-          'DOCIDAFILIADO': '${numberDocument}',
-          'EMAIL': '${email}',
-          'CELULAR': '${phone}'
-        }
-    );
-
-    ResponseApi res = await jsonProvider.json(json);
+    dynamic resCode = await genericProvider.generic(
+      {
+        "email":"$email",
+        "tipodoc":"$docType",
+        "ndocumento":"$numberDocument"
+      },
+      'login/validacion'
+      );
     hideLoadingDialog();
-
-    print('Respuesta => ${res.result?.recordsets!}');
-    if(res.res == 'ok') {
-
-      if(res.result?.recordset![0].ok == 'OK'){
-        Get.snackbar(
-            'Aviso: ',
-            'Código enviado',
-            colorText: Colors.white,
-            backgroundColor: Colors.green,
-            icon: const Icon(Icons.send)
-        );
-        List code = res.result?.recordsets![1];
-        Map validateCode = code[0];
-        validationCodeGen = validateCode['CODIGO'];
-        print('CODIGO DE VALIDACIÓN: ${validationCodeGen}');
-
-        showConfirmDialog(email, phone, context);
-
-
-      }else{
-        List Error = res.result?.recordsets![1];
-        Map detail = Error[0];
-        Get.snackbar(
-            'Aviso: ',
-            detail['ERROR'],
-            colorText: Colors.white,
-            backgroundColor: Colors.red,
-            icon: const Icon(Icons.error_outline)
-        );
-      }
-    }else{
-      print('Ha Error API');
+    if(resCode != 'error'){
+      Get.snackbar(
+          'Aviso: ',
+          'Código enviado',
+          colorText: Colors.white,
+          backgroundColor: Colors.green,
+          icon: const Icon(Icons.send)
+      );
+      validationCodeGen = resCode['codigo'];
+      print('CODIGO DE VALIDACIÓN =====>>>>>>> : ${resCode['codigo']}');
+      showConfirmDialog(email, phone, context);
     }
   }
   void showConfirmDialog(email, phone, context){
@@ -516,7 +446,7 @@ class RegisterController extends GetxController {
         Container(
           margin: EdgeInsets.only(bottom: 20),
           child:
-            Text('Código de validación:',
+            const Text('Código de validación:',
               style: TextStyle(
                 fontSize: 22,
                 color: Color(0xFF243588),
@@ -527,18 +457,18 @@ class RegisterController extends GetxController {
         children: [
           Column(
             children: [
-              Text('Se ha enviado un código de validación al siguiente correo electrónico:'),
-              Text('${email}',
-                  style: TextStyle(
+              const Text('Se ha enviado un código de validación al siguiente correo electrónico:'),
+              Text('$email',
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w300,
                     color: Color(0xFF243588),
                     fontFamily: 'AvenirReg',
                   )
               ),
-              Text('También por mensaje de texto al número:'),
+              const Text('También por mensaje de texto al número:'),
               Text('${phone}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w300,
                     color: Color(0xFF243588),
@@ -551,7 +481,7 @@ class RegisterController extends GetxController {
                   onChanged: (value){
                     validationCodeInput = value;
                   },
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Ingresar código',
                     // prefixIcon: Icon(Icons.val)
                   )
@@ -568,7 +498,7 @@ class RegisterController extends GetxController {
                               padding: EdgeInsets.symmetric(horizontal: 15),
                               shadowColor: Colors.transparent
                           ),
-                          child: Text(
+                          child: const Text(
                             'Cancelar',
                             style: TextStyle(
                               color: Colors.red,
@@ -582,7 +512,7 @@ class RegisterController extends GetxController {
                           style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.symmetric(horizontal: 15)
                           ),
-                          child: Text(
+                          child: const Text(
                             'Validar',
                             style: TextStyle(
                               color: Colors.white,
@@ -630,35 +560,21 @@ class RegisterController extends GetxController {
   }
   void saveUser() async{
     showLoadingDialog();
-    Json json = Json(
-        modelo: 'VIVO_AFI_APP',
-        metodo: 'REGISTRAR',
-        parametros: userData
+    dynamic onLogin = await genericProvider.generic(
+      userData,
+      'login/registrar'
     );
-
-    ResponseApi res = await jsonProvider.json(json);
-    print('Respuesta => ${res.result?.recordsets!}');
     hideLoadingDialog();
-    if(res.res == 'ok') {
-      if(res.result?.recordset![0].ok == 'OK'){
-        print('Respuesta => ${res.result?.recordsets!}');
-        Get.toNamed('/');
-      }else{
-        List Error = res.result?.recordsets![1];
-        Map detail = Error[0];
-        Get.snackbar(
-            'Aviso: ',
-            detail['ERROR'],
-            colorText: Colors.white,
-            backgroundColor: Colors.red,
-            icon: const Icon(Icons.error_outline)
-        );
-      }
-    }else{
-      print('Ha Error API');
+    if(onLogin != 'error'){
+      Get.snackbar(
+          'Aviso: ',
+          'Usuario registrado correctamente',
+          colorText: Colors.white,
+          backgroundColor: Colors.green,
+          icon: const Icon(Icons.check_circle_outline_outlined)
+      );
+      Get.toNamed('/');
     }
-
-
   }
 }
 

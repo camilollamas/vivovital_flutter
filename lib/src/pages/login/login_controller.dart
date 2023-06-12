@@ -44,7 +44,6 @@ class LoginController extends GetxController {
       };
       Object res = await loginProvider.login(json2);
       hideLoadingDialog();
-      
 
 
       if(res != 'error'){

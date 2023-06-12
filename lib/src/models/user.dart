@@ -9,38 +9,6 @@ User userFromJson(String str) => User.fromJson(json.decode(str));
 String userToJson(User data) => json.encode(data.toJson());
 
 class User {
-    int? id;
-    String? email;
-    String? tipodoc;
-    String? ndocumento;
-    String? pnombre;
-    String? snombre;
-    String? papellido;
-    String? sapellido;
-    DateTime? fnacimiento;
-    String? genero;
-    String? pais;
-    String? ciudad;
-    String? departamento;
-    String? direccion;
-    String? telefono;
-    String? celular;
-    String? estadoCivil;
-    String? ocupacion;
-    String? empresa;
-    String? escolaridad;
-    String? eps;
-    String? tipoeps;
-    String? prepagada;
-    String? roll;
-    String? estado;
-    DateTime? createdAt;
-    DateTime? updatedAt;
-    String? nombrePais;
-    String? codigoTelefonico;
-    String? nombreDepartamento;
-    String? nombreCiudad;
-    String? token;
 
     User({
         this.id,
@@ -68,14 +36,48 @@ class User {
         this.prepagada,
         this.roll,
         this.estado,
-        this.createdAt,
-        this.updatedAt,
+        // this.createdAt,
+        // this.updatedAt,
         this.nombrePais,
         this.codigoTelefonico,
         this.nombreDepartamento,
         this.nombreCiudad,
         this.token,
     });
+
+    int? id;
+    String? email;
+    String? tipodoc;
+    String? ndocumento;
+    String? pnombre;
+    String? snombre;
+    String? papellido;
+    String? sapellido;
+    String? fnacimiento;
+    // DateTime? fnacimiento;
+    String? genero;
+    String? pais;
+    String? ciudad;
+    String? departamento;
+    String? direccion;
+    String? telefono;
+    String? celular;
+    String? estadoCivil;
+    String? ocupacion;
+    String? empresa;
+    String? escolaridad;
+    String? eps;
+    String? tipoeps;
+    String? prepagada;
+    String? roll;
+    String? estado;
+    // DateTime? createdAt;
+    // DateTime? updatedAt;
+    String? nombrePais;
+    String? codigoTelefonico;
+    String? nombreDepartamento;
+    String? nombreCiudad;
+    String? token;
 
     factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
@@ -86,7 +88,8 @@ class User {
         snombre: json["snombre"],
         papellido: json["papellido"],
         sapellido: json["sapellido"],
-        fnacimiento: DateTime.parse(json["fnacimiento"]),
+        fnacimiento: json["fnacimiento"],
+        // fnacimiento: DateTime.parse(json["fnacimiento"]),
         genero: json["genero"],
         pais: json["pais"],
         ciudad: json["ciudad"],
@@ -103,8 +106,8 @@ class User {
         prepagada: json["prepagada"],
         roll: json["roll"],
         estado: json["estado"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
+        // createdAt: DateTime.parse(json["createdAt"]),
+        // updatedAt: DateTime.parse(json["updatedAt"]),
         nombrePais: json["nombre_pais"],
         codigoTelefonico: json["codigo_telefonico"],
         nombreDepartamento: json["nombre_departamento"],
@@ -121,7 +124,8 @@ class User {
         "snombre": snombre,
         "papellido": papellido,
         "sapellido": sapellido,
-        "fnacimiento": "${fnacimiento!.year.toString().padLeft(4, '0')}-${fnacimiento!.month.toString().padLeft(2, '0')}-${fnacimiento!.day.toString().padLeft(2, '0')}",
+        "fnacimiento": fnacimiento,
+        // "fnacimiento": "${fnacimiento!.year.toString().padLeft(4, '0')}-${fnacimiento!.month.toString().padLeft(2, '0')}-${fnacimiento!.day.toString().padLeft(2, '0')}",
         "genero": genero,
         "pais": pais,
         "ciudad": ciudad,
@@ -138,8 +142,8 @@ class User {
         "prepagada": prepagada,
         "roll": roll,
         "estado": estado,
-        "createdAt": createdAt!.toIso8601String(),
-        "updatedAt": updatedAt!.toIso8601String(),
+        // "createdAt": createdAt!.toIso8601String(),
+        // "updatedAt": updatedAt!.toIso8601String(),
         "nombre_pais": nombrePais,
         "codigo_telefonico": codigoTelefonico,
         "nombre_departamento": nombreDepartamento,

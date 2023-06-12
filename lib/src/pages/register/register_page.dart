@@ -674,8 +674,8 @@ class _RegisterState extends State<RegisterPage> {
     List<DropdownMenuItem<String>> list = [];
     departamentos.forEach((dep) {
       list.add(DropdownMenuItem(
-          child: Text(dep.nombre ?? ''),
-          value: dep.dpto,
+          child: Text(dep.nombre_departamento ?? ''),
+          value: dep.cod_departamento,
       ));
     });
     return list;
@@ -729,8 +729,8 @@ class _RegisterState extends State<RegisterPage> {
     List<DropdownMenuItem<String>> list = [];
     ciudades.forEach((dep) {
       list.add(DropdownMenuItem(
-        child: Text(dep.nombre ?? ''),
-        value: dep.ciudad,
+        child: Text(dep.nombre_ciudad ?? ''),
+        value: dep.cod_ciudad,
       ));
     });
     return list;

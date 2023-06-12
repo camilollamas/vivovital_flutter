@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       title: 'Vivo Vital App',
       debugShowCheckedModeBanner: false,
-      initialRoute: userSession != null  ? '/home' :  '/',
+      initialRoute: userSession.id != null  ? '/home' :  '/',
       getPages: [
         GetPage(name: '/', page: () => LoginPage() ),
         GetPage(name: '/register', page: () => RegisterPage() ),

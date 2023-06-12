@@ -6,18 +6,21 @@ List<Departamentos> departamentosFromJson(String str) => List<Departamentos>.fro
 
 String departamentosToJson(List<Departamentos> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+// "cod_pais": "CO",
+// "cod_departamento": "05",
+// "nombre_departamento": "ANTIOQUIA",
 class Departamentos {
   Departamentos({
-    this.dpto,
-    this.nombre,
+    this.cod_departamento,
+    this.nombre_departamento,
   });
 
-  String? dpto;
-  String? nombre;
+  String? cod_departamento;
+  String? nombre_departamento;
 
   factory Departamentos.fromJson(Map<String, dynamic> json) => Departamentos(
-    dpto: json["DPTO"],
-    nombre: json["NOMBRE"],
+    cod_departamento: json["cod_departamento"],
+    nombre_departamento: json["nombre_departamento"],
   );
 
   static List<Departamentos> fromJsonList(List<dynamic> jsonList){
@@ -31,7 +34,7 @@ class Departamentos {
   }
 
   Map<String, dynamic> toJson() => {
-    "DPTO": dpto,
-    "NOMBRE": nombre,
+    "cod_departamento": cod_departamento,
+    "nombre_departamento": nombre_departamento,
   };
 }
