@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:vivovital_app/src/models/json.dart';
-import 'package:vivovital_app/src/models/response_api.dart';
 import 'package:vivovital_app/src/providers/json_provider.dart';
 import 'package:vivovital_app/src/providers/login_provider.dart';
 import 'package:load/load.dart';
@@ -14,7 +12,9 @@ class LoginController extends GetxController {
 
   LoginController(){
     GetStorage().write('user', {});
-    print('=====>>>> LoginController');
+    GetStorage().write('token', {});
+    GetStorage().write('admision', {});
+    GetStorage().write('procesos', []);
   }
 
   TextEditingController emailController = TextEditingController();
@@ -48,9 +48,15 @@ class LoginController extends GetxController {
 
       if(res != 'error'){
         dynamic afi = res;
-        print('resdesde login_controller afi: ${afi['usuario']}');
+        print('resdesde login_controller usuario: ${afi['usuario']}');
+        print('resdesde login_controller admision: ${afi['admision']}');
+        print('resdesde login_controller procesos: ${afi['procesos']}');
+        print('resdesde login_controller token: ${afi['token']}');
 
         GetStorage().write('user', afi['usuario']);
+        GetStorage().write('token', afi['token']);
+        GetStorage().write('admision', afi['admision']);
+        GetStorage().write('procesos', afi['procesos']);
         // Get.snackbar('Hola ${afi['pnombre']}', 'Bienvenido!');
         goToHomePage();
         // }

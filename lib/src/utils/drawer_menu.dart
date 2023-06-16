@@ -4,12 +4,13 @@ import 'package:vivovital_app/src/utils/utils_controller.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:vivovital_app/src/models/user.dart';
-
+import 'package:vivovital_app/src/models/admision.dart';
 
 class CustomDrawerMenu extends StatelessWidget {
   UtilController con = Get.put(UtilController());
 
   User user = User.fromJson(GetStorage().read('user') ?? {});
+  Admision admision = Admision.fromJson(GetStorage().read('admision') ?? {});
 
 
   @override
@@ -21,7 +22,8 @@ class CustomDrawerMenu extends StatelessWidget {
         '${user.papellido! ?? ''} ${user.sapellido! ?? ''} ',
       ),
       accountEmail: Text(
-        '${user.email! ?? ''}'
+        '${user.email! ?? ''}\n'
+        '${admision.id ?? ''} ${admision.programaid ?? 'Sin programa.'} ',
       ),
       currentAccountPicture: CircleAvatar(
         backgroundImage: user.genero == 'Masculino'

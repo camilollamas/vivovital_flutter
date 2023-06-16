@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
     return GetBuilder<HomeController>(
         init: con,
         initState: (_) {
-          con.getStatusUser();
+          con.GetStatusUser();
         },
       builder: (_) {
       return
@@ -33,15 +33,15 @@ class HomePage extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 appBar: AppBar(
                         leading: IconButton(
-                          icon:const Icon(
+                          icon: Icon(
                             Icons.menu,
                             color: Color(0xFFFFFFFF),
                             size: 30,
                           ),
                           onPressed: () => { scaffoldKey.currentState?.openDrawer() },
                         ),
-                        title:const Text(
-                            'VitalHelp App',
+                        title: Text(
+                            'VivoVital App',
                             style: TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.w300,
@@ -54,13 +54,10 @@ class HomePage extends StatelessWidget {
                   children: [
                     Column(
                           children: [
-                            // Text('user =>  ${con.user.toString() }'),
-                            // Text('Admision =>  ${con.admision.toString()}'),
-                            // Text('proceso.habeasData =>  ${con.habeasData}'),
-                            // Text('procesos =>  ${con.procesos.toString()}'),
-                            // Text('consInf =>  ${con.consInf.value}'),
-                            // Text('refWompi =>  ${con.refWompi.value}'),
-                            // Text('keyPublic =>  ${con.keyPublic.value}'),
+                            Text('tratDatos =>  ${con.tratDatos.value}'),
+                            Text('consInf =>  ${con.consInf.value}'),
+                            Text('refWompi =>  ${con.refWompi.value}'),
+                            Text('keyPublic =>  ${con.keyPublic.value}'),
                             // ElevatedButton(
                             //     onPressed: () => {
                             //     con.GetStatusUser()
@@ -71,17 +68,46 @@ class HomePage extends StatelessWidget {
                             //     )
                             // ),
                             Visibility(
-                                // ignore: unrelated_type_equality_checks
-                                visible: con.habeasData == 0 ? true : false,
-                                child: _cardHabeasData(context)
+                                visible: con.tratDatos.value == '0' ? true : false,
+                                child: _cardSignature(context)
+                            ),
+                            Visibility(
+                                visible: con.showPlanes.value,
+                                child:
+                                Column(
+                                  children: con.planes.map((_) => FutureBuilder(
+                                          future: con.getPlanes(),
+                                          builder: (context, snapshot){
+                                           if(snapshot.hasData){
+                                              print('snapshot.hasData => ${snapshot}');
+                                              return
+                                               ListView.builder(
+                                                 scrollDirection: Axis.vertical,
+                                                 shrinkWrap: true,
+                                                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                                   itemCount: snapshot.data?.length ?? 0,
+                                                   itemBuilder: (_, index) {
+                                                     return _planesCard(snapshot.data![index], context);
+                                                   }
+                                               );
+
+
+                                              /*  ListView.builder(
+                                                itemCount: snapshot.data?.length ?? 0,
+                                                itemBuilder: (_, index) {
+                                                  return ListTile(
+                                                  );
+                                                  // return _Test(snapshot.data![index]);
+                                                },
+                                              );*/
+                                            }else{
+                                              return Text('Sin PLanes');
+                                            }
+                                          }
+                                      )
+                                    ).toList(),
+                                  )
                             )
-                            // Visibility(
-                            //     visible: true, //con.showPlanes.value,
-                            //     child:
-                            //     Column(
-                            //       children: Text('dataPlanes.length.toString()'),
-                            //     )
-                            // )
                           ],
                         )
                   ],
@@ -97,8 +123,9 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // ignore: unused_element
-  Widget _cardHabeasData(BuildContext context){
+  Widget _planesCard(Planes plan, context){
+    final numberFormat = NumberFormat.currency(locale: 'es_MX', symbol:"\$");
+
     return Container(
       margin: EdgeInsets.only(top: 20),
       alignment: Alignment.center,
@@ -107,7 +134,7 @@ class HomePage extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
         clipBehavior: Clip.hardEdge,
         child: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             border: Border.symmetric(
                 vertical: BorderSide(
                     color: Color(0xFF243588),
@@ -120,16 +147,44 @@ class HomePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-               const Text("Bienvenido a Vital Help",
-                    style: TextStyle(
+                Text('${plan.descplan ?? ''} ${plan.idplan ?? ''}',
+                    style: const TextStyle(
                       fontSize: 19,
                       // fontWeight: FontWeight.w300,
                       color: Color(0xFF243588),
                       fontFamily: 'AvenirBold',
                     )
                 ),
-                const Text('Para continuar debe aceptar el consentimiento para el tratamiento de datos personales.',
-                    textAlign: TextAlign.center,
+                Text( '${plan.idplan == 'VV90D' ? con.p1Pln1 : ''}',
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w300,
+                      color: Color(0xFF243588),
+                      fontFamily: 'AvenirReg',
+                    )
+                ),
+                Text( '${plan.idplan == 'VV90D' ? con.p2Pln1 : ''}',
+                  textAlign: TextAlign.justify,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w300,
+                    color: Color(0xFF243588),
+                    fontFamily: 'AvenirReg',
+                  )
+              ),
+                // Text( 'Inversión: ${con.numberToMoney(plan.valor) ?? ''}',
+                Text('Inversión: ${numberFormat.format(plan.valor)}',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w300,
+                      color: Color(0xFF243588),
+                      fontFamily: 'AvenirBold',
+                    )
+                ),
+                Text( '${ con.consInf == '0' ? 'Para continuar debe firmar el consentimiento informado': 'Continuar con el Pago.'}' , // '',
+                    textAlign: TextAlign.justify,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w300,
@@ -138,23 +193,115 @@ class HomePage extends StatelessWidget {
                     )
                 ),
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        onPressed:() => {
-                          Navigator.push(context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context ) => ConInfDialog(),
-                              fullscreenDialog: true,
-                            ),
+                    margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                              onPressed: () => {
+
+                                if(con.consInf == '0'){
+                                  print('Firmar'),
+                                  con.signatureController.clear(),
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context ) => ConInfDialog(),
+                                      fullscreenDialog: true,
+                                    ),
+                                  )
+                                },
+                                if(con.consInf == '1'){
+                                  print('Pagar'),
+                                  con.onPagar(plan.idplan, plan.valor, plan.descplan),
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.symmetric(horizontal: 15)
+                              ),
+                              child: Text(
+                                '${ con.consInf == '0' ? 'Continuar': 'Pagar'}' ,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w300,
+                                  fontFamily: 'AvenirReg',
+                                ),
+                              )
                           )
-                        }, 
+                        ]
+                    )
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+  }
+  Widget _cardSignature(BuildContext context){
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      alignment: Alignment.center,
+      child: Card(
+        color: Color(0xFFe3f2fd),
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+        clipBehavior: Clip.hardEdge,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.symmetric(
+                vertical: BorderSide(
+                    color: Color(0xFF243588),
+                    width: 5
+                )
+            ),
+          ),
+          child: Container(
+            margin: EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const Text(
+                    'Para continuar debe diligenciar el siguiente documento:',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w300,
+                      color: Color(0xFF243588),
+                      fontFamily: 'AvenirReg',
+                    )
+                ),
+                const Text('Autorización para el tratamiento de datos personales de CONCIENCIA PURA SAS.',
+                    style: TextStyle(
+                      fontSize: 16,
+                      // fontWeight: FontWeight.w300,
+                      color: Color(0xFF243588),
+                      fontFamily: 'AvenirBold',
+                    )
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+                  child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                        onPressed: () => {
+                          print('On signature Document'),
+                          con.signatureController.clear(),
+                          // _showDialogTrat(context),
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context ) => FullScreenDialog(),
+                                fullscreenDialog: true,
+                              ),
+                          )
+                        },
                         style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 15)
+                            padding: EdgeInsets.symmetric(horizontal: 15)
                         ),
-                        child: const Text( 'Continuar' ,
+                        child: Text(
+                          'Ver documento',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -162,18 +309,16 @@ class HomePage extends StatelessWidget {
                             fontFamily: 'AvenirReg',
                           ),
                         )
-                      )
-                    ]
-                    ),
-                ),
-              ]
-            )
-          )
-
-        )
-      )
+                    )
+                  ]
+                  )
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
     );
-
   }
 
   Widget _bgDegrade(BuildContext context){
@@ -311,6 +456,12 @@ class FullScreenDialog extends StatelessWidget {
                             fontFamily: 'AvenirReg',
                           ),
                         ),
+                        Signature(
+                          controller: con.signatureController,
+                          backgroundColor: Colors.grey.withAlpha(50),
+                          height: 200,
+                          // width: 200,
+                        ),
                         _buildButtons(context)
                       ],
                     ),
@@ -341,7 +492,9 @@ class FullScreenDialog extends StatelessWidget {
     return IconButton(
       iconSize: 36,
       onPressed: () async {
-
+        if (con.signatureController.isNotEmpty){
+          con.confirmSignature(context,'TRATAMIENTO');
+        }else{
           Get.snackbar(
               'Aviso: ',
               'Debe Firmar',
@@ -349,7 +502,7 @@ class FullScreenDialog extends StatelessWidget {
               backgroundColor: Colors.red,
               icon: const Icon(Icons.error_outline, color: Colors.white)
           );
-        
+        }
       },
       icon: Icon(Icons.check, color: Colors.green)
     );
@@ -357,7 +510,7 @@ class FullScreenDialog extends StatelessWidget {
   Widget buildClear(){
     return IconButton(
         iconSize: 36,
-        onPressed: () => {},
+        onPressed: () => con.signatureController.clear(),
         icon: Icon(Icons.clear , color: Colors.red)
     );
   }
@@ -404,9 +557,57 @@ class ConInfDialog extends StatelessWidget{
                       fontFamily: 'AvenirBold',
                     ),
                   ),
-                  const Text('1111111111111111',
+                  Text('${con.p1ConInf ?? ''}',
                     textAlign: TextAlign.justify,
-                    style: TextStyle(
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontFamily: 'AvenirReg',
+                    ),
+                  ),
+                  Text('${con.p2ConInf ?? ''}',
+                    textAlign: TextAlign.justify,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontFamily: 'AvenirReg',
+                    ),
+                  ),
+                  Text('${con.p3ConInf ?? ''}',
+                    textAlign: TextAlign.justify,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontFamily: 'AvenirReg',
+                    ),
+                  ),
+                  Text('${con.p4ConInf ?? ''}',
+                    textAlign: TextAlign.justify,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontFamily: 'AvenirReg',
+                    ),
+                  ),
+                  Text('${con.p5ConInf ?? ''}',
+                    textAlign: TextAlign.justify,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontFamily: 'AvenirReg',
+                    ),
+                  ),
+                  Text('${con.p6ConInf ?? ''}',
+                    textAlign: TextAlign.justify,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontFamily: 'AvenirReg',
+                    ),
+                  ),
+                  Text('${con.p7ConInf ?? ''}',
+                    textAlign: TextAlign.justify,
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                       fontFamily: 'AvenirReg',
@@ -431,6 +632,30 @@ class ConInfDialog extends StatelessWidget{
                       fontFamily: 'AvenirReg',
                     ),
                   ),
+                  Text('${con.p8ConInf ?? ''}',
+                    textAlign: TextAlign.justify,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontFamily: 'AvenirReg',
+                    ),
+                  ),
+                  Text('${con.p9ConInf ?? ''}',
+                    textAlign: TextAlign.justify,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontFamily: 'AvenirReg',
+                    ),
+                  ),
+                  Text('${con.p10ConInf ?? ''}',
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                      color: Color(0xff243588),
+                      fontSize: 18,
+                      fontFamily: 'AvenirBold',
+                    ),
+                  ),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
                     child: Column(
@@ -443,7 +668,13 @@ class ConInfDialog extends StatelessWidget{
                             fontFamily: 'AvenirReg',
                           ),
                         ),
-                        // _singButtos(context)
+                        Signature(
+                          controller: con.signatureController,
+                          backgroundColor: Colors.grey.withAlpha(50),
+                          height: 200,
+                          // width: 200,
+                        ),
+                        _singButtos(context)
                       ],
                     ),
                   )
@@ -473,21 +704,25 @@ class ConInfDialog extends StatelessWidget{
     return IconButton(
         iconSize: 36,
         onPressed: () async {
-          Get.snackbar(
-              'Aviso: ',
-              'Debe Firmar',
-              colorText: Colors.white,
-              backgroundColor: Colors.red,
-              icon: const Icon(Icons.error_outline, color: Colors.white)
-          );
-          },
+          if (con.signatureController.isNotEmpty){
+            con.confirmSignature(context, 'CONSENTIMIENTO' );
+          }else{
+            Get.snackbar(
+                'Aviso: ',
+                'Debe Firmar',
+                colorText: Colors.white,
+                backgroundColor: Colors.red,
+                icon: const Icon(Icons.error_outline, color: Colors.white)
+            );
+          }
+        },
         icon: Icon(Icons.check, color: Colors.green)
     );
   }
   Widget buildClear(){
     return IconButton(
         iconSize: 36,
-        onPressed: () => {},
+        onPressed: () => con.signatureController.clear(),
         icon: Icon(Icons.clear , color: Colors.red)
     );
   }

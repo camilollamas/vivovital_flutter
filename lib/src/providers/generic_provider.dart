@@ -16,15 +16,13 @@ class GenericProvider extends GetConnect {
     print('Provider generic_provider => data ${data}');
     print('Provider generic_provider => url/path ${url}${path}');
     dynamic response = await post(
-        "${url}${path}",
+        "$url$path",
         data,
         headers: {
           'Content-Type': 'application/json'
         }
     );
-    print('generic_provider => response1 ${response.body}');
     Map body = response.body ?? "error";
-
     print('generic_provider => body ${body}');
 
     if(body == 'error'){
