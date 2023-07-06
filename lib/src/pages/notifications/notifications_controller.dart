@@ -122,7 +122,7 @@ class NotificationsController extends GetxController {
 
     print('===>>> getVideo <<<=== ${iddoc}');
 
-    return true;
+    // return true;
 
     showLoadingDialog();
     Json json = Json(
@@ -151,7 +151,7 @@ class NotificationsController extends GetxController {
     hideLoadingDialog();
     if(resp['res'] == 'ok'){
       print('RESP=> ${resp['result']}');
-      urlVideo.value = 'http://192.168.1.11:90/${resp['result']['sourcePath']}';
+      urlVideo.value = 'http://192.168.1.22:90/${resp['result']['sourcePath']}';
       print('urlVideo ${urlVideo.value}');
       return true;
       // showVideo(context, urlVideo);
@@ -161,7 +161,7 @@ class NotificationsController extends GetxController {
 
   void showVideo (context, String? url) {
     late VideoPlayerController urlVideo;
-    urlVideo = VideoPlayerController.network('http://192.168.1.11:90/docs/0DA29342-FC20-4405-A5C2-CFD24F629B11.mp4')
+    urlVideo = VideoPlayerController.network('http://192.168.1.22:90/docs/0DA29342-FC20-4405-A5C2-CFD24F629B11.mp4')
     ..initialize().then((_) {
     // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
       super.refresh();

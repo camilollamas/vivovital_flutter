@@ -13,6 +13,8 @@ import 'package:vivovital_app/src/pages/register/register_page.dart';
 import 'package:vivovital_app/src/pages/home/home_page.dart';
 import 'package:vivovital_app/src/pages/paid/paid_page.dart';
 
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 User userSession = User.fromJson(GetStorage().read('user') ?? {});
 
 void main() async {
@@ -46,6 +48,13 @@ class _MyAppState extends State<MyApp> {
     print('Afiliado: ${userSession.idafiliado}');
 
     return GetMaterialApp(
+      localizationsDelegates: const [
+         GlobalMaterialLocalizations.delegate
+       ],
+       supportedLocales: const [
+         Locale('es'),
+         Locale('en')
+       ],
       title: 'Vivo Vital App',
       debugShowCheckedModeBanner: false,
       initialRoute: userSession.idafiliado != null  ? '/home' :  '/',
@@ -61,7 +70,7 @@ class _MyAppState extends State<MyApp> {
         GetPage(name: '/paid', page: () => PaidPage() )
       ],
       theme: ThemeData(
-        primaryColor: Color(0xff243588),
+        primaryColor:const Color(0xff243588),
         colorScheme: ColorScheme(
             primary: Color(0xff243588),
             secondary: Color(0xff72246c),

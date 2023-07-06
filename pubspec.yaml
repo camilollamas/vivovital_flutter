@@ -50,6 +50,8 @@ dependencies:
   appinio_video_player: ^1.2.0
   pdf: ^3.6.0
   permission_handler: ^8.2.2
+  flutter_localizations:
+    sdk: flutter 
 
 dev_dependencies:
   flutter_test:
@@ -102,10 +104,6 @@ flutter:
       fonts:
         - asset: assets/fonts/AvenirNextRoundedStd-Bold.ttf
           style: normal
-
-
-
-
 
 
   #       - asset: fonts/Schyler-Italic.ttf

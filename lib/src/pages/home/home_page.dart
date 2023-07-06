@@ -33,14 +33,14 @@ class HomePage extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 appBar: AppBar(
                         leading: IconButton(
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.menu,
                             color: Color(0xFFFFFFFF),
                             size: 30,
                           ),
                           onPressed: () => { scaffoldKey.currentState?.openDrawer() },
                         ),
-                        title: Text(
+                        title: const Text(
                             'VivoVital App',
                             style: TextStyle(
                               fontSize: 30,
@@ -54,10 +54,26 @@ class HomePage extends StatelessWidget {
                   children: [
                     Column(
                           children: [
-                            Text('tratDatos =>  ${con.tratDatos.value}'),
-                            Text('consInf =>  ${con.consInf.value}'),
-                            Text('refWompi =>  ${con.refWompi.value}'),
-                            Text('keyPublic =>  ${con.keyPublic.value}'),
+                            Text('habeasData =>  ${con.habeasData.value}'),
+                            Visibility(
+                              visible: con.habeasData.value['ESTADOPASO'] == 0 ? true : false,
+                              child: _cardSignature(context)
+                            ),
+
+                            Text('datosPersonales =>  ${con.datosPersonales.value}'),
+                            Visibility(
+                                visible: con.habeasData.value['ESTADOPASO'] == 1 && con.datosPersonales.value['ESTADOPASO'] == 0 ? true : false,
+                                child: _cardDatosPersonales(context)
+                            ),
+
+
+                            Text('citaValoracion =>  ${con.citaValoracion.value}'),
+                            Visibility(
+                                visible: con.datosPersonales.value['ESTADOPASO'] == 1 && con.citaValoracion.value['ESTADOPASO'] == 0 ? true : false,
+                                child: _cardCitaValoracion(context)
+                            ),
+
+                            // Text('keyPublic =>  ${con.keyPublic.value}'),
                             // ElevatedButton(
                             //     onPressed: () => {
                             //     con.GetStatusUser()
@@ -240,6 +256,7 @@ class HomePage extends StatelessWidget {
     );
 
   }
+  
   Widget _cardSignature(BuildContext context){
     return Container(
       margin: EdgeInsets.only(top: 20),
@@ -248,8 +265,8 @@ class HomePage extends StatelessWidget {
         color: Color(0xFFe3f2fd),
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
         clipBehavior: Clip.hardEdge,
-        child: Container(
-          decoration: BoxDecoration(
+        child: Container( 
+          decoration: const BoxDecoration(
             border: Border.symmetric(
                 vertical: BorderSide(
                     color: Color(0xFF243588),
@@ -285,22 +302,11 @@ class HomePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
-                        onPressed: () => {
-                          print('On signature Document'),
-                          con.signatureController.clear(),
-                          // _showDialogTrat(context),
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context ) => FullScreenDialog(),
-                                fullscreenDialog: true,
-                              ),
-                          )
-                        },
+                        onPressed: () => { con.onSignatureHabeasData(context) },
                         style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(horizontal: 15)
+                            padding: const EdgeInsets.symmetric(horizontal: 15)
                         ),
-                        child: Text(
+                        child: const Text(
                           'Ver documento',
                           style: TextStyle(
                             color: Colors.white,
@@ -320,7 +326,136 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-
+  Widget _cardDatosPersonales(BuildContext context){
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      alignment: Alignment.center,
+      child: Card(
+        color: Color(0xFFe3f2fd),
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+        clipBehavior: Clip.hardEdge,
+        child: Container(
+          decoration: const BoxDecoration(
+            border: Border.symmetric(
+                vertical: BorderSide(
+                    color: Color(0xFF243588),
+                    width: 5
+                )
+            ),
+          ),
+          child: Container(
+            margin: const EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const Text(
+                    'Es hora de actualizar tus datos personales:',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w300,
+                      color: Color(0xFF243588),
+                      fontFamily: 'AvenirReg',
+                    )
+                ),
+                Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                              onPressed: () => { 
+                                Get.toNamed('/profile')
+                                // con.onSignatureHabeasData(context) 
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(horizontal: 15)
+                              ),
+                              child: const Text(
+                                'Ir al perfil',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w300,
+                                  fontFamily: 'AvenirReg',
+                                ),
+                              )
+                          )
+                        ]
+                    )
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+  Widget _cardCitaValoracion(BuildContext context){
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      alignment: Alignment.center,
+      child: Card(
+        color: Color(0xFFe3f2fd),
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+        clipBehavior: Clip.hardEdge,
+        child: Container(
+          decoration: const BoxDecoration(
+            border: Border.symmetric(
+                vertical: BorderSide(
+                    color: Color(0xFF243588),
+                    width: 5
+                )
+            ),
+          ),
+          child: Container(
+            margin: const EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const Text(
+                    'Agenda tu cita de Valoración para establecer el programa que mejor se adapte a tus necesidades.',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w300,
+                      color: Color(0xFF243588),
+                      fontFamily: 'AvenirReg',
+                    )
+                ),
+                Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                              onPressed: () => { 
+                                Get.toNamed('/dates')
+                                // con.onSignatureHabeasData(context) 
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(horizontal: 15)
+                              ),
+                              child: const Text(
+                                'Ir a Citas',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w300,
+                                  fontFamily: 'AvenirReg',
+                                ),
+                              )
+                          )
+                        ]
+                    )
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+  
+  
   Widget _bgDegrade(BuildContext context){
     return Container(
       height: MediaQuery.of(context).size.height * 0.4,
@@ -384,7 +519,8 @@ class FullScreenDialog extends StatelessWidget {
   HomeController con = Get.put(HomeController());
   @override
   Widget build(BuildContext context){
-    return Scaffold(
+    return 
+    Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xff243588),
         foregroundColor: Colors.white,
@@ -541,7 +677,7 @@ class ConInfDialog extends StatelessWidget{
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Column(
                 children: [
-                  Text('CONSENTIMIENTO INFORMADO',
+                  const Text('CONSENTIMIENTO INFORMADO',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Color(0xff243588),
@@ -549,7 +685,7 @@ class ConInfDialog extends StatelessWidget{
                       fontFamily: 'AvenirBold',
                     ),
                   ),
-                  Text('PROGRAMA DE INTERVENCIÓN VIVOVITAL VITAL-PLUS.',
+                  const Text('PROGRAMA DE INTERVENCIÓN VIVOVITAL VITAL-PLUS.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Color(0xff243588),
@@ -559,7 +695,7 @@ class ConInfDialog extends StatelessWidget{
                   ),
                   Text('${con.p1ConInf ?? ''}',
                     textAlign: TextAlign.justify,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                       fontFamily: 'AvenirReg',
@@ -567,7 +703,7 @@ class ConInfDialog extends StatelessWidget{
                   ),
                   Text('${con.p2ConInf ?? ''}',
                     textAlign: TextAlign.justify,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                       fontFamily: 'AvenirReg',
@@ -575,7 +711,7 @@ class ConInfDialog extends StatelessWidget{
                   ),
                   Text('${con.p3ConInf ?? ''}',
                     textAlign: TextAlign.justify,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                       fontFamily: 'AvenirReg',
@@ -583,7 +719,7 @@ class ConInfDialog extends StatelessWidget{
                   ),
                   Text('${con.p4ConInf ?? ''}',
                     textAlign: TextAlign.justify,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                       fontFamily: 'AvenirReg',
@@ -591,7 +727,7 @@ class ConInfDialog extends StatelessWidget{
                   ),
                   Text('${con.p5ConInf ?? ''}',
                     textAlign: TextAlign.justify,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                       fontFamily: 'AvenirReg',
@@ -599,7 +735,7 @@ class ConInfDialog extends StatelessWidget{
                   ),
                   Text('${con.p6ConInf ?? ''}',
                     textAlign: TextAlign.justify,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                       fontFamily: 'AvenirReg',
@@ -607,7 +743,7 @@ class ConInfDialog extends StatelessWidget{
                   ),
                   Text('${con.p7ConInf ?? ''}',
                     textAlign: TextAlign.justify,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                       fontFamily: 'AvenirReg',
@@ -618,7 +754,7 @@ class ConInfDialog extends StatelessWidget{
                       '${con.user.papellido ?? ''} '
                       '${con.user.sapellido ?? ''} ',
                     textAlign: TextAlign.justify,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                       fontFamily: 'AvenirReg',
@@ -626,7 +762,7 @@ class ConInfDialog extends StatelessWidget{
                   ),
                   Text('Con ${con.user.documentocompleto ?? ''}',
                     textAlign: TextAlign.justify,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                       fontFamily: 'AvenirReg',
@@ -634,7 +770,7 @@ class ConInfDialog extends StatelessWidget{
                   ),
                   Text('${con.p8ConInf ?? ''}',
                     textAlign: TextAlign.justify,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                       fontFamily: 'AvenirReg',
@@ -642,7 +778,7 @@ class ConInfDialog extends StatelessWidget{
                   ),
                   Text('${con.p9ConInf ?? ''}',
                     textAlign: TextAlign.justify,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                       fontFamily: 'AvenirReg',
@@ -650,7 +786,7 @@ class ConInfDialog extends StatelessWidget{
                   ),
                   Text('${con.p10ConInf ?? ''}',
                     textAlign: TextAlign.left,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color(0xff243588),
                       fontSize: 18,
                       fontFamily: 'AvenirBold',
@@ -660,7 +796,7 @@ class ConInfDialog extends StatelessWidget{
                     margin: EdgeInsets.symmetric(horizontal: 0, vertical: 15),
                     child: Column(
                       children: [
-                        Text('Firmar: ',
+                        const Text('Firmar: ',
                           // textAlign: TextAlign.left,
                           style: TextStyle(
                             color: Color(0xff243588),
@@ -705,7 +841,7 @@ class ConInfDialog extends StatelessWidget{
         iconSize: 36,
         onPressed: () async {
           if (con.signatureController.isNotEmpty){
-            con.confirmSignature(context, 'CONSENTIMIENTO' );
+            con.confirmSignature(context, 'HABEASDATA' );
           }else{
             Get.snackbar(
                 'Aviso: ',
@@ -716,7 +852,7 @@ class ConInfDialog extends StatelessWidget{
             );
           }
         },
-        icon: Icon(Icons.check, color: Colors.green)
+        icon: const Icon(Icons.check, color: Colors.green)
     );
   }
   Widget buildClear(){

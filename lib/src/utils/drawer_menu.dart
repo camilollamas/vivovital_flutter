@@ -21,7 +21,6 @@ class CustomDrawerMenu extends StatelessWidget {
       ),
       accountEmail: Text(
         '${user.email! ?? ''}'
-        ' ${user.noadmision! ?? ''}',
       ),
       currentAccountPicture: CircleAvatar(
         backgroundImage: user.sexo == 'Masculino'

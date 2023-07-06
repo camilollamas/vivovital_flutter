@@ -18,10 +18,34 @@ import 'dart:convert';
 import 'package:money2/money2.dart';
 import 'package:vivovital_app/src/enviroment/enviroment.dart';
 
+
+class EstadoUser {
+  String? IDAFILIADO;
+  String? PASO;
+  int? ESTADOPASO;
+  String? FECHA;
+  String? DESCRIPCION;
+
+  EstadoUser(this.IDAFILIADO, this.PASO, this.ESTADOPASO, this.FECHA, this.DESCRIPCION);
+
+  @override
+  String toString() {
+    return 'IDAFILIADO: $IDAFILIADO, PASO: $PASO, ESTADOPASO: $ESTADOPASO, FECHA: $FECHA, DESCRIPCION: $DESCRIPCION';
+  }
+}
+
 class HomeController extends GetxController {
   User user = User.fromJson(GetStorage().read('user') ?? {});
   JsonProvider jsonProvider = JsonProvider();
   String api_url = '${Enviroment.API_URL}';
+
+  // Variables de procesos
+  var habeasData = {}.obs;
+  var datosPersonales = {}.obs;
+  var citaValoracion = {}.obs;
+
+
+
   var p1ConsInf = '';
   var statusUser = {};
   var refWompi = ''.obs;
@@ -59,10 +83,10 @@ class HomeController extends GetxController {
     showDialog(
         context: context,
         builder: (_) => SimpleDialog(
-          contentPadding: EdgeInsets.only(left: 30, right: 30, bottom: 30),
+          contentPadding: const EdgeInsets.only(left: 30, right: 30, bottom: 30),
           title:
           Container(
-              margin: EdgeInsets.only(bottom: 20),
+              margin: const EdgeInsets.only(bottom: 20),
               child:
               const Text('Confirmación',
                   style: TextStyle(
@@ -75,7 +99,7 @@ class HomeController extends GetxController {
           children: [
             Column(
               children: [
-                Text('¿Confirma que desea continuar?',
+                const Text('¿Confirma que desea continuar?',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.black,
@@ -91,10 +115,10 @@ class HomeController extends GetxController {
                           onPressed: () => Navigator.pop(context, true),
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
-                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
                               shadowColor: Colors.transparent
                           ),
-                          child: Text(
+                          child: const Text(
                             'Cancelar',
                             style: TextStyle(
                               color: Colors.redAccent,
@@ -109,9 +133,9 @@ class HomeController extends GetxController {
                             Navigator.pop(context, true)
                           },
                           style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(horizontal: 15)
+                              padding: const EdgeInsets.symmetric(horizontal: 15)
                           ),
-                          child: Text(
+                          child: const Text(
                             'Continuar',
                             style: TextStyle(
                               color: Colors.white,
@@ -137,7 +161,7 @@ class HomeController extends GetxController {
     final signature = await exportSignature();
 
     var request = http.MultipartRequest('POST', Uri.parse('${api_url}upload/archivoMpld'));
-    request.fields['DocTipo'] = document == 'CONSENTIMIENTO' ? 'CONSENTIMIENTO' : 'TRATAMIENTO';
+    request.fields['DocTipo'] = document == 'HABEASDATA' ? 'HABEASDATA' : 'TRATAMIENTO';
     request.fields['DocCnsAuxiliar'] = '${usuario['IDAFILIADO']}';
     request.fields['DocConsecutivo'] = '${usuario['IDAFILIADO']}';
     request.fields['DocUsuario'] = 'AFIAPP';
@@ -155,7 +179,7 @@ class HomeController extends GetxController {
     hideLoadingDialog();
     var jsonData = jsonDecode(respStr);
     if (response.statusCode == 200) {
-      // print('sucess => ${jsonData['result']}');
+      print('sucess => ${jsonData['result']}');
       getFirma(jsonData['result'], document);
 
 
@@ -164,37 +188,37 @@ class HomeController extends GetxController {
     }
     return;
   }
+  
   void getFirma(idFirma, String? document) async{
-    // showLoadingDialog();
+    showLoadingDialog();
     var usuario = user.toJson();
 
     Json json = Json(
         modelo: 'VIVO_AFI_APP',
         metodo: 'GETFIRMA',
         parametros: {
-          'IDFIRMA': '${idFirma}',
+          'IDFIRMA': '$idFirma',
           'IDAFILIADO': '${usuario['IDAFILIADO']}',
-          'DOCUMENTO': '${document}'
+          'DOCUMENTO': '$document'
         }
     );
 
     ResponseApi res = await jsonProvider.json(json);
+    hideLoadingDialog();
+    print('Respuesta => ${res.result?.recordsets!}');
+    // var datos = {
+    //   'MODELO': 'VIVO_AFI_APP',
+    //   'METODO': 'FIRMARDOCUMENTO',
+    //   'PARAMETROS':{
+    //     'DOCUMENTOID': '${idFirma}',
+    //     'IDAFILIADO': '${usuario['IDAFILIADO']}',
+    //     'NOADMISION': '${usuario['NOADMISION']}',
+    //     'DOCUMENTO': '${document}'
+    //   }
+    // };
 
-    // hideLoadingDialog();
-    // print('Respuesta => ${res.result?.recordsets!}');
-    var datos = {
-      'MODELO': 'VIVO_AFI_APP',
-      'METODO': 'FIRMARDOCUMENTO',
-      'PARAMETROS':{
-        'DOCUMENTOID': '${idFirma}',
-        'IDAFILIADO': '${usuario['IDAFILIADO']}',
-        'NOADMISION': '${usuario['NOADMISION']}',
-        'DOCUMENTO': '${document}'
-      }
-    };
-
-    var dio = Dio();
-    var response = await dio.post('${api_url}json', data: datos);
+    // var dio = Dio();
+    // var response = await dio.post('${api_url}json', data: datos);
 
     // print('response DIO : ${response}');
     changeValue('1');
@@ -207,8 +231,10 @@ class HomeController extends GetxController {
     );
     Get.toNamed('/home');
     // Get.back();
+    GetStatusUser();
     // Get.back();
   }
+  
   void SedImage(data) async{
     Dio dio = new Dio();
     dio.post('${api_url}upload/archivoMpld', data: data).then((response) {
@@ -240,6 +266,7 @@ class HomeController extends GetxController {
     Get.toNamed('/');
   }
   void GetStatusUser() async{
+    showLoadingDialog();
     planes.clear();
     showPlanes.value = false;
     consInf = '2'.obs;
@@ -252,54 +279,91 @@ class HomeController extends GetxController {
         modelo: 'VIVO_AFI_APP',
         metodo: 'GETSTATUS',
         parametros: {
-          "IDAFILIADO": '${idafiliado['IDAFILIADO']}',
-          "NOADMISION": '${idafiliado['NOADMISION']}'
-
+          "IDAFILIADO": '${idafiliado['IDAFILIADO']}'
         });
     //
     ResponseApi res = await jsonProvider.json(json);
     // dynamic res = await jsonProvider.json(json);
     // hideLoadingDialog();
     // print('Respuesta res  -> ${res}');
-    print('Respuesta res  -> ${res.result?.recordsets}');
+    // print('Respuesta res  -> ${res.result?.recordsets}');
 
-    print('[0] cos_inf - Trat  => ${res.result?.recordsets![0]}');
-    print('[4] pagos - PAgos => ${res.result?.recordsets![4]}');
-    print('[5] planes - Planes => ${res.result?.recordsets![5]}');
+    List<dynamic> estadoUser = res.result?.recordsets![0];
+
+    print('Estado USER =======>>>> $estadoUser');
+    
+
+    // List<Map<String, dynamic>> listaObjetos = res.result?.recordsets![0][0];
+
+    // Habeas Data
+    var hD = estadoUser.where((objeto) => objeto['PASO'] == '0010').toList();
+    habeasData.value = hD[0];
+
+    // Datos Personales
+    var dP = estadoUser.where((objeto) => objeto['PASO'] == '0020').toList();
+    datosPersonales.value = dP[0];
+
+    // Cita Valoración
+    var cV = estadoUser.where((objeto) => objeto['PASO'] == '0030').toList();
+    citaValoracion.value = cV[0];
+
+
+    print('Estado->0010->FIRMA HABEAS DATA  -> $habeasData');
+
+    if(habeasData['ESTADOPASO'] == 0){
+      // print('Mostrar Dialog Habeas Data');
+      onSignatureHabeasData(Get.context!);
+    }
+
+    // Completar Datos Personales
+    if(datosPersonales['ESTADOPASO'] == 0){
+
+    }
+
+
+    hideLoadingDialog();
+
+
+
+    // print('[0] cos_inf - Trat  => ${res.result?.recordsets![0]}');
+    // print('[4] pagos - PAgos => ${res.result?.recordsets![4]}');
+    // print('[5] planes - Planes => ${res.result?.recordsets![5]}');
     // planes = res.result?.recordsets![5];
-    var result = Planes.fromJsonList(res.result?.recordsets![5]);
-    planes.addAll(result);
+    
+    
+    // var result = Planes.fromJsonList(res.result?.recordsets![5]);
+    // planes.addAll(result);
 
 
-    var pagos = {};
-    var preConInf = res.result?.recordsets![0];
-    var prepagos = res.result?.recordsets![4];
+    // var pagos = {};
+    // var preConInf = res.result?.recordsets![0];
+    // var prepagos = res.result?.recordsets![4];
 
-    statusUser = preConInf[0];
+    // statusUser = preConInf[0];
 
-    pagos = prepagos[0];
+    // pagos = prepagos[0];
 
-    refWompi.value = pagos['REF_WOMPI'];
+    // refWompi.value = pagos['REF_WOMPI'];
 
 
     // tratDatos.value = '2'; //statusUser['TRAT_DATOS'].toString();
     //tratDatos.value = 'Valor 2';
-    changeValue('${statusUser['TRAT_DATOS']}');
-    consInf.value = '${statusUser['CONS_INF']}';
+    // changeValue('${statusUser['TRAT_DATOS']}');
+    // consInf.value = '${statusUser['CONS_INF']}';
 
-    print('TRAT_DATOS[TRAT_DATOS] =>>  ${statusUser['TRAT_DATOS']} ');
-    print('CONS_INF[CONS_INF] =>>  ${statusUser['CONS_INF']} ');
-    print('PAGOS[ESTADO]          =>> ${pagos['ESTADO']} ');
+    // print('TRAT_DATOS[TRAT_DATOS] =>>  ${statusUser['TRAT_DATOS']} ');
+    // print('CONS_INF[CONS_INF] =>>  ${statusUser['CONS_INF']} ');
+    // print('PAGOS[ESTADO]          =>> ${pagos['ESTADO']} ');
 
 
-    if(statusUser['TRAT_DATOS'] == 1 && pagos['ESTADO'] == 'PENDIENTE'){
-      print('Mostrar Planes ${planes}');
-      showPlanes.value = true;
-    }
+    // if(statusUser['TRAT_DATOS'] == 1 && pagos['ESTADO'] == 'PENDIENTE'){
+    //   print('Mostrar Planes ${planes}');
+    //   showPlanes.value = true;
+    // }
 
 
     // Get.toNamed('/home');
-    update(["tratDatos"]);
+    // update(["tratDatos"]);
     super.refresh();
 
     // print('[1] Envio =>  ${res.result?.recordsets![1]}');
@@ -312,6 +376,138 @@ class HomeController extends GetxController {
 
 
 
+  }
+
+  void onSignatureHabeasData(context) {
+    signatureController.clear();
+    
+    Navigator.push(
+      Get.context!,
+      MaterialPageRoute(
+        builder: (BuildContext context ) => 
+          Scaffold(
+            appBar: AppBar(
+              backgroundColor: Color(0xff243588),
+              foregroundColor: Colors.white,
+              title: const Text (
+                  'Tratamiento de datos personales',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontFamily: 'AvenirReg',
+                ),
+              ),
+            ),
+            body: Center(
+              child: SingleChildScrollView(
+                // padding: EdgeInsets.only(left: 30, right: 30),
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    child: Column(
+                      children: [
+                        const Text('Autorización para el tratamiento de datos personales de',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color(0xff243588),
+                            fontSize: 18,
+                            fontFamily: 'AvenirBold',
+                          ),
+                        ),
+                        const Text('CONCIENCIA PURA SAS.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color(0xff243588),
+                            fontSize: 18,
+                            fontFamily: 'AvenirBold',
+                          ),
+                        ),
+                        const Text('Declaro que he sido informado que CONCIENCIA PURA S.A.S es el responsable del tratamiento de mis datos personales que estoy proveyendo a través del diligenciamiento del presente formulario, chat, correo electrónico o a través de cualquier contacto verbal, escrito o telefónico con dicha empresa, y declaro que he leído las Políticas de Tratamiento de Datos Personales disponibles en el sitio web www.vivovital.com.co',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontFamily: 'AvenirReg',
+                          ),
+                        ),
+                        const Text('Por ello, consiento y autorizo de manera previa, expresa e inequívoca que mis datos personales sean tratados con sujeción a lo establecido en sus Políticas de Protección de Datos Personales, atendiendo a las finalidades allí señaladas según mi vinculación con la empresa.',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontFamily: 'AvenirReg',
+                          ),
+                        ),
+                        const Text('Como Titular de esta información tengo derecho a conocer, actualizar y rectificar mis datos personales, solicitar prueba de la autorización otorgada para su tratamiento, ser informado sobre el uso que se ha dado a los mismos, presentar quejas ante la SIC por infracción a la ley, revocar la autorización y/o solicitar la supresión de mis datos en los casos en que sea procedente y acceder en forma gratuita a los mismos mediante solicitud por escrito dirigida a CONCIENCIA PURA S.A.S al correo electrónico: servicioalcliente@vivovital.com.co',
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontFamily: 'AvenirReg',
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+                          child: Column(
+                            children: [
+                              const Text('Firmar: ',
+                                // textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  color: Color(0xff243588),
+                                  fontSize: 16,
+                                  fontFamily: 'AvenirReg',
+                                ),
+                              ),
+                              Signature(
+                                controller: signatureController,
+                                backgroundColor: Colors.grey.withAlpha(50),
+                                height: 200,
+                                // width: 200,
+                              ),
+                                //Buttons:
+                                Container(
+                                  color: Color(0xff243588),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      IconButton(
+                                        iconSize: 36,
+                                        onPressed: () async {
+                                          if (signatureController.isNotEmpty){
+                                            confirmSignature(context,'TRATAMIENTO');
+                                          }else{
+                                            Get.snackbar(
+                                                'Aviso: ',
+                                                'Debe Firmar',
+                                                colorText: Colors.white,
+                                                backgroundColor: Colors.red,
+                                                icon: const Icon(Icons.error_outline, color: Colors.white)
+                                            );
+                                          }
+                                        },
+                                        icon: Icon(Icons.check, color: Colors.green)
+                                      ),
+                                      IconButton(
+                                        iconSize: 36,
+                                        onPressed: () => signatureController.clear(),
+                                        icon: Icon(Icons.clear , color: Colors.red)
+                                      )
+                                    ],
+                                  ),
+                                )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                ),
+              )
+            ),
+          ),
+          fullscreenDialog: true,
+      ),
+    );
+    // print('Firma Habeas Data');
+    // Get.toNamed('/home');  
   }
 
   Future<List<Planes>> getPlanes() async {
@@ -373,5 +569,6 @@ class HomeController extends GetxController {
     Get.toNamed('/paid');
     // update();
   }
+
 
 }

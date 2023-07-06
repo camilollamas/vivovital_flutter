@@ -693,6 +693,7 @@ class _RegisterState extends State<RegisterPage> {
         )
     );
   }
+  
   Widget _inputRegion(List<Departamentos> departamentos){
     return Container(
       margin: EdgeInsets.only(top: 0),
