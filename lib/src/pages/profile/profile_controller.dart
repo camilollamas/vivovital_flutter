@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:vivovital_app/src/models/user.dart';
+import 'package:vitalhelp_app/src/models/user.dart';
 import '../../models/tgensel.dart';
 import '../../models/json.dart';
 import '../../models/response_api.dart';
-import 'package:vivovital_app/src/providers/json_provider.dart';
+import 'package:vitalhelp_app/src/providers/json_provider.dart';
 
 class ProfileController extends GetxController {
   User user = User.fromJson(GetStorage().read('user') ?? {});

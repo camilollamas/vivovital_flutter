@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:load/load.dart';
-import 'package:vivovital_app/src/models/user.dart';
-import 'package:vivovital_app/src/pages/dates/dates_page.dart';
-import 'package:vivovital_app/src/pages/login/login_page.dart';
-import 'package:vivovital_app/src/pages/monitoring/monitoring_page.dart';
-import 'package:vivovital_app/src/pages/notifications/notifications_page.dart';
-import 'package:vivovital_app/src/pages/profile/profile_page.dart';
-import 'package:vivovital_app/src/pages/profile/update/update_profile_page.dart';
-import 'package:vivovital_app/src/pages/register/register_page.dart';
-import 'package:vivovital_app/src/pages/home/home_page.dart';
-import 'package:vivovital_app/src/pages/paid/paid_page.dart';
+import 'package:vitalhelp_app/src/models/user.dart';
+import 'package:vitalhelp_app/src/pages/dates/dates_page.dart';
+import 'package:vitalhelp_app/src/pages/login/login_page.dart';
+import 'package:vitalhelp_app/src/pages/monitoring/monitoring_page.dart';
+import 'package:vitalhelp_app/src/pages/notifications/notifications_page.dart';
+import 'package:vitalhelp_app/src/pages/profile/profile_page.dart';
+import 'package:vitalhelp_app/src/pages/profile/update/update_profile_page.dart';
+import 'package:vitalhelp_app/src/pages/register/register_page.dart';
+import 'package:vitalhelp_app/src/pages/home/home_page.dart';
+import 'package:vitalhelp_app/src/pages/paid/paid_page.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 

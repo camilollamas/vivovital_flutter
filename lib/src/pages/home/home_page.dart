@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vivovital_app/src/pages/home/home_controller.dart';
-import 'package:vivovital_app/src/utils/drawer_menu.dart';
+import 'package:vitalhelp_app/src/pages/home/home_controller.dart';
+import 'package:vitalhelp_app/src/utils/drawer_menu.dart';
 import 'package:signature/signature.dart';
-import 'package:vivovital_app/src/models/planes.dart';
+import 'package:vitalhelp_app/src/models/planes.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatelessWidget {
@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
                           onPressed: () => { scaffoldKey.currentState?.openDrawer() },
                         ),
                         title: const Text(
-                            'VivoVital App',
+                            'vitalhelp App',
                             style: TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.w300,
@@ -72,7 +72,16 @@ class HomePage extends StatelessWidget {
                                 visible: con.datosPersonales.value['ESTADOPASO'] == 1 && con.citaValoracion.value['ESTADOPASO'] == 0 ? true : false,
                                 child: _cardCitaValoracion(context)
                             ),
-
+                            Text('citaValoracionCumpli =>  ${con.citaValoracionCumpli.value}'),
+                            Visibility(
+                                visible: con.citaValoracionCumpli.value['ESTADOPASO'] == 1 ? true : false,
+                                child: Text('Consultar planes')
+                            ),
+                            Text('programaSeleccioando =>  ${con.programaSeleccioando.value}'),
+                            Text('programaPagado =>  ${con.programaPagado.value}'),
+                            Visibility(
+                              child: _cardPlanPagado(context)
+                            ),
                             // Text('keyPublic =>  ${con.keyPublic.value}'),
                             // ElevatedButton(
                             //     onPressed: () => {
@@ -87,6 +96,7 @@ class HomePage extends StatelessWidget {
                                 visible: con.tratDatos.value == '0' ? true : false,
                                 child: _cardSignature(context)
                             ),
+                            Text('Mostrar planes ${con.showPlanes.value}'),
                             Visibility(
                                 visible: con.showPlanes.value,
                                 child:
@@ -141,16 +151,15 @@ class HomePage extends StatelessWidget {
 
   Widget _planesCard(Planes plan, context){
     final numberFormat = NumberFormat.currency(locale: 'es_MX', symbol:"\$");
-
     return Container(
-      margin: EdgeInsets.only(top: 20),
-      alignment: Alignment.center,
+      margin: const EdgeInsets.only(top: 20),
+      alignment: Alignment.topLeft,
       child: Card(
         color: Color(0xFFe3f2fd),
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
         clipBehavior: Clip.hardEdge,
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             border: Border.symmetric(
                 vertical: BorderSide(
                     color: Color(0xFF243588),
@@ -159,47 +168,40 @@ class HomePage extends StatelessWidget {
             ),
           ),
           child: Container(
-            margin: EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
+            margin: const EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('${plan.descplan ?? ''} ${plan.idplan ?? ''}',
-                    style: const TextStyle(
+                const Text('Plan Asignado:',
+                    style: TextStyle(
                       fontSize: 19,
                       // fontWeight: FontWeight.w300,
-                      color: Color(0xFF243588),
-                      fontFamily: 'AvenirBold',
-                    )
-                ),
-                Text( '${plan.idplan == 'VV90D' ? con.p1Pln1 : ''}',
-                    textAlign: TextAlign.justify,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w300,
                       color: Color(0xFF243588),
                       fontFamily: 'AvenirReg',
                     )
                 ),
-                Text( '${plan.idplan == 'VV90D' ? con.p2Pln1 : ''}',
-                  textAlign: TextAlign.justify,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w300,
-                    color: Color(0xFF243588),
-                    fontFamily: 'AvenirReg',
-                  )
-              ),
-                // Text( 'Inversión: ${con.numberToMoney(plan.valor) ?? ''}',
+                Text('${plan.descplan ?? ''} ${plan.idplan ?? ''}',
+                    style: const TextStyle(
+                      fontSize: 19,
+                      fontWeight: FontWeight.w900,
+                      color: Color(0xFF243588),
+                      fontFamily: 'AvenirReg',
+                    )
+                
+                ),
                 Text('Inversión: ${numberFormat.format(plan.valor)}',
                     textAlign: TextAlign.left,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w300,
                       color: Color(0xFF243588),
                       fontFamily: 'AvenirBold',
                     )
                 ),
-                Text( '${ con.consInf == '0' ? 'Para continuar debe firmar el consentimiento informado': 'Continuar con el Pago.'}' , // '',
+                Divider(),
+                // Text( '${ con.programaSeleccioando['CONS_INF'] == 0 ? 'Para continuar debe firmar el consentimiento informado': 'Continuar con el Pago.'}' , // '',
+                const Text( 'Continuar con el Pago.' , // '',
                     textAlign: TextAlign.justify,
                     style: TextStyle(
                       fontSize: 14,
@@ -209,35 +211,35 @@ class HomePage extends StatelessWidget {
                     )
                 ),
                 Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+                    margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           ElevatedButton(
                               onPressed: () => {
 
-                                if(con.consInf == '0'){
-                                  print('Firmar'),
-                                  con.signatureController.clear(),
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context ) => ConInfDialog(),
-                                      fullscreenDialog: true,
-                                    ),
-                                  )
-                                },
-                                if(con.consInf == '1'){
-                                  print('Pagar'),
-                                  con.onPagar(plan.idplan, plan.valor, plan.descplan),
-                                }
+                                // if(con.programaSeleccioando['CONS_INF'] == 0){
+                                //   print('Firmar'),
+                                //   con.signatureController.clear(),
+                                //   Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //       builder: (BuildContext context ) => ConInfDialog(),
+                                //       fullscreenDialog: true,
+                                //     ),
+                                //   )
+                                // },
+                                // if(con.programaSeleccioando['CONS_INF'] == 1){
+                                  print('Pagar IDPLAN: ${plan.idplan}, VALOR: ${plan.valor}, DESC: ${plan.descplan}, REF_WOMPI: ${plan.refWompi}'),
+                                  con.onPagar(plan),
+                                // }
                               },
                               style: ElevatedButton.styleFrom(
                                   padding: EdgeInsets.symmetric(horizontal: 15)
                               ),
                               child: Text(
-                                '${ con.consInf == '0' ? 'Continuar': 'Pagar'}' ,
-                                style: TextStyle(
+                                '${ con.programaSeleccioando['CONS_INF'] == 0 ? 'Continuar': 'Pagar'}' ,
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
                                   fontWeight: FontWeight.w300,
@@ -454,12 +456,65 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-  
+  Widget _cardPlanPagado(BuildContext context){
+    return Container(
+      margin: EdgeInsets.only(top: 20),
+      alignment: Alignment.center,
+      child: Card(
+        color: Color(0xFFe3f2fd),
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+        clipBehavior: Clip.hardEdge,
+        child: Container(
+          decoration: const BoxDecoration(
+            border: Border.symmetric(
+                vertical: BorderSide(
+                    color: Color(0xFF243588),
+                    width: 5
+                )
+            ),
+          ),
+          child: Container(
+            margin: const EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const Text(
+                    'Gracias por ser parte de VitalHelp tu plan actual es.',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w300,
+                      color: Color(0xFF243588),
+                      fontFamily: 'AvenirReg',
+                    )
+                ),
+                Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text('${con.programaPagado.value['DESCPLAN']}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              // fontWeight: FontWeight.w300,
+                              color: Color(0xFF243588),
+                              fontFamily: 'AvenirBold',
+                            )
+                          )
+                        ]
+                    )
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
   
   Widget _bgDegrade(BuildContext context){
     return Container(
       height: MediaQuery.of(context).size.height * 0.4,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: Colors.transparent,
           boxShadow: <BoxShadow>[
             BoxShadow(
@@ -556,7 +611,7 @@ class FullScreenDialog extends StatelessWidget {
                       fontFamily: 'AvenirBold',
                     ),
                   ),
-                  const Text('Declaro que he sido informado que CONCIENCIA PURA S.A.S es el responsable del tratamiento de mis datos personales que estoy proveyendo a través del diligenciamiento del presente formulario, chat, correo electrónico o a través de cualquier contacto verbal, escrito o telefónico con dicha empresa, y declaro que he leído las Políticas de Tratamiento de Datos Personales disponibles en el sitio web www.vivovital.com.co',
+                  const Text('Declaro que he sido informado que CONCIENCIA PURA S.A.S es el responsable del tratamiento de mis datos personales que estoy proveyendo a través del diligenciamiento del presente formulario, chat, correo electrónico o a través de cualquier contacto verbal, escrito o telefónico con dicha empresa, y declaro que he leído las Políticas de Tratamiento de Datos Personales disponibles en el sitio web www.vitalhelp.com.co',
                     textAlign: TextAlign.justify,
                     style: TextStyle(
                       color: Colors.black,
@@ -572,7 +627,7 @@ class FullScreenDialog extends StatelessWidget {
                       fontFamily: 'AvenirReg',
                     ),
                   ),
-                  const Text('Como Titular de esta información tengo derecho a conocer, actualizar y rectificar mis datos personales, solicitar prueba de la autorización otorgada para su tratamiento, ser informado sobre el uso que se ha dado a los mismos, presentar quejas ante la SIC por infracción a la ley, revocar la autorización y/o solicitar la supresión de mis datos en los casos en que sea procedente y acceder en forma gratuita a los mismos mediante solicitud por escrito dirigida a CONCIENCIA PURA S.A.S al correo electrónico: servicioalcliente@vivovital.com.co',
+                  const Text('Como Titular de esta información tengo derecho a conocer, actualizar y rectificar mis datos personales, solicitar prueba de la autorización otorgada para su tratamiento, ser informado sobre el uso que se ha dado a los mismos, presentar quejas ante la SIC por infracción a la ley, revocar la autorización y/o solicitar la supresión de mis datos en los casos en que sea procedente y acceder en forma gratuita a los mismos mediante solicitud por escrito dirigida a CONCIENCIA PURA S.A.S al correo electrónico: servicioalcliente@vitalhelp.com.co',
                     textAlign: TextAlign.justify,
                     style: TextStyle(
                       color: Colors.black,
@@ -655,6 +710,8 @@ class FullScreenDialog extends StatelessWidget {
 
 class ConInfDialog extends StatelessWidget{
   HomeController con = Get.put(HomeController());
+  // TODO: implement key tipo
+  var tipo =  '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -685,7 +742,7 @@ class ConInfDialog extends StatelessWidget{
                       fontFamily: 'AvenirBold',
                     ),
                   ),
-                  const Text('PROGRAMA DE INTERVENCIÓN VIVOVITAL VITAL-PLUS.',
+                  const Text('PROGRAMA DE INTERVENCIÓN vitalhelp VITAL-PLUS.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Color(0xff243588),
@@ -810,7 +867,7 @@ class ConInfDialog extends StatelessWidget{
                           height: 200,
                           // width: 200,
                         ),
-                        _singButtos(context)
+                        _singButtos(context, tipo)
                       ],
                     ),
                   )
@@ -824,24 +881,24 @@ class ConInfDialog extends StatelessWidget{
     );
   }
 
-  Widget _singButtos(BuildContext context){
+  Widget _singButtos(BuildContext context, String tipo){
     return Container(
       color: Color(0xff243588),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          buildCheck(context),
+          buildCheck(context, tipo),
           buildClear()
         ],
       ),
     );
   }
-  Widget buildCheck(BuildContext context){
+  Widget buildCheck(BuildContext context, String tipo){
     return IconButton(
         iconSize: 36,
         onPressed: () async {
           if (con.signatureController.isNotEmpty){
-            con.confirmSignature(context, 'HABEASDATA' );
+            con.confirmSignature(context, tipo  ); //'HABEASDATA'
           }else{
             Get.snackbar(
                 'Aviso: ',

@@ -4,13 +4,14 @@ import 'package:flutter_credit_card/credit_card_model.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:load/load.dart';
-import 'package:vivovital_app/src/models/user.dart';
-import 'package:vivovital_app/src/providers/wompi_provider.dart';
-import 'package:vivovital_app/src/providers/json_provider.dart';
-import 'package:vivovital_app/src/models/json.dart';
-import 'package:vivovital_app/src/models/response_api.dart';
+import 'package:vitalhelp_app/src/models/user.dart';
+import 'package:vitalhelp_app/src/providers/wompi_provider.dart';
+import 'package:vitalhelp_app/src/providers/json_provider.dart';
+import 'package:vitalhelp_app/src/models/json.dart';
+import 'package:vitalhelp_app/src/models/response_api.dart';
 
 class PaidController extends GetxController {
+
   WompiProvider wompiProvider = WompiProvider();
   JsonProvider jsonProvider = JsonProvider();
   User user = User.fromJson(GetStorage().read('user') ?? {});
@@ -18,6 +19,7 @@ class PaidController extends GetxController {
   List documentTypes=['CC','PS','CE'];
   var docType = ''.obs;
   var numberDocumentController = ''.obs;
+
   // TextEditingController numberDocumentController  = TextEditingController();
 
   List listInstallments=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36];
@@ -31,16 +33,18 @@ class PaidController extends GetxController {
   GlobalKey<FormState> keyForm = GlobalKey();
   dynamic dataTransaction = '';
 
-  String wompiURL = 'https://sandbox.wompi.co/v1/';
+  String wompiURL = '';
 
   PaidController(){
-    print('Paid Controller -> User -> : ${user.toJson()}');
-    print('Paid Controller -> Paid -> : ${paid}');
+    // print('Paid Controller -> User -> : ${user.toJson()}');
+    // print('Paid Controller -> Paid -> : ${paid}');
+    getURLWompi();
+
   }
   bool validatePaid(){
 
-    print('cardNumber => ${cardNumber} ');
-    print('expiryDate => ${expiryDate} ');
+    // print('cardNumber => ${cardNumber} ');
+    // print('expiryDate => ${expiryDate} ');
 
     String cardNum = cardNumber.value.replaceAll(' ', '');
     if(cardNum == '' ||  cardNum.length != 16){
@@ -128,7 +132,7 @@ class PaidController extends GetxController {
             children: [
               Column(
                 children: [
-                  Text('¿Confirma que desea continuar con el pago?',
+                  const Text('¿Confirma que desea continuar con el pago?',
                     style: TextStyle(
                         fontSize: 16,
                         color: Colors.black,
@@ -147,7 +151,7 @@ class PaidController extends GetxController {
                                 padding: EdgeInsets.symmetric(horizontal: 15),
                                 shadowColor: Colors.transparent
                             ),
-                            child: Text(
+                            child: const Text(
                               'Cancelar',
                               style: TextStyle(
                                 color: Colors.redAccent,
@@ -164,7 +168,7 @@ class PaidController extends GetxController {
                             style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.symmetric(horizontal: 15)
                             ),
-                            child: Text(
+                            child: const Text(
                               'Pagar',
                               style: TextStyle(
                                 color: Colors.white,
@@ -206,21 +210,22 @@ class PaidController extends GetxController {
     var cardId = '';
     var paySourceId = 0;
     var idTransaction = '';
+    
     String refWompi = paid['refWompi'];
     int plnCost = paid['PlanCost'];
     String pubkey = paid['pubKey'];
     String prvkey = paid['keyPrivated'];
 
     // acceptance_token
-    print('================= acceptance_token =========================');
+    // print('================= acceptance_token =========================');
 
-    dynamic res = await wompiProvider.acceptance_token(pubkey);
+    dynamic res = await wompiProvider.acceptance_token(wompiURL, pubkey);
 
-    print('=> acceptance_token -> ${res['data']['presigned_acceptance']['acceptance_token']}');
+    // print('=> acceptance_token -> ${res['data']['presigned_acceptance']['acceptance_token']}');
     accToken = res['data']['presigned_acceptance']['acceptance_token'];
 
     //Create  Card
-    print('================= Create  Card =========================');
+    // print('================= Create  Card =========================');
       List<String> list = expiryDate.split('/');
       String year = list[1];
       int month = int.parse(list[0]);
@@ -233,7 +238,7 @@ class PaidController extends GetxController {
         "card_holder": cardHolderName.value
       };
 
-      dynamic resp = await wompiProvider.create_card(card, pubkey);
+      dynamic resp = await wompiProvider.create_card(wompiURL,card, pubkey);
       if(resp["status"] == 'ERROR'){
         hideLoadingDialog();
         Get.snackbar(
@@ -246,10 +251,10 @@ class PaidController extends GetxController {
         return;
       }
       cardId = resp['data']['id'];
-      print('cardId : ${cardId}');
+      // print('cardId : ${cardId}');
 
     //Create payment source create_pay_source
-    print('================= Create payment source =========================');
+    // print('================= Create payment source =========================');
 
       Map<String, String> paymentSource = {
         "type": "CARD",
@@ -258,7 +263,7 @@ class PaidController extends GetxController {
         "customer_email": '${user.email}'
       };
 
-      dynamic respo = await wompiProvider.create_pay_source(paymentSource, prvkey);
+      dynamic respo = await wompiProvider.create_pay_source(wompiURL,paymentSource, prvkey);
       if(respo["status"] == 'ERROR'){
         hideLoadingDialog();
         Get.snackbar(
@@ -270,12 +275,12 @@ class PaidController extends GetxController {
         );
         return;
       }
-      print('=> create_pay_source id -> ${respo['data']['id']}');
+      // print('=> create_pay_source id -> ${respo['data']['id']}');
       paySourceId = respo['data']['id'] as int;
 
 
     //Create Transactions
-    print('================= Create Transactions =========================');
+    // print('================= Create Transactions =========================');
       Map<String, dynamic> transaction = {
         "acceptance_token": accToken,
         "amount_in_cents": plnCost*100,
@@ -306,9 +311,9 @@ class PaidController extends GetxController {
           "postal_code": "250001"
         }
       };
-      print(transaction);
+      // print(transaction);
 
-      dynamic respon = await wompiProvider.create_transaction(transaction, prvkey);
+      dynamic respon = await wompiProvider.create_transaction(wompiURL, transaction, prvkey);
       if(respo["status"] == 'ERROR'){
         hideLoadingDialog();
         Get.snackbar(
@@ -320,16 +325,16 @@ class PaidController extends GetxController {
         );
         return;
       }
-      print('=> create_transaction id -> ${respon['data']}');
+      // print('=> create_transaction id -> ${respon['data']}');
       // paySourceId = respo['data']['id'];
       idTransaction = respon['data']['id'];
 
-      print('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> entra delay');
+      // print('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> entra delay');
       await Future.delayed(const Duration(seconds: 5));
-      print('=======================================> sale delay');
+      // print('=======================================> sale delay');
       // get transaction
-      print('================= Get Transactions =========================');
-      dynamic response = await wompiProvider.get_transactions(idTransaction);
+      // print('================= Get Transactions =========================');
+      dynamic response = await wompiProvider.get_transactions(wompiURL, idTransaction);
       if(response["status"] == 'ERROR'){
         hideLoadingDialog();
         Get.snackbar(
@@ -341,10 +346,10 @@ class PaidController extends GetxController {
         );
         return;
       }
-      print('=> get_transactions data -> ${response}');
+      // print('=> get_transactions data -> ${response}');
       dataTransaction = response;
       if(response['data']['status'] == 'APPROVED' ){
-        print('======================> transaccion aprobada');
+        // print('======================> transaccion aprobada');
 
         var afi = user.toJson();
         // print('idafiliado -> ${idafiliado['IDAFILIADO']}');
@@ -355,12 +360,11 @@ class PaidController extends GetxController {
             parametros: {
               "IDENTIFICADOR": idTransaction,
               "REF_WOMPI": paid['refWompi'],
-              "IDAFILIADO": '${afi['IDAFILIADO']}',
-              "NOADMISION": '${afi['NOADMISION']}'
+              "IDAFILIADO": '${afi['IDAFILIADO']}'
             });
         //
         ResponseApi res = await jsonProvider.json(json);
-        print('res=>>>> ${res}');
+        // print('res=>>>> ${res}');
         Get.snackbar(
             'Aviso: ',
             'Pago procesado correctamente!',
@@ -376,8 +380,23 @@ class PaidController extends GetxController {
 
     hideLoadingDialog();
   }
+
+  void getURLWompi () async {
+    Json json = Json(
+        modelo: 'VIVO_AFI_APP',
+        metodo: 'URLWOMPI'
+      );
+    //
+    ResponseApi res = await jsonProvider.json(json);
+    // print('res=>>>> ${res.result?.recordsets!}');
+    List<dynamic> list = res.result?.recordsets![0];
+
+    // print('list => ${list[0]['URL_WOMPI']}');
+    wompiURL = list[0]['URL_WOMPI'];
+  }
+
   void messagePostPaid(context){
-    print('messagePostPaid');
+    // print('messagePostPaid');
     showDialog(
       useSafeArea: false,
       barrierDismissible: false,
@@ -399,7 +418,7 @@ class PaidController extends GetxController {
           children: [
             Column(
               children: [
-                Text('Tu pago ha sido aprobado y has quedado vinculado al programa:',
+                const Text('Tu pago ha sido aprobado y has quedado vinculado al programa:',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       fontSize: 16,
@@ -408,13 +427,13 @@ class PaidController extends GetxController {
                   ),
                 ),
                 Text('${paid['descPlan']}',
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                       fontFamily: 'AvenirBold'
                   ),
                 ),
-                Text('Continua con tu proceso diligenciando la siguiente información:',
+                const Text('Comenzarás recibir notificaciones.',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       fontSize: 14,
@@ -422,45 +441,45 @@ class PaidController extends GetxController {
                       fontFamily: 'AvenirReg'
                   ),
                 ),
-                Row(
-                  children: [
-                    Icon(Icons.chevron_right_outlined, color: Color(0xFF243588)),
-                    Text('Datos personales.',
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF243588),
-                          fontFamily: 'AvenirReg'
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Icon(Icons.chevron_right_outlined, color: Color(0xFF243588)),
-                    Text('Antecedentes Iniciales.',
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF243588),
-                          fontFamily: 'AvenirReg'
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Icon(Icons.chevron_right_outlined, color: Color(0xFF243588)),
-                    Text('Anamnesis Alimentaria.',
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF243588),
-                          fontFamily: 'AvenirReg'
-                      ),
-                    ),
-                  ]
-                ),
+                // Row(
+                //   children: [
+                //     Icon(Icons.chevron_right_outlined, color: Color(0xFF243588)),
+                //     Text('Datos personales.',
+                //       textAlign: TextAlign.justify,
+                //       style: TextStyle(
+                //           fontSize: 16,
+                //           color: Color(0xFF243588),
+                //           fontFamily: 'AvenirReg'
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // Row(
+                //   children: [
+                //     Icon(Icons.chevron_right_outlined, color: Color(0xFF243588)),
+                //     Text('Antecedentes Iniciales.',
+                //       textAlign: TextAlign.justify,
+                //       style: TextStyle(
+                //           fontSize: 16,
+                //           color: Color(0xFF243588),
+                //           fontFamily: 'AvenirReg'
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // Row(
+                //   children: [
+                //     Icon(Icons.chevron_right_outlined, color: Color(0xFF243588)),
+                //     Text('Anamnesis Alimentaria.',
+                //       textAlign: TextAlign.justify,
+                //       style: TextStyle(
+                //           fontSize: 16,
+                //           color: Color(0xFF243588),
+                //           fontFamily: 'AvenirReg'
+                //       ),
+                //     ),
+                //   ]
+                // ),
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
                   child: Row(
@@ -474,7 +493,7 @@ class PaidController extends GetxController {
                           style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.symmetric(horizontal: 15)
                           ),
-                          child: Text(
+                          child: const Text(
                             'Continuar ',
                             style: TextStyle(
                               color: Colors.white,
@@ -498,9 +517,10 @@ class PaidController extends GetxController {
   }
   void onCancel(){
     // Get.toNamed('/home');
-    // Get.removeRoute('/paid');
-    // Get.offUntil('/paid', (route) => false);
-    Get.offNamed('/home');
+    // Get.removeRoute('paid');
+    // Get.offUntil('paid', (route) => false);
+    // Get.offNamed('/home');
+    Get.offAllNamed('/home');
   }
 
   String getMonth(int month){

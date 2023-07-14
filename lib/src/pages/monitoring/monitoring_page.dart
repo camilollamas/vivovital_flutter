@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vivovital_app/src/pages/monitoring/monitoring_controller.dart';
-import 'package:vivovital_app/src/utils/drawer_menu.dart';
+import 'package:vitalhelp_app/src/pages/monitoring/monitoring_controller.dart';
+import 'package:vitalhelp_app/src/utils/drawer_menu.dart';
 
 class MonitoringPage extends StatelessWidget {
   MonitoringController con = Get.put(MonitoringController());
@@ -34,7 +34,7 @@ class MonitoringPage extends StatelessWidget {
                     ),
                   onPressed: () => {scaffoldKey.currentState?.openDrawer()},
                   ),
-                  title: const Text('VivoVital App',
+                  title: const Text('vitalhelp App',
                       style: TextStyle( fontSize: 30, fontWeight:
                                 FontWeight.w300,
                                 color: Color(0xFFFFFFFF),

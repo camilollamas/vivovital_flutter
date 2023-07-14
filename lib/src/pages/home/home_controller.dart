@@ -4,19 +4,19 @@ import 'package:http_parser/http_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:vivovital_app/src/models/user.dart';
-import 'package:vivovital_app/src/models/planes.dart';
+import 'package:vitalhelp_app/src/models/user.dart';
+import 'package:vitalhelp_app/src/models/planes.dart';
 import 'package:load/load.dart';
 import 'package:signature/signature.dart';
 
-import 'package:vivovital_app/src/providers/json_provider.dart';
-import 'package:vivovital_app/src/models/json.dart';
-import 'package:vivovital_app/src/models/response_api.dart';
+import 'package:vitalhelp_app/src/providers/json_provider.dart';
+import 'package:vitalhelp_app/src/models/json.dart';
+import 'package:vitalhelp_app/src/models/response_api.dart';
 
 import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'package:money2/money2.dart';
-import 'package:vivovital_app/src/enviroment/enviroment.dart';
+import 'package:vitalhelp_app/src/enviroment/enviroment.dart';
 
 
 class EstadoUser {
@@ -43,6 +43,9 @@ class HomeController extends GetxController {
   var habeasData = {}.obs;
   var datosPersonales = {}.obs;
   var citaValoracion = {}.obs;
+  var citaValoracionCumpli = {}.obs;
+  var programaSeleccioando = {}.obs;
+  var programaPagado = {}.obs;
 
 
 
@@ -307,8 +310,18 @@ class HomeController extends GetxController {
     var cV = estadoUser.where((objeto) => objeto['PASO'] == '0030').toList();
     citaValoracion.value = cV[0];
 
+    // Cita Cumplida
+    var cVC = estadoUser.where((objeto) => objeto['PASO'] == '0040').toList();
+    citaValoracionCumpli.value = cVC[0];
 
-    print('Estado->0010->FIRMA HABEAS DATA  -> $habeasData');
+    // Programa Seleccionado
+    var pSel = estadoUser.where((objeto) => objeto['PASO'] == '0050').toList();
+    programaSeleccioando.value = pSel[0];
+
+    // Programa Pagado
+    var pPag = estadoUser.where((objeto) => objeto['PASO'] == '0060').toList();
+    programaPagado.value = pPag[0];
+   
 
     if(habeasData['ESTADOPASO'] == 0){
       // print('Mostrar Dialog Habeas Data');
@@ -319,6 +332,14 @@ class HomeController extends GetxController {
     if(datosPersonales['ESTADOPASO'] == 0){
 
     }
+    
+
+    print('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ${citaValoracionCumpli.value}');
+    print('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ${citaValoracionCumpli['ESTADOPASO']}');
+    if(citaValoracionCumpli['ESTADOPASO'] == 1){
+      getPrograma();
+    }
+
 
 
     hideLoadingDialog();
@@ -378,6 +399,28 @@ class HomeController extends GetxController {
 
   }
 
+  void getPrograma() async{
+    print('Consultando planes');
+
+    var idafiliado = user.toJson();
+    // showLoadingDialog();
+    Json json = Json(
+        modelo: 'VIVO_AFI_APP',
+        metodo: 'GETPROGRAMA',
+        parametros: {
+          "IDAFILIADO": '${idafiliado['IDAFILIADO']}'
+        });
+    //
+    ResponseApi res = await jsonProvider.json(json);
+
+    var result = Planes.fromJsonList(res.result?.recordsets![0]);
+    planes.addAll(result);
+    showPlanes.value = true;
+    super.refresh();
+
+
+  }
+
   void onSignatureHabeasData(context) {
     signatureController.clear();
     
@@ -421,7 +464,7 @@ class HomeController extends GetxController {
                             fontFamily: 'AvenirBold',
                           ),
                         ),
-                        const Text('Declaro que he sido informado que CONCIENCIA PURA S.A.S es el responsable del tratamiento de mis datos personales que estoy proveyendo a través del diligenciamiento del presente formulario, chat, correo electrónico o a través de cualquier contacto verbal, escrito o telefónico con dicha empresa, y declaro que he leído las Políticas de Tratamiento de Datos Personales disponibles en el sitio web www.vivovital.com.co',
+                        const Text('Declaro que he sido informado que CONCIENCIA PURA S.A.S es el responsable del tratamiento de mis datos personales que estoy proveyendo a través del diligenciamiento del presente formulario, chat, correo electrónico o a través de cualquier contacto verbal, escrito o telefónico con dicha empresa, y declaro que he leído las Políticas de Tratamiento de Datos Personales disponibles en el sitio web www.vitalhelp.com.co',
                           textAlign: TextAlign.justify,
                           style: TextStyle(
                             color: Colors.black,
@@ -437,7 +480,7 @@ class HomeController extends GetxController {
                             fontFamily: 'AvenirReg',
                           ),
                         ),
-                        const Text('Como Titular de esta información tengo derecho a conocer, actualizar y rectificar mis datos personales, solicitar prueba de la autorización otorgada para su tratamiento, ser informado sobre el uso que se ha dado a los mismos, presentar quejas ante la SIC por infracción a la ley, revocar la autorización y/o solicitar la supresión de mis datos en los casos en que sea procedente y acceder en forma gratuita a los mismos mediante solicitud por escrito dirigida a CONCIENCIA PURA S.A.S al correo electrónico: servicioalcliente@vivovital.com.co',
+                        const Text('Como Titular de esta información tengo derecho a conocer, actualizar y rectificar mis datos personales, solicitar prueba de la autorización otorgada para su tratamiento, ser informado sobre el uso que se ha dado a los mismos, presentar quejas ante la SIC por infracción a la ley, revocar la autorización y/o solicitar la supresión de mis datos en los casos en que sea procedente y acceder en forma gratuita a los mismos mediante solicitud por escrito dirigida a CONCIENCIA PURA S.A.S al correo electrónico: servicioalcliente@vitalhelp.com.co',
                           textAlign: TextAlign.justify,
                           style: TextStyle(
                             color: Colors.black,
@@ -521,53 +564,50 @@ class HomeController extends GetxController {
   String p3ConInf = 'Ten en cuenta que al inicio del programa, mientras tu cuerpo logra la asimilación del tratamiento, podrías presentar irritabilidad, dolor de cabeza y mareos entre otras reacciones leves, propias de un cambio de alimentación, evita alarmarte. Por ello una de nuestras fortalezas es que todo tu tratamiento será realizado bajo la supervisión de profesionales de la salud, quienes realizarán las acciones necesarias para reducir eventuales efectos secundarios. Adicional a lo anterior, contarás con un chat interactivo donde podrás resolver tus dudas y recibirás recomendaciones propias del programa.';
   String p4ConInf = 'Durante el proceso harás parte de varias evaluaciones y encuestas que nos ayudarán a conocer o identificar algunos aspectos que pueden estar interfiriendo (NO SON DIAGNÓSTICOS) en el buen desarrollo de tu tratamiento y servirán de guías para los diferentes profesionales que te estarán acompañando. Las recomendaciones de los profesionales se harán a MODO ASINCRÓNICO con videos direccionados desde de la plataforma digital.';
   String p5ConInf = 'Los controles nutricionales (TELEORIENTACIÓN - SINCRÓNICA) serán mensuales y, si se paga la membresía, cada 3 meses después de los 90 días. Hay una segunda consulta con medicina externa a los 90 días y otras dos si se continua con la membresía. Estará disponible un chat para solucionar inquietudes durante los 90 días que dura el programa VITAL-PLUS. También se incluye la primera VITAL-BOX, que se entregará sin costo adicional en el lugar que se acuerde o especifique.';
-  String p6ConInf = 'En caso de necesitar la atención extra con algunos de nuestros profesionales, el servicio tendrá un costo adicional, VivoVital sólo se encargará de la logística requerida para que se realice la atención.';
+  String p6ConInf = 'En caso de necesitar la atención extra con algunos de nuestros profesionales, el servicio tendrá un costo adicional, vitalhelp sólo se encargará de la logística requerida para que se realice la atención.';
   String p7ConInf = 'Podrás cancelar las citas de Medicina o Teleorientación nutricional con 12 horas de anticipación, en caso contrario serán descontadas de las adquiridas en tu PLAN, pero podrás cancelar un valor adicional para acceder nuevamente a ese servicio.';
   String p8ConInf = 'Declaro que no presento ninguna de las enfermedades de los criterios de exclusión absolutos y en caso de presentar algunos de los criterios de exclusión relativos o alguna enfermedad que el profesional considere es de especial vigilancia, me comprometo a presentar los soportes médicos solicitados.';
   String p9ConInf = 'Comprendo el propósito del tratamiento. Me han sido explicados los posibles beneficios y riesgos del programa de adelgazamiento. Acepto que no me han sido garantizados los resultados del tratamiento, en el sentido que la intervención se constituye en una práctica de medios y no de resultados. En consecuencia, libre y voluntaria autorizo a ser intervenido en el programa que ofrece CONCIENCIA PURA S.A.S. para el adelgazar y firmo a continuación a los 18 días del mes Enero del año 2023.';
   String p10ConInf = 'RECUERDA QUE TU COMPROMISO CON TODAS LAS ACTIVIDADES PROGRAMADAS ASEGURAN UN MEJOR RESULTADO';
 
-  void onPagar(String? idplan, dynamic valor, String descplan) async{
-
+  void onPagar(Planes plan) async{
 
     var idafiliado = user.toJson();
-    print('idafiliado -> ${idafiliado}');
+
     showLoadingDialog();
     Json json = Json(
       modelo: 'VIVO_AFI_APP',
-      metodo: 'ACTUALIZAR_PAGO',
+      metodo: 'WOMPI_KEYS',
       parametros: {
         "IDAFILIADO": '${idafiliado['IDAFILIADO']}',
-        "REF_WOMPI": '${refWompi.value}',
-        "IDPLAN": '${idplan}',
-        "NOADMISION": '${idafiliado['NOADMISION']}',
+        "REF_WOMPI": plan.refWompi,
+        "IDPLAN": plan.idplan
       }
     );
-    //
+
     ResponseApi res = await jsonProvider.json(json);
-    // dynamic res = await jsonProvider.json(json);
     hideLoadingDialog();
-    // print('Respuesta res  -> ${res}');
     var respuesta = res.result?.recordsets[0];
 
-    keyPublic.value = respuesta[0]['DATO'];
-    keyPrivated.value = 'prv_test_Ik81BFUW6lp1UMtP398YxT5HDuksqguL';
+    keyPublic.value = respuesta[0]['KEYPUB'];
+    keyPrivated.value = respuesta[0]['KEYPRIVATED'];
 
 
 
     Map<dynamic, dynamic> paid = {
-      "refWompi": refWompi.value,
-      "pubKey": 'pub_test_Uq7PKLNPHuj9074IHfqVNsHnH7JMSF4E',//keyPublic.value,
-      "keyPrivated": 'prv_test_Ik81BFUW6lp1UMtP398YxT5HDuksqguL', //keyPrivated.value,
-      "PlanCost": valor,
-      "descPlan": descplan
+      "refWompi": plan.refWompi,
+      "pubKey": keyPublic.value,
+      "keyPrivated": keyPrivated.value,
+      "PlanCost": plan.valor,
+      "descPlan": plan.descplan
     };
+
+    // print( 'paid => ${paid.toString()}' );
+
     GetStorage().write('paid', paid);
 
-
-    print('Respuesta res  -> ${respuesta[0]['DATO']}');
     Get.toNamed('/paid');
-    // update();
+    update();
   }
 
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vivovital_app/src/pages/login/login_controller.dart';
+import 'package:vitalhelp_app/src/pages/login/login_controller.dart';
 
 class LoginPage extends StatelessWidget {
   LoginController con = Get.put(LoginController());

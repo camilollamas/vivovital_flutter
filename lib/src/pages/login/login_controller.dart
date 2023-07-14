@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:vivovital_app/src/models/json.dart';
-import 'package:vivovital_app/src/models/response_api.dart';
-import 'package:vivovital_app/src/providers/json_provider.dart';
+import 'package:vitalhelp_app/src/models/json.dart';
+import 'package:vitalhelp_app/src/models/response_api.dart';
+import 'package:vitalhelp_app/src/providers/json_provider.dart';
 import 'package:load/load.dart';
-import 'package:vivovital_app/src/models/user.dart';
+import 'package:vitalhelp_app/src/models/user.dart';
 
 class LoginController extends GetxController {
   // User user = User.fromJson(GetStorage().read('user') ?? {});

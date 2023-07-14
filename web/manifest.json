@@ -1,6 +1,6 @@
 {
-    "name": "vivovital_app",
-    "short_name": "vivovital_app",
+    "name": "vitalhelp_app",
+    "short_name": "vitalhelp_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

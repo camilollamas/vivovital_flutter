@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:load/load.dart';
-import 'package:vivovital_app/src/pages/notifications/notifications_controller.dart';
-import 'package:vivovital_app/src/utils/drawer_menu.dart';
+import 'package:vitalhelp_app/src/pages/notifications/notifications_controller.dart';
+import 'package:vitalhelp_app/src/utils/drawer_menu.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/alerta.dart';
@@ -96,7 +96,7 @@ class _NotificationsPageState extends State<NotificationsPage>
                           onPressed: () => {scaffoldKey.currentState?.openDrawer()},
                         ),
                         title: const Text(
-                            'VivoVital App',
+                            'vitalhelp App',
                             style: TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.w300,

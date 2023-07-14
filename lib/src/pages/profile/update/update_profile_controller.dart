@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:load/load.dart';
-import 'package:vivovital_app/src/models/user.dart';
-import 'package:vivovital_app/src/providers/json_provider.dart';
+import 'package:vitalhelp_app/src/models/user.dart';
+import 'package:vitalhelp_app/src/providers/json_provider.dart';
 
 
 import '../../../models/ciudad.dart';

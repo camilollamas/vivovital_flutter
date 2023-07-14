@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:load/load.dart';
 
-import 'package:vivovital_app/src/models/json.dart';
-import 'package:vivovital_app/src/models/response_api.dart';
-import 'package:vivovital_app/src/providers/json_provider.dart';
-import 'package:vivovital_app/src/models/departamentos.dart';
-import 'package:vivovital_app/src/models/ciudad.dart';
-import 'package:vivovital_app/src/models/mes.dart';
+import 'package:vitalhelp_app/src/models/json.dart';
+import 'package:vitalhelp_app/src/models/response_api.dart';
+import 'package:vitalhelp_app/src/providers/json_provider.dart';
+import 'package:vitalhelp_app/src/models/departamentos.dart';
+import 'package:vitalhelp_app/src/models/ciudad.dart';
+import 'package:vitalhelp_app/src/models/mes.dart';
 
 class RegisterController extends GetxController {
   JsonProvider jsonProvider = JsonProvider();

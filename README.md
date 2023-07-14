@@ -1,4 +1,4 @@
-# vivovital_app
+# vitalhelp_app
 
 Una aplicación de Vivo Vital
 

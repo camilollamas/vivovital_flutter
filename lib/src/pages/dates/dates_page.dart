@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vivovital_app/src/pages/dates/dates_controller.dart';
-import 'package:vivovital_app/src/utils/drawer_menu.dart';
+import 'package:vitalhelp_app/src/pages/dates/dates_controller.dart';
+import 'package:vitalhelp_app/src/utils/drawer_menu.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/citas.dart';

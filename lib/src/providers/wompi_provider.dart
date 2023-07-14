@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:vivovital_app/src/enviroment/enviroment.dart';
+import 'package:vitalhelp_app/src/enviroment/enviroment.dart';
 import '../models/json.dart';
 import '../models/response_api.dart';
 
 // import "package:http/http.dart" as http;
 
 class WompiProvider extends GetConnect {
+  
   String url = 'https://sandbox.wompi.co/v1/';
 
-  Future<dynamic> acceptance_token(String pub_key) async {
+  Future<dynamic> acceptance_token(String UrlWompi, String pub_key) async {
     dynamic response = await get(
-        '${url}merchants/${pub_key}',
+        '${UrlWompi}merchants/${pub_key}',
         headers: {
           'Content-Type': 'application/json'
         }
@@ -24,10 +25,10 @@ class WompiProvider extends GetConnect {
     return response.body;
   }
 
-  Future<dynamic> create_card(Map data, String pub_key) async {
+  Future<dynamic> create_card(String UrlWompi, Map data, String pub_key) async {
     print(data);
     dynamic response = await post(
-        '${url}/tokens/cards',
+        '${UrlWompi}/tokens/cards',
         data,
         headers: {
           'Content-Type': 'application/json',
@@ -43,10 +44,11 @@ class WompiProvider extends GetConnect {
 
   }
 
-  Future<dynamic> create_pay_source(Map data, String prv_key) async {
-    print(data);
+  Future<dynamic> create_pay_source(String UrlWompi, Map data, String prv_key) async {
+    print('create_pay_source data: $data');
+    print('create_pay_source prv_key: $prv_key');
     dynamic response = await post(
-        '${url}/payment_sources',
+        '${UrlWompi}/payment_sources',
         data,
         headers: {
           'Content-Type': 'application/json',
@@ -63,9 +65,9 @@ class WompiProvider extends GetConnect {
     }
   }
 
-  Future<dynamic> create_transaction(Map data, String prv_key) async {
+  Future<dynamic> create_transaction(String UrlWompi, Map data, String prv_key) async {
     dynamic response = await post(
-        '${url}/transactions/',
+        '${UrlWompi}/transactions/',
         data,
         headers: {
           'Content-Type': 'application/json',
@@ -82,9 +84,9 @@ class WompiProvider extends GetConnect {
     }
   }
 
-  Future<dynamic> get_transactions(String id) async {
+  Future<dynamic> get_transactions(String UrlWompi, String id) async {
     dynamic response = await get(
-        '${url}transactions/${id}',
+        '${UrlWompi}transactions/${id}',
         headers: {
           'Content-Type': 'application/json'
         }

@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "vivovital_flutter",
+            "name": "vitalhelp_flutter",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "vivovital_flutter (profile mode)",
+            "name": "vitalhelp_flutter (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "vivovital_flutter (release mode)",
+            "name": "vitalhelp_flutter (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

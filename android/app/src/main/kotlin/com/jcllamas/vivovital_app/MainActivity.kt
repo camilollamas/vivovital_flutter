@@ -1,4 +1,4 @@
-package com.jcllamas.vivovital_app
+package com.jcllamas.vitalhelp_app
 
 import io.flutter.embedding.android.FlutterActivity
 

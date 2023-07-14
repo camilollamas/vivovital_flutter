@@ -1,9 +1,9 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:vivovital_app/src/models/tgensel.dart';
-import 'package:vivovital_app/src/pages/profile/update/update_profile_controller.dart';
-import 'package:vivovital_app/src/utils/drawer_menu.dart';
+// import 'package:vitalhelp_app/src/models/tgensel.dart';
+import 'package:vitalhelp_app/src/pages/profile/update/update_profile_controller.dart';
+import 'package:vitalhelp_app/src/utils/drawer_menu.dart';
 
 import '../../../models/ciudad.dart';
 import '../../../models/tgensel.dart';
@@ -52,7 +52,7 @@ class UpdateProfilePage extends StatelessWidget {
                     ),
                     onPressed: () => {scaffoldKey.currentState?.openDrawer()},
                     ),
-                    title: Text('VivoVital App',
+                    title: Text('vitalhelp App',
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.w300,

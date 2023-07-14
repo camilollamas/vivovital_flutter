@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:vivovital_app/src/enviroment/enviroment.dart';
+import 'package:vitalhelp_app/src/enviroment/enviroment.dart';
 import '../models/json.dart';
 import '../models/response_api.dart';
 

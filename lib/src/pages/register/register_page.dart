@@ -1,7 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vivovital_app/src/pages/register/register_controller.dart';
+import 'package:vitalhelp_app/src/pages/register/register_controller.dart';
 
 import '../../models/departamentos.dart';
 import '../../models/ciudad.dart';

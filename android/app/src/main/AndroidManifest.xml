@@ -1,10 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jcllamas.vivovital_app">
+    package="com.jcllamas.vitalhelp_app">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
    <application
-        android:label="vivovital_app"
+        android:label="vitalhelp_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"

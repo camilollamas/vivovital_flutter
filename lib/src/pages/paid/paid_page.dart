@@ -6,8 +6,8 @@ import 'package:flutter_credit_card/credit_card_widget.dart';
 import 'package:flutter_credit_card/custom_card_type_icon.dart';
 import 'package:flutter_credit_card/glassmorphism_config.dart';
 import 'package:get/get.dart';
-import 'package:vivovital_app/src/pages/paid/paid_controller.dart';
-import 'package:vivovital_app/src/utils/drawer_menu.dart';
+import 'package:vitalhelp_app/src/pages/paid/paid_controller.dart';
+import 'package:vitalhelp_app/src/utils/drawer_menu.dart';
 import 'package:intl/intl.dart';
 
 class PaidPage extends StatelessWidget {
@@ -34,7 +34,7 @@ class PaidPage extends StatelessWidget {
                 onPressed: () => {scaffoldKey.currentState?.openDrawer()},
               ),
               title: const Text(
-                  'VivoVital App',
+                  'vitalhelp App',
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w300,
@@ -268,7 +268,7 @@ class PaidPage extends StatelessWidget {
   }
   Widget _inputInstallments(BuildContext context){
     return Container(
-        width: MediaQuery.of(context).size.width * 0.1,
+        width: MediaQuery.of(context).size.width * 0.2,
         margin: EdgeInsets.only( top: 15 , left: 0, right: 5),
         child: DropdownButton(
           hint: Text('Cuotas'),
@@ -330,13 +330,13 @@ class PaidPage extends StatelessWidget {
   Widget _buttonPaid(BuildContext context){
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: ElevatedButton(
           onPressed: () => con.confirmPaid(context),
           style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(vertical: 0)
+              padding: const EdgeInsets.symmetric(vertical: 0)
           ),
-          child: Text(
+          child: const Text(
             'Pagar',
             style: TextStyle(
               color: Colors.white,
