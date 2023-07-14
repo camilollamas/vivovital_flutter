@@ -1,4 +1,6 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:load/load.dart';
@@ -14,15 +16,28 @@ import 'package:vitalhelp_app/src/pages/home/home_page.dart';
 import 'package:vitalhelp_app/src/pages/paid/paid_page.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:vitalhelp_app/src/presentation/blocs/notifications/notifications_bloc.dart';
 
 User userSession = User.fromJson(GetStorage().read('user') ?? {});
 
 void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationsBloc.initializeFirebaseNotifications();
+  
   await GetStorage.init();
+
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   runApp(
-    LoadingProvider(
-        child: const MyApp(),
-        themeData: LoadingThemeData())
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => NotificationsBloc())
+        ], 
+      child: LoadingProvider(
+                child: MyApp(),
+                themeData: LoadingThemeData()
+            )
+      )
   );
 }
 
@@ -83,6 +98,68 @@ class _MyAppState extends State<MyApp> {
         )
       ),
       navigatorKey: Get.key,
+      builder: (context, child) {
+        return HandleNotificationInteractions(child: child!);
+      },
     );
+  }
+}
+
+
+class HandleNotificationInteractions extends StatefulWidget {
+
+  final Widget child;
+  const HandleNotificationInteractions({Key? key, required this.child});
+
+  @override
+  _HandleNotificationInteractionsState createState() => _HandleNotificationInteractionsState();
+}
+
+class _HandleNotificationInteractionsState extends State<HandleNotificationInteractions> {
+  get appRouter => null;
+
+   // It is assumed that all messages contain a data field with the key 'type'
+  Future<void> setupInteractedMessage() async {
+    // Get any messages which caused the application to open from
+    // a terminated state.
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    // If the message also contains a data property with a "type" of "chat",
+    // navigate to a chat screen
+    if (initialMessage != null) {
+      _handleMessage(initialMessage);
+    }
+
+    // Also handle any interaction when the app is in the background via a
+    // Stream listener
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+  }
+  
+  void _handleMessage(RemoteMessage message) {
+    print('======================>>>>> Handling a background message: ${message.messageId}');
+    
+    context.read<NotificationsBloc>()
+    .handleRemoteMessage(message);
+
+    // appRouter.push('/notifications');
+    Get.toNamed('/notifications');
+
+    // if (message.data['type'] == 'chat') {
+    //   Navigator.pushNamed(context, '/chat', 
+    //     arguments: ChatArguments(message),
+    //   );
+    // }
+  }
+  
+  @override
+  void initState() {
+    super.initState();
+    setupInteractedMessage();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
   }
 }

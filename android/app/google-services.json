@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "458636555335",
+    "project_id": "vital-help",
+    "storage_bucket": "vital-help.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458636555335:android:95400f6833fa44fbf7ed62",
+        "android_client_info": {
+          "package_name": "com.vitalhelp.user_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "458636555335-1l1upbg40pkri90150pg1uv4608vj5l2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiNyzQptH8N2EekyKK2DDbIjyjkyhAqmg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "458636555335-1l1upbg40pkri90150pg1uv4608vj5l2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
