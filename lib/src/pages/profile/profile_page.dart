@@ -35,7 +35,7 @@ class ProfilePage extends StatelessWidget {
                     ),
                     onPressed: () => {scaffoldKey.currentState?.openDrawer()},
                     ),
-                    title: const Text('vitalhelp App',
+                    title: const Text('VitalHelp App',
                       style: TextStyle(
                         fontSize: 30, fontWeight: FontWeight.w300,
                         color: Color(0xFFFFFFFF), fontFamily: 'AvenirReg',
@@ -70,7 +70,7 @@ class ProfilePage extends StatelessWidget {
         padding: EdgeInsets.all(5),
         leading: Icon(Icons.add_alert_outlined, color: Colors.white,),
         backgroundColor: Colors.red,
-        content: Text(
+        content: const Text(
             'Completa tus datos personales para continuar con el proceso.',
             style: TextStyle(
                 fontSize: 14,
@@ -103,7 +103,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
   Widget _textTilte(){
-    return Text(
+    return const Text(
         'Perfil',
       style: TextStyle(
         fontSize: 20,
@@ -118,7 +118,9 @@ class ProfilePage extends StatelessWidget {
           margin: const EdgeInsets.only(top: 20),
           alignment: Alignment.center,
           child: Image.asset(
-            'assets/img/avatars/male.png',
+            con.user.sexo == 'Masculino' ?
+            'assets/img/avatars/male.png' : 
+            'assets/img/avatars/female.png',
             width: 100,
           )
       ),
@@ -127,11 +129,11 @@ class ProfilePage extends StatelessWidget {
   Widget _fistName(){
     return SafeArea(
         child: Container(
-          margin: EdgeInsets.only(top: 20),
+          margin: const EdgeInsets.only(top: 20),
           alignment: Alignment.center,
           child: Text(
               '${con.user.pnombre} ${con.user.snombre} ${con.user.papellido} ${con.user.sapellido}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w300,
                 color: Color(0xFF243588),
@@ -144,11 +146,11 @@ class ProfilePage extends StatelessWidget {
   Widget _document(){
     return SafeArea(
         child: Container(
-          margin: EdgeInsets.only(top: 0),
+          margin: const EdgeInsets.only(top: 0),
           alignment: Alignment.center,
           child: Text(
               '${con.user.tipoDoc} ${con.user.docidafiliado}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w300,
                 color: Color(0xFF243588),

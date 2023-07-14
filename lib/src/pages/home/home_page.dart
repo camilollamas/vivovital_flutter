@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
                           onPressed: () => { scaffoldKey.currentState?.openDrawer() },
                         ),
                         title: const Text(
-                            'vitalhelp App',
+                            'VitalHelp App',
                             style: TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.w300,
@@ -54,49 +54,29 @@ class HomePage extends StatelessWidget {
                   children: [
                     Column(
                           children: [
-                            Text('habeasData =>  ${con.habeasData.value}'),
                             Visibility(
                               visible: con.habeasData.value['ESTADOPASO'] == 0 ? true : false,
                               child: _cardSignature(context)
                             ),
-
-                            Text('datosPersonales =>  ${con.datosPersonales.value}'),
                             Visibility(
                                 visible: con.habeasData.value['ESTADOPASO'] == 1 && con.datosPersonales.value['ESTADOPASO'] == 0 ? true : false,
                                 child: _cardDatosPersonales(context)
                             ),
-
-
-                            Text('citaValoracion =>  ${con.citaValoracion.value}'),
                             Visibility(
                                 visible: con.datosPersonales.value['ESTADOPASO'] == 1 && con.citaValoracion.value['ESTADOPASO'] == 0 ? true : false,
                                 child: _cardCitaValoracion(context)
                             ),
-                            Text('citaValoracionCumpli =>  ${con.citaValoracionCumpli.value}'),
-                            Visibility(
-                                visible: con.citaValoracionCumpli.value['ESTADOPASO'] == 1 ? true : false,
-                                child: Text('Consultar planes')
-                            ),
-                            Text('programaSeleccioando =>  ${con.programaSeleccioando.value}'),
-                            Text('programaPagado =>  ${con.programaPagado.value}'),
+                            // Visibility(
+                            //     visible: con.citaValoracionCumpli.value['ESTADOPASO'] == 1 ? true : false,
+                            //     child: Text('Consultar planes')
+                            // ),
                             Visibility(
                               child: _cardPlanPagado(context)
                             ),
-                            // Text('keyPublic =>  ${con.keyPublic.value}'),
-                            // ElevatedButton(
-                            //     onPressed: () => {
-                            //     con.GetStatusUser()
-                            //       // , con.changeValue('desde el boton')
-                            //     },
-                            //     child: Text('Cambiar Valor',
-                            //         style: TextStyle(color: Colors.white)
-                            //     )
-                            // ),
                             Visibility(
                                 visible: con.tratDatos.value == '0' ? true : false,
                                 child: _cardSignature(context)
                             ),
-                            Text('Mostrar planes ${con.showPlanes.value}'),
                             Visibility(
                                 visible: con.showPlanes.value,
                                 child:

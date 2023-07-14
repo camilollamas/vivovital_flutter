@@ -96,7 +96,7 @@ class _NotificationsPageState extends State<NotificationsPage>
                           onPressed: () => {scaffoldKey.currentState?.openDrawer()},
                         ),
                         title: const Text(
-                            'vitalhelp App',
+                            'VitalHelp App',
                             style: TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.w300,

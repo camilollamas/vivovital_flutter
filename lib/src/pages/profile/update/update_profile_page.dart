@@ -52,7 +52,7 @@ class UpdateProfilePage extends StatelessWidget {
                     ),
                     onPressed: () => {scaffoldKey.currentState?.openDrawer()},
                     ),
-                    title: Text('vitalhelp App',
+                    title: Text('VitalHelp App',
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.w300,

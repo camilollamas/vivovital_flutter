@@ -36,7 +36,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -44,9 +43,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    //Cosntruye las vistas de la app
-    print('Afiliado: ${userSession.idafiliado}');
-
     return GetMaterialApp(
       localizationsDelegates: const [
          GlobalMaterialLocalizations.delegate
@@ -55,7 +51,7 @@ class _MyAppState extends State<MyApp> {
          Locale('es'),
          Locale('en')
        ],
-      title: 'Vivo Vital App',
+      title: 'Vital Help App',
       debugShowCheckedModeBanner: false,
       initialRoute: userSession.idafiliado != null  ? '/home' :  '/',
       getPages: [
@@ -71,7 +67,7 @@ class _MyAppState extends State<MyApp> {
       ],
       theme: ThemeData(
         primaryColor:const Color(0xff243588),
-        colorScheme: ColorScheme(
+        colorScheme: const ColorScheme(
             primary: Color(0xff243588),
             secondary: Color(0xff72246c),
             error: Color(0xffC10015),
