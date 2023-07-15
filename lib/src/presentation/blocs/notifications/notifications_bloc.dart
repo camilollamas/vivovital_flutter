@@ -4,9 +4,14 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../../../../firebase_options.dart';
 import '../../../domain/entities/push_message.dart';
+import '../../../models/json.dart';
+import '../../../models/response_api.dart';
+import '../../../models/user.dart';
+import '../../../providers/json_provider.dart';
 
 part 'notifications_event.dart';
 part 'notifications_state.dart';
@@ -22,6 +27,8 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+  User user = User.fromJson(GetStorage().read('user') ?? {});
+  JsonProvider jsonProvider = JsonProvider();
   
   NotificationsBloc() : super( const NotificationsState() ) {
 
@@ -56,6 +63,20 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
     final token = await messaging.getToken();
     print('Token: $token');
+    _saveFCMtoken(token);
+  }
+
+  void _saveFCMtoken(String? token) async {
+     Json json = Json(
+        modelo: 'VIVO_WEBPUSH',
+        metodo: 'SAVEFCMTOKEN',
+        parametros: { 
+          'ENPOINT': '$token', 
+          "IDAFILIADO": '${user.idafiliado}' 
+        }
+    );
+    await jsonProvider.json(json);
+
   }
 
   void handleRemoteMessage(RemoteMessage message) {
