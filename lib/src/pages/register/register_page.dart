@@ -255,7 +255,7 @@ class _RegisterState extends State<RegisterPage> {
   Widget _buttonRegister(BuildContext context){
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+      margin: const EdgeInsets.only(top: 10, left: 80, right: 80, bottom: 60 ),
       child: ElevatedButton(
           onPressed: () => con.register(context),
           style: ElevatedButton.styleFrom(

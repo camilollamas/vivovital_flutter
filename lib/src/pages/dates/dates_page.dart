@@ -317,7 +317,7 @@ class _DatesPageState extends State<DatesPage> {
           ),
           elevation: 3,
           isExpanded: true,
-          hint: const Text('Seleccionar el dia:',
+          hint: const Text('Seleccionar Hora:',
             style: TextStyle(
               color: Colors.black38,
               fontSize: 16
@@ -498,7 +498,7 @@ class _DatesPageState extends State<DatesPage> {
                           fontFamily: 'AvenirReg',
                         )
                     ),
-                    Text('${cit.estadocit} ',
+                    Text('${cit.estadocit ?? ''} ',
                         style: const TextStyle(
                           fontSize: 18,
                           // fontWeight: FontWeight.w300,

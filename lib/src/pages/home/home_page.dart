@@ -72,10 +72,10 @@ class HomePage extends StatelessWidget {
                                 child: _cardCitaValoracion(context)
                             ),
                             // Visibility(
-                            //     visible: con.citaValoracionCumpli.value['ESTADOPASO'] == 1 ? true : false,
                             //     child: Text('Consultar planes')
                             // ),
                             Visibility(
+                              visible: con.programaPagado.value['ESTADOPASO'] == 1 ? true : false,
                               child: _cardPlanPagado(context)
                             ),
                             Visibility(

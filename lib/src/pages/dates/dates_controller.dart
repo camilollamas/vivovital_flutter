@@ -158,6 +158,8 @@ class DatesController extends GetxController {
     }
   }
   void getDates() async{
+    citas.clear();
+
     // showLoadingDialog();
     Json json = Json(
         modelo: 'VIVO_CIT',
