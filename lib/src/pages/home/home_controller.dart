@@ -18,6 +18,8 @@ import 'dart:convert';
 import 'package:money2/money2.dart';
 import 'package:vitalhelp_app/src/enviroment/enviroment.dart';
 
+import '../../presentation/blocs/notifications/notifications_bloc.dart';
+
 
 class EstadoUser {
   String? IDAFILIADO;
@@ -35,6 +37,12 @@ class EstadoUser {
 }
 
 class HomeController extends GetxController {
+ final NotificationsBloc notificationsBloc = NotificationsBloc();
+
+  
+
+
+
   User user = User.fromJson(GetStorage().read('user') ?? {});
   JsonProvider jsonProvider = JsonProvider();
   String api_url = '${Enviroment.API_URL}';
@@ -46,6 +54,7 @@ class HomeController extends GetxController {
   var citaValoracionCumpli = {}.obs;
   var programaSeleccioando = {}.obs;
   var programaPagado = {}.obs;
+  var showButtonNotify = false.obs;
 
 
 
@@ -63,6 +72,7 @@ class HomeController extends GetxController {
   String p1Pln1 = 'Incluye 2 consultas médicas, 3 teleorientaciones nutricionales, más de 100 actividades diseñadas y dirigidas por diferentes profesionales y el servicio de comunicación directa vía WhatsApp para que puedas solucionar tus dudas al instante.';
   String p2Pln1 = 'Adicionalmente recibirás nuestra VITAL-BOX, en la que te incluimos si costo adicional los instrumentos que te permitirán hacer seguimiento a tu evolución, desarrollar tus propios planes alimentarios, mejorar tu condición física y los nutracéuticos (alimentos con fines terapéuticos) para alcanzar tu regulación metabólica.';
   HomeController(){
+  
     GetStorage().write('paid', {});
     changeValue('2');
     p1ConsInf = '${user.pnombre}';
@@ -72,6 +82,9 @@ class HomeController extends GetxController {
     // update();
 
   }
+ void rintStatus() {
+  }
+
 
   SignatureController signatureController = SignatureController(
       penColor: Color(0xff243588)
@@ -269,6 +282,14 @@ class HomeController extends GetxController {
     Get.toNamed('/');
   }
   void GetStatusUser() async{
+     if (notificationsBloc.state.status == 'AuthorizationStatus.notDetermined') {
+      showButtonNotify.value = true;
+    } else {
+      showButtonNotify.value = false;
+    }
+
+
+
     showLoadingDialog();
     planes.clear();
     showPlanes.value = false;

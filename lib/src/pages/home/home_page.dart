@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:vitalhelp_app/src/pages/home/home_controller.dart';
 import 'package:vitalhelp_app/src/utils/drawer_menu.dart';
@@ -6,10 +7,14 @@ import 'package:signature/signature.dart';
 import 'package:vitalhelp_app/src/models/planes.dart';
 import 'package:intl/intl.dart';
 
+import '../../presentation/blocs/notifications/notifications_bloc.dart';
+
 class HomePage extends StatelessWidget {
   HomeController con = Get.put(HomeController());
 
   var scaffoldKey = GlobalKey<ScaffoldState>();
+  
+  Widget? get builder => null;
 
   @override
 
@@ -73,6 +78,12 @@ class HomePage extends StatelessWidget {
                             Visibility(
                               child: _cardPlanPagado(context)
                             ),
+                            Visibility(
+                              visible: con.showButtonNotify.value, 
+                              child: _notificacionAcivated(context),
+                            ),
+                            // _notificacionAcivated(context),
+                            // _getStatusNotify(context),
                             Visibility(
                                 visible: con.tratDatos.value == '0' ? true : false,
                                 child: _cardSignature(context)
@@ -491,6 +502,30 @@ class HomePage extends StatelessWidget {
     );
   }
   
+  Widget _notificacionAcivated(BuildContext context){
+    return
+    Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text('Activar Notificaciones: '),
+        IconButton(
+                icon: const Icon(Icons.notifications),
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                  iconColor: MaterialStateProperty.all<Color>(Colors.white),
+                ),
+                onPressed: () {
+                  context.read<NotificationsBloc>().requestPermission();
+                },
+              ),
+      ],
+    );
+  }
+  Widget _getStatusNotify(BuildContext context){
+    return Text('${con.notificationsBloc.state.status}');
+  }
+
+
   Widget _bgDegrade(BuildContext context){
     return Container(
       height: MediaQuery.of(context).size.height * 0.4,
