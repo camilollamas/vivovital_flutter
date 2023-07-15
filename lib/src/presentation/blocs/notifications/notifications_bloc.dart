@@ -12,6 +12,7 @@ import '../../../models/json.dart';
 import '../../../models/response_api.dart';
 import '../../../models/user.dart';
 import '../../../providers/json_provider.dart';
+import '../../../utils/local_notifications.dart';
 
 part 'notifications_event.dart';
 part 'notifications_state.dart';
@@ -29,6 +30,8 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   User user = User.fromJson(GetStorage().read('user') ?? {});
   JsonProvider jsonProvider = JsonProvider();
+
+  int pushNumbnerID = 0;
   
   NotificationsBloc() : super( const NotificationsState() ) {
 
@@ -92,7 +95,12 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       imageUrl: Platform.isAndroid ? message.notification!.android!.imageUrl : message.notification!.apple!.imageUrl
 
     );
-
+    LocalNotifications.showLocalNotification(
+      id: ++pushNumbnerID,
+      title: notification.title,
+      body: notification.body,
+      data: notification.data.toString()
+    );
     print('Message also contained a notification: ${notification.toString()}');
 
   }
@@ -112,6 +120,9 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       provisional: false,
       sound: true
     );
+
+    await LocalNotifications.requestPermissionLocalNotifications();
+
     add( NotifiactionsStatusChange(settings.authorizationStatus));
   }
 

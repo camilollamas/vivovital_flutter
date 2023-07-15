@@ -17,6 +17,7 @@ import 'package:vitalhelp_app/src/pages/paid/paid_page.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:vitalhelp_app/src/presentation/blocs/notifications/notifications_bloc.dart';
+import 'package:vitalhelp_app/src/utils/local_notifications.dart';
 
 User userSession = User.fromJson(GetStorage().read('user') ?? {});
 
@@ -24,6 +25,7 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationsBloc.initializeFirebaseNotifications();
+  await LocalNotifications.initializeLocalNotifications();
   
   await GetStorage.init();
 

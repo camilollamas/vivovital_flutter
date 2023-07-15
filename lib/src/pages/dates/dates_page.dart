@@ -218,8 +218,7 @@ class _DatesPageState extends State<DatesPage> {
   }
 
   Widget _buttonBack() {
-    return SafeArea(
-        child: Container(
+    return Container(
             margin: const EdgeInsets.only(left: 20),
             child: IconButton(
               onPressed: () => Get.offNamed('/home'),
@@ -229,7 +228,6 @@ class _DatesPageState extends State<DatesPage> {
                 size: 20,
               ),
             )
-        )
     );
   }
   Widget _textTitlePage(){

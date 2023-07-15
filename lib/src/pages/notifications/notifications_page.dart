@@ -60,12 +60,12 @@ class _NotificationsPageState extends State<NotificationsPage>
         init: con,
         initState: (_) {
           _videoPlayerController = VideoPlayerController.network(longVideo);
-          // _customVideoPlayerController = CustomVideoPlayerController(
-          //   context: context,
-          //   videoPlayerController: _videoPlayerController,
-          //   customVideoPlayerSettings: _customVideoPlayerSettings,
-          //   additionalVideoSources: { "720p": _videoPlayerController },
-          // );
+          _customVideoPlayerController = CustomVideoPlayerController(
+            context: context,
+            videoPlayerController: _videoPlayerController,
+            customVideoPlayerSettings: _customVideoPlayerSettings,
+            additionalVideoSources: { "720p": _videoPlayerController },
+          );
 
           _customVideoPlayerWebController = CustomVideoPlayerWebController(
             webVideoPlayerSettings: _customVideoPlayerWebSettings,
@@ -124,7 +124,6 @@ class _NotificationsPageState extends State<NotificationsPage>
                               ),
                               Column(
                                 children: [
-                                  
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -234,7 +233,7 @@ class _NotificationsPageState extends State<NotificationsPage>
     // Future.delayed(const Duration(seconds: 4), () {
     setState(() {
         _videoPlayerController = VideoPlayerController.network(
-          "http://192.168.1.11:90/docs/${urlVideo}.mp4",
+          "http://5.161.183.200:82/docs/${urlVideo}.mp4",
         )..initialize().then((value) => con.updates());
 
         _customVideoPlayerController = CustomVideoPlayerController(
@@ -537,9 +536,8 @@ class _NotificationsPageState extends State<NotificationsPage>
   }
 
   Widget _buttonBack() {
-    return SafeArea(
-        child: Container(
-            margin: EdgeInsets.only(left: 20),
+    return Container(
+            margin: EdgeInsets.only(left: 10),
             child: IconButton(
               onPressed: () => Get.offNamed('/home'),
               icon: Icon(
@@ -548,7 +546,6 @@ class _NotificationsPageState extends State<NotificationsPage>
                 size: 20,
               ),
             )
-        )
     );
   }
 

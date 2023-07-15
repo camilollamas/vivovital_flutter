@@ -113,9 +113,8 @@ class ProfilePage extends StatelessWidget {
     );
   }
   Widget _imageAvatar(){
-    return SafeArea(
-      child: Container(
-          margin: const EdgeInsets.only(top: 20),
+    return Container(
+          margin: const EdgeInsets.only(top: 10),
           alignment: Alignment.center,
           child: Image.asset(
             con.user.sexo == 'Masculino' ?
@@ -123,13 +122,11 @@ class ProfilePage extends StatelessWidget {
             'assets/img/avatars/female.png',
             width: 100,
           )
-      ),
     );
   }
   Widget _fistName(){
-    return SafeArea(
-        child: Container(
-          margin: const EdgeInsets.only(top: 20),
+    return Container(
+          margin: const EdgeInsets.only(top: 0),
           alignment: Alignment.center,
           child: Text(
               '${con.user.pnombre} ${con.user.snombre} ${con.user.papellido} ${con.user.sapellido}',
@@ -140,12 +137,10 @@ class ProfilePage extends StatelessWidget {
                 fontFamily: 'AvenirBold',
               )
           ),
-        )
     );
   }
   Widget _document(){
-    return SafeArea(
-        child: Container(
+    return Container(
           margin: const EdgeInsets.only(top: 0),
           alignment: Alignment.center,
           child: Text(
@@ -157,7 +152,6 @@ class ProfilePage extends StatelessWidget {
                 fontFamily: 'AvenirReg',
               )
           ),
-        )
     );
   }
   Widget _divider(){
@@ -368,40 +362,40 @@ class ProfilePage extends StatelessWidget {
   }
   Widget _prepaid(){
     return ListTile(
-      leading: Icon(Icons.attach_money),
+      leading: const Icon(Icons.attach_money),
       title: Text('${con.user.idclaseafiliacion ?? ''}',
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w100,
             color: Color(0xFF243588),
             fontFamily: 'AvenirBold',
           )
       ),
-      subtitle: Text('Prepagada/Póliza/Plan Complementario'),
+      subtitle: const Text('Prepagada/Póliza/Plan Complementario'),
     );
   }
   Widget _whoPrepaid(){
     return ListTile(
-      leading: Icon(Icons.question_answer),
+      leading: const Icon(Icons.question_answer),
       title: Text('${con.user.idclaseafiliacion == 'Si' ? con.prepagada.label : ''}',
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w100,
             color: Color(0xFF243588),
             fontFamily: 'AvenirBold',
           )
       ),
-      subtitle: Text('¿Cuál Prepagada/Póliza/Plan Complementario? '),
+      subtitle: const Text('¿Cuál Prepagada/Póliza/Plan Complementario? '),
     );
   }
   Widget _btnEdit(){
     return Container(
-        margin: EdgeInsets.only(top: 10, left: 5, right: 0, bottom: 15 ),
+        margin: const EdgeInsets.only(top: 10, left: 5, right: 0, bottom: 60 ),
         child: FloatingActionButton.extended(
           onPressed: () {  con.onEditProfile(); },
           backgroundColor: Color(0xFF243588),
           icon: Icon(Icons.edit, color: Colors.white),
-          label: Text(
+          label: const Text(
               'Editar',
               style: TextStyle(
                 fontSize: 20,
@@ -416,7 +410,7 @@ class ProfilePage extends StatelessWidget {
 
   Widget _boxDataPerson(BuildContext context){
     return Container(
-      height: MediaQuery.of(context).size.height * 2.0,
+      height: MediaQuery.of(context).size.height * 3.0,
       margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.06, left: 00, right: 0, bottom: 0 ),
       child: SingleChildScrollView(
         child: Column(
@@ -455,8 +449,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
   Widget _buttonBack() {
-    return SafeArea(
-        child: Container(
+    return Container(
             margin: EdgeInsets.only(left: 20),
             child: IconButton(
               onPressed: () => Get.offNamed('/home'),
@@ -466,7 +459,6 @@ class ProfilePage extends StatelessWidget {
                 size: 20,
               ),
             )
-        )
     );
   }
   Widget _textEditForm(){

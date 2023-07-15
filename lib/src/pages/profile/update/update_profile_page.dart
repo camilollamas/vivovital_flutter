@@ -84,8 +84,7 @@ class UpdateProfilePage extends StatelessWidget {
     );
   }
   Widget _buttonBack() {
-    return SafeArea(
-        child: Container(
+    return Container(
             margin: EdgeInsets.only(left: 20),
             child: IconButton(
               onPressed: () => Get.offNamed('/profile'),
@@ -95,7 +94,6 @@ class UpdateProfilePage extends StatelessWidget {
                 size: 20,
               ),
             )
-        )
     );
   }
   Widget _textEditForm(){
@@ -671,9 +669,9 @@ class UpdateProfilePage extends StatelessWidget {
   }
   Widget _textRegion(BuildContext context){
     return Container(
-        margin: EdgeInsets.only(top: 0),
+        margin: const EdgeInsets.only(top: 0),
         width: MediaQuery.of(context).size.width * 0.30,
-        child: Text(
+        child: const Text(
           'Departamento:',
           style: TextStyle(
               fontSize: 17,
@@ -684,20 +682,20 @@ class UpdateProfilePage extends StatelessWidget {
   }
   Widget _inputRegion(List<Departamentos> departamentos, BuildContext context){
     return Container(
-      margin: EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.only(top: 0),
       width: MediaQuery.of(context).size.width * 0.50,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: DropdownButton(
         underline: Container(
           alignment: Alignment.centerRight,
-          child: Icon(
+          child: const Icon(
             Icons.arrow_drop_down_outlined,
             color: Color(0xff243588),
           ),
         ),
         elevation: 3,
         isExpanded: true,
-        hint: Text('Seleccionar...',
+        hint: const Text('Seleccionar...',
           style: TextStyle(
               color: Colors.black38,
               fontSize: 16
@@ -729,7 +727,7 @@ class UpdateProfilePage extends StatelessWidget {
     return Container(
         margin: EdgeInsets.only(top: 0),
         width: MediaQuery.of(context).size.width * 0.30,
-        child: Text(
+        child: const Text(
           'Ciudad:',
           style: TextStyle(
               fontSize: 17,
@@ -740,20 +738,20 @@ class UpdateProfilePage extends StatelessWidget {
   }
   Widget _inputCity(List<Ciudad> ciudades, BuildContext context){
     return Container(
-      margin: EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.only(top: 0),
       width: MediaQuery.of(context).size.width * 0.5,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: DropdownButton(
         underline: Container(
           alignment: Alignment.centerRight,
-          child: Icon(
+          child: const Icon(
             Icons.arrow_drop_down_outlined,
             color: Color(0xff243588),
           ),
         ),
         elevation: 3,
         isExpanded: true,
-        hint: Text('Seleccionar...',
+        hint: const Text('Seleccionar...',
           style: TextStyle(
               color: Colors.black38,
               fontSize: 16
@@ -773,11 +771,11 @@ class UpdateProfilePage extends StatelessWidget {
 
   Widget _inputAddress(){
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 0),
+      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
       child: TextField(
           controller: con.addressController,
           keyboardType: TextInputType.text,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Dirección de residencia',
             // prefixIcon: Icon(Icons.account_circle)
           )
@@ -787,9 +785,9 @@ class UpdateProfilePage extends StatelessWidget {
 
   Widget _textCivilStatus(BuildContext context){
     return Container(
-        margin: EdgeInsets.only(top: 15),
+        margin: const EdgeInsets.only(top: 15),
         width: MediaQuery.of(context).size.width * 0.30,
-        child: Text(
+        child: const Text(
           'Estado Civil:',
           style: TextStyle(
               fontSize: 17,
@@ -800,20 +798,20 @@ class UpdateProfilePage extends StatelessWidget {
   }
   Widget _inputCivilStatus(BuildContext context){
     return Container(
-        margin: EdgeInsets.only(top: 15),
+        margin: const EdgeInsets.only(top: 15),
         width: MediaQuery.of(context).size.width * 0.5,
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: DropdownButton(
           underline: Container(
             alignment: Alignment.centerRight,
-            child: Icon(
+            child: const Icon(
               Icons.arrow_drop_down_outlined,
               color: Color(0xff243588),
             ),
           ),
           elevation: 3,
           isExpanded: true,
-          hint: Text('Seleccionar...',
+          hint: const Text('Seleccionar...',
               style: TextStyle(
                 color: Colors.black38,
                 fontSize: 16
@@ -853,9 +851,9 @@ class UpdateProfilePage extends StatelessWidget {
   }
   Widget _textOcupation(BuildContext context){
     return Container(
-        margin: EdgeInsets.only(top: 0),
+        margin: const EdgeInsets.only(top: 0),
         width: MediaQuery.of(context).size.width * 0.30,
-        child: Text(
+        child: const Text(
           'Ocupación:',
           style: TextStyle(
               fontSize: 17,
@@ -866,20 +864,20 @@ class UpdateProfilePage extends StatelessWidget {
   }
   Widget _inputOcupation(List<Tgensel> valores, BuildContext context){
     return Container(
-      margin: EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.only(top: 0),
       width: MediaQuery.of(context).size.width * 0.5,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: DropdownButton(
         underline: Container(
           alignment: Alignment.centerRight,
-          child: Icon(
+          child: const Icon(
             Icons.arrow_drop_down_outlined,
             color: Color(0xff243588),
           ),
         ),
         elevation: 3,
         isExpanded: true,
-        hint: Text('Seleccionar...',
+        hint: const Text('Seleccionar...',
           style: TextStyle(
               color: Colors.black38,
               fontSize: 16
@@ -898,11 +896,11 @@ class UpdateProfilePage extends StatelessWidget {
 
   Widget _inputCompnay(){
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 0),
+      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 0),
       child: TextField(
           controller: con.companyController,
           keyboardType: TextInputType.text,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Empresa o Institución',
             // prefixIcon: Icon(Icons.account_circle)
           )
@@ -922,9 +920,9 @@ class UpdateProfilePage extends StatelessWidget {
   }
   Widget _textSchool(BuildContext context){
     return Container(
-        margin: EdgeInsets.only(top: 0),
+        margin: const EdgeInsets.only(top: 0),
         width: MediaQuery.of(context).size.width * 0.30,
-        child: Text(
+        child: const Text(
           'Escolaridad:',
           style: TextStyle(
               fontSize: 17,
@@ -935,20 +933,20 @@ class UpdateProfilePage extends StatelessWidget {
   }
   Widget _inputSchool(List<Tgensel> valores, BuildContext context){
     return Container(
-      margin: EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.only(top: 0),
       width: MediaQuery.of(context).size.width * 0.5,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: DropdownButton(
         underline: Container(
           alignment: Alignment.centerRight,
-          child: Icon(
+          child: const Icon(
             Icons.arrow_drop_down_outlined,
             color: Color(0xff243588),
           ),
         ),
         elevation: 3,
         isExpanded: true,
-        hint: Text('Seleccionar...',
+        hint: const Text('Seleccionar...',
           style: TextStyle(
               color: Colors.black38,
               fontSize: 16
@@ -957,7 +955,6 @@ class UpdateProfilePage extends StatelessWidget {
         items: _dropDownSchool(valores),
         value: con.school.value == '' ? null : con.school.value,
         onChanged: (opt)=>{
-          print('Ciudad seleccionada -> ${opt}'),
           con.school.value = opt.toString(),
           con.updateValues()
         },
@@ -979,7 +976,7 @@ class UpdateProfilePage extends StatelessWidget {
     return Container(
         margin: EdgeInsets.only(top: 0),
         width: MediaQuery.of(context).size.width * 0.30,
-        child: Text(
+        child: const Text(
           'EPS:',
           style: TextStyle(
               fontSize: 17,
@@ -990,20 +987,20 @@ class UpdateProfilePage extends StatelessWidget {
   }
   Widget _inputEps(List<Tgensel> valores, BuildContext context){
     return Container(
-      margin: EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.only(top: 0),
       width: MediaQuery.of(context).size.width * 0.5,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: DropdownButton(
         underline: Container(
           alignment: Alignment.centerRight,
-          child: Icon(
+          child: const Icon(
             Icons.arrow_drop_down_outlined,
             color: Color(0xff243588),
           ),
         ),
         elevation: 3,
         isExpanded: true,
-        hint: Text('Seleccionar...',
+        hint: const Text('Seleccionar...',
           style: TextStyle(
               color: Colors.black38,
               fontSize: 16
@@ -1032,9 +1029,9 @@ class UpdateProfilePage extends StatelessWidget {
   }
   Widget _textTypeAfi(BuildContext context){
     return Container(
-        margin: EdgeInsets.only(top: 0),
+        margin: const EdgeInsets.only(top: 0),
         width: MediaQuery.of(context).size.width * 0.30,
-        child: Text(
+        child: const Text(
           'Tipo Afiliación:',
           style: TextStyle(
               fontSize: 17,
@@ -1045,20 +1042,20 @@ class UpdateProfilePage extends StatelessWidget {
   }
   Widget _inputTypeAfi(List<Tgensel> valores, BuildContext context){
     return Container(
-      margin: EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.only(top: 0),
       width: MediaQuery.of(context).size.width * 0.5,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: DropdownButton(
         underline: Container(
           alignment: Alignment.centerRight,
-          child: Icon(
+          child: const Icon(
             Icons.arrow_drop_down_outlined,
             color: Color(0xff243588),
           ),
         ),
         elevation: 3,
         isExpanded: true,
-        hint: Text('Seleccionar...',
+        hint: const Text('Seleccionar...',
           style: TextStyle(
               color: Colors.black38,
               fontSize: 16
@@ -1067,7 +1064,6 @@ class UpdateProfilePage extends StatelessWidget {
         items: _dropDownTypeAfi(valores),
         value: con.typeAfi.value == '' ? null : con.typeAfi.value,
         onChanged: (opt)=>{
-          print('typeAfi seleccionada -> ${opt}'),
           con.typeAfi.value = opt.toString(),
           con.updateValues()
         },
@@ -1077,9 +1073,9 @@ class UpdateProfilePage extends StatelessWidget {
 
   Widget _textPrepaid(BuildContext context){
     return Container(
-        margin: EdgeInsets.only(top: 15),
+        margin: const EdgeInsets.only(top: 15),
         width: MediaQuery.of(context).size.width * 0.30,
-        child: Text(
+        child: const Text(
           'Prepagada/Póliza/Plan Complementario:',
           style: TextStyle(
               fontSize: 12,
@@ -1090,20 +1086,20 @@ class UpdateProfilePage extends StatelessWidget {
   }
   Widget _inputPrepaid(BuildContext context){
     return Container(
-        margin: EdgeInsets.only(top: 15),
+        margin: const EdgeInsets.only(top: 15),
         width: MediaQuery.of(context).size.width * 0.5,
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: DropdownButton(
           underline: Container(
             alignment: Alignment.centerRight,
-            child: Icon(
+            child: const Icon(
               Icons.arrow_drop_down_outlined,
               color: Color(0xff243588),
             ),
           ),
           elevation: 3,
           isExpanded: true,
-          hint: Text('Seleccionar...',
+          hint: const Text('Seleccionar...',
               style: TextStyle(
                 color: Colors.black38,
                 fontSize: 16
@@ -1133,9 +1129,9 @@ class UpdateProfilePage extends StatelessWidget {
 
   Widget _textPrepaidEps(BuildContext context){
     return Container(
-        margin: EdgeInsets.only(top: 0),
+        margin: const EdgeInsets.only(top: 0),
         width: MediaQuery.of(context).size.width * 0.30,
-        child: Text(
+        child: const Text(
           '¿Cuál Prepagada/Poliza/Plan Complemantario?:',
           style: TextStyle(
               fontSize: 12,
@@ -1146,20 +1142,20 @@ class UpdateProfilePage extends StatelessWidget {
   }
   Widget _inputPrepaidEps(List<Tgensel> valores, BuildContext context){
     return Container(
-      margin: EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.only(top: 0),
       width: MediaQuery.of(context).size.width * 0.5,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: DropdownButton(
         underline: Container(
           alignment: Alignment.centerRight,
-          child: Icon(
+          child: const Icon(
             Icons.arrow_drop_down_outlined,
             color: Color(0xff243588),
           ),
         ),
         elevation: 3,
         isExpanded: true,
-        hint: Text('Seleccionar...',
+        hint: const Text('Seleccionar...',
           style: TextStyle(
               color: Colors.black38,
               fontSize: 16
@@ -1179,12 +1175,12 @@ class UpdateProfilePage extends StatelessWidget {
   Widget _buttonRegister(BuildContext context){
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.only(top: 10, left: 80, right: 80, bottom: 15 ),
+      margin: const EdgeInsets.only(top: 10, left: 80, right: 80, bottom: 60 ),
       child: FloatingActionButton.extended(
           onPressed: () => con.onUpdateProfile(),
           icon: Icon(Icons.save, color: Colors.white),
           backgroundColor: Color(0xFF243588),
-          label: Text(
+          label: const Text(
             'Actualizar',
             style: TextStyle(
               color: Colors.white,
@@ -1200,7 +1196,7 @@ class UpdateProfilePage extends StatelessWidget {
   Widget _bgDegrade(BuildContext context){
     return Container(
       height: MediaQuery.of(context).size.height * 0.4,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: Colors.transparent,
           boxShadow: <BoxShadow>[
             BoxShadow(
