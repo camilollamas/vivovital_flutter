@@ -29,6 +29,13 @@
             {
               "client_id": "458636555335-1l1upbg40pkri90150pg1uv4608vj5l2.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "458636555335-cqssqlbtr4u4gi0c3i533jbg86ds0lr5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.vitalhelp.user-app"
+              }
             }
           ]
         }

@@ -439,7 +439,7 @@ class UpdateProfilePage extends StatelessWidget {
 
   Widget _inputDayBird(BuildContext context){
     return Container(
-      width: MediaQuery.of(context).size.width * 0.13,
+      width: MediaQuery.of(context).size.width * 0.2,
       margin: EdgeInsets.only( top: 0 , left: 0, right: 10),
       child: DropdownButtonHideUnderline(
           child: DropdownButton2(
@@ -490,7 +490,7 @@ class UpdateProfilePage extends StatelessWidget {
   }
   Widget _inputDayMont(BuildContext context, List<Mes> meses){
     return Container(
-      width: MediaQuery.of(context).size.width * 0.28,
+      width: MediaQuery.of(context).size.width * 0.3,
       margin: EdgeInsets.only( top: 0 , left: 0, right: 30),
       child: DropdownButtonHideUnderline(
           child: DropdownButton(
@@ -516,7 +516,7 @@ class UpdateProfilePage extends StatelessWidget {
   }
   Widget _inputDayYear(BuildContext context){
     return Container(
-      width: MediaQuery.of(context).size.width * 0.17,
+      width: MediaQuery.of(context).size.width * 0.2,
       child: DropdownButtonHideUnderline(
           child: DropdownButton2(
             hint: Text('Año',

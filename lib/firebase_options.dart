@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -49,6 +46,15 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBtdC170s25M7WiXgW_z1whZR_BSQkvSyE',
+    appId: '1:458636555335:web:c72063de259888f5f7ed62',
+    messagingSenderId: '458636555335',
+    projectId: 'vital-help',
+    authDomain: 'vital-help.firebaseapp.com',
+    storageBucket: 'vital-help.appspot.com',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBiNyzQptH8N2EekyKK2DDbIjyjkyhAqmg',
     appId: '1:458636555335:android:95400f6833fa44fbf7ed62',
@@ -59,11 +65,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBOrmpcL0mVvY3PiWJX51YkelrlMlYewko',
-    appId: '1:458636555335:ios:10d7f5c9256d42c1f7ed62',
+    appId: '1:458636555335:ios:c3586ff24bb603fbf7ed62',
     messagingSenderId: '458636555335',
     projectId: 'vital-help',
     storageBucket: 'vital-help.appspot.com',
-    iosClientId: '458636555335-hv87bbcsiqe13u670ntbj5r5gtgu348p.apps.googleusercontent.com',
-    iosBundleId: 'com.jcllamas.vitalhelplApp',
+    iosClientId: '458636555335-cqssqlbtr4u4gi0c3i533jbg86ds0lr5.apps.googleusercontent.com',
+    iosBundleId: 'com.vitalhelp.user-app',
   );
 }

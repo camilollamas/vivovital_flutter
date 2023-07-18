@@ -53,10 +53,10 @@ class _RegisterState extends State<RegisterPage> {
   Widget _buttonBack() {
     return SafeArea(
       child: Container(
-        margin: EdgeInsets.only(left: 20),
+        margin: const EdgeInsets.only(left: 20),
         child: IconButton(
           onPressed: () => Get.back(),
-          icon: Icon(
+          icon: const Icon(
               Icons.arrow_back_ios,
               color: Color(0xFF243588),
               size: 30,
@@ -68,7 +68,7 @@ class _RegisterState extends State<RegisterPage> {
 
   Widget _divider(){
     return
-      Divider(
+      const Divider(
         color: Colors.black54,
         height: 10,
         thickness: 0,
@@ -79,7 +79,7 @@ class _RegisterState extends State<RegisterPage> {
   Widget _imageLogo(){
     return SafeArea(
       child: Container(
-          margin: EdgeInsets.only(top: 0),
+          margin: const EdgeInsets.only(top: 0),
           alignment: Alignment.center,
           child: Image.asset(
             'assets/img/LogoLogin.png',
@@ -90,7 +90,7 @@ class _RegisterState extends State<RegisterPage> {
   }
   Widget _imageLines(BuildContext context){
     return Container(
-        margin: EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
+        margin: const EdgeInsets.only(top: 0, left: 0, right: 0, bottom: 0),
         alignment: Alignment.center,
         width: double.infinity,
         height: 100,
@@ -103,7 +103,7 @@ class _RegisterState extends State<RegisterPage> {
   Widget _bgDegrade(BuildContext context){
     return Container(
       height: MediaQuery.of(context).size.height * 0.4,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: Colors.transparent,
           boxShadow: <BoxShadow>[
             BoxShadow(
@@ -130,7 +130,7 @@ class _RegisterState extends State<RegisterPage> {
   }
 
   Widget _textLogin(){
-    return Text(
+    return const Text(
         'Formulario de registro',
         style: TextStyle(
           fontSize: 30,
@@ -259,9 +259,9 @@ class _RegisterState extends State<RegisterPage> {
       child: ElevatedButton(
           onPressed: () => con.register(context),
           style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(vertical: 5)
+              padding: const EdgeInsets.symmetric(vertical: 5)
           ),
-          child: Text(
+          child: const Text(
             'Registrarse',
             style: TextStyle(
               color: Colors.white,
@@ -291,11 +291,11 @@ class _RegisterState extends State<RegisterPage> {
   Widget _inputSecondname(){
     return Container(
       width: 150,
-      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: TextField(
           controller: con.secNameController,
           keyboardType: TextInputType.text,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Segundo Nombre',
             // prefixIcon: Icon(Icons.account_circle)
           )
@@ -306,11 +306,11 @@ class _RegisterState extends State<RegisterPage> {
   Widget _inputLastName(){
     return Container(
       width: 150,
-      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
       child: TextField(
           controller: con.lastController,
           keyboardType: TextInputType.text,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Primer Apellido',
           )
       ),
@@ -319,11 +319,11 @@ class _RegisterState extends State<RegisterPage> {
   Widget _inputSecondLastName(){
     return Container(
       width: 150,
-      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
       child: TextField(
           controller: con.secondLastController,
           keyboardType: TextInputType.text,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Segundo Apellido'
           )
       ),
@@ -333,9 +333,9 @@ class _RegisterState extends State<RegisterPage> {
   Widget _inputDocumentType(){
     return Container(
       width: MediaQuery.of(context).size.height * 0.1,
-      margin: EdgeInsets.only( top: 15 , left: 11, right: 5),
+      margin: const EdgeInsets.only( top: 15 , left: 11, right: 5),
       child: DropdownButton(
-        hint: Text('Tipo'),
+        hint: const Text('Tipo'),
         isExpanded: true,
         items: con.documentTypes.map((value) {
           return DropdownMenuItem(
@@ -360,7 +360,7 @@ class _RegisterState extends State<RegisterPage> {
       child: TextField(
           controller: con.numberDocumentController,
           keyboardType: TextInputType.number,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'N° de documento',
             // prefixIcon: Icon(Icons.account_circle)
           )
@@ -371,8 +371,8 @@ class _RegisterState extends State<RegisterPage> {
   Widget _textGender(){
     return Container(
       width: 100,
-      margin: EdgeInsets.only( top: 20 , left: 0, right: 0),
-      child: Text(
+      margin: const EdgeInsets.only( top: 20 , left: 0, right: 0),
+      child: const Text(
           'Genero:',
         style: TextStyle(
           fontSize: 17
@@ -383,7 +383,7 @@ class _RegisterState extends State<RegisterPage> {
   Widget _inputGender(){
     return Container(
       width: 140,
-      margin: EdgeInsets.only( top: 20 , left: 0, right: 0),
+      margin: const EdgeInsets.only( top: 20 , left: 0, right: 0),
       child: DropdownButtonHideUnderline(
           child: DropdownButton2(
             hint: Text('Seleccionar...',
@@ -423,13 +423,13 @@ class _RegisterState extends State<RegisterPage> {
   Widget _textBirdDate(BuildContext context){
     return Container(
         width: MediaQuery.of(context).size.width * 1,
-        margin: EdgeInsets.only( top: 20 , left: 0, right: 0),
+        margin: const EdgeInsets.only( top: 20 , left: 0, right: 0),
         child: Text(
           'Fecha de nacimiento: '
               '${con.dayBird == '' ? 'dd' : con.dayBird}'
               '/${con.MontBird == '' ? 'mm' : con.MontBird}'
               '/${con.yearBird == '' ? 'aaaa' : con.yearBird}',
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black,
               fontSize: 17
           ),
@@ -439,8 +439,8 @@ class _RegisterState extends State<RegisterPage> {
 
   Widget _inputDayBird(BuildContext context){
     return Container(
-      width: MediaQuery.of(context).size.width * 0.13,
-      margin: EdgeInsets.only( top: 0 , left: 0, right: 10),
+      width: MediaQuery.of(context).size.width * 0.2,
+      margin: const EdgeInsets.only( top: 0 , left: 0, right: 10),
       child: DropdownButtonHideUnderline(
           child: DropdownButton2(
             hint: Text('Día',
@@ -489,8 +489,8 @@ class _RegisterState extends State<RegisterPage> {
   }
   Widget _inputDayMont(BuildContext context, List<Mes> meses){
     return Container(
-      width: MediaQuery.of(context).size.width * 0.28,
-      margin: EdgeInsets.only( top: 0 , left: 0, right: 30),
+      width: MediaQuery.of(context).size.width * 0.3,
+      margin: const EdgeInsets.only( top: 0 , left: 0, right: 30),
       child: DropdownButtonHideUnderline(
           child: DropdownButton(
             hint: Text('Mes',
@@ -514,8 +514,8 @@ class _RegisterState extends State<RegisterPage> {
   }
 
   Widget _inputDayYear(BuildContext context){
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.17,
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.2,
       child: DropdownButtonHideUnderline(
           child: DropdownButton2(
             hint: Text('Año',
@@ -556,11 +556,11 @@ class _RegisterState extends State<RegisterPage> {
   Widget _inputPhone(BuildContext context){
     return Container(
       width: MediaQuery.of(context).size.width * 0.4,
-      margin: EdgeInsets.only( top: 10 , left: 0, right: 10),
+      margin: const EdgeInsets.only( top: 10 , left: 0, right: 10),
       child: TextField(
           controller: con.phoneController,
           keyboardType: TextInputType.phone,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: 'Número celular',
             // prefixIcon: Icon(Icons.account_circle)
           )
@@ -574,7 +574,7 @@ class _RegisterState extends State<RegisterPage> {
       child: TextField(
           controller: con.otherPhoneController,
           keyboardType: TextInputType.phone,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: 'Otro número celular',
             // prefixIcon: Icon(Icons.account_circle)
           )

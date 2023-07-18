@@ -25,6 +25,7 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationsBloc.initializeFirebaseNotifications();
+
   await LocalNotifications.initializeLocalNotifications();
   
   await GetStorage.init();

@@ -321,7 +321,7 @@ class HomePage extends StatelessWidget {
   }
   Widget _cardDatosPersonales(BuildContext context){
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       alignment: Alignment.center,
       child: Card(
         color: Color(0xFFe3f2fd),
