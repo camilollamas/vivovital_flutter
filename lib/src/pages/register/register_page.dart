@@ -2,6 +2,8 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vitalhelp_app/src/pages/register/register_controller.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:async';
 
 import '../../models/departamentos.dart';
 import '../../models/ciudad.dart';
@@ -16,6 +18,16 @@ class RegisterPage extends StatefulWidget {
 }
 class _RegisterState extends State<RegisterPage> {
   RegisterController con = Get.put(RegisterController());
+  Future<void>? _launched;
+
+   Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
 
   Widget build(BuildContext context) {
     return
@@ -858,18 +870,24 @@ class _RegisterState extends State<RegisterPage> {
                       });
                     },
                   ),
-                  Text('Acepto ',
+                  const Text('Acepto ',
                     style: TextStyle(
                         fontFamily: 'AvenirReg'
                     )
                   ),
-                  Text('Terminos y condiciones',
-                      style: TextStyle(
-                        color: Color(0xff243588),
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'AvenirReg',
-                      )
+                  TextButton(
+                    onPressed: () async {
+                      final Uri toLaunch = Uri(scheme: '${con.urlPath}', host: '${con.urlHost}', path: '${con.urlTerminos}');
+                      _launched = _launchInBrowser(toLaunch);
+                    },
+                    child: const Text('Términos y condiciones.',
+                        style: TextStyle(
+                          color: Color(0xff243588),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'AvenirReg',
+                        )
+                    ),
                   )
                 ],
               ),
@@ -883,17 +901,23 @@ class _RegisterState extends State<RegisterPage> {
                       });
                     },
                   ),
-                  Text('Acepto ',
+                  const Text('Acepto ',
                     style: TextStyle(
                       fontFamily: 'AvenirReg'
                     )
                   ),
-                  Text('Criterios de exclusión',
-                    style: TextStyle(
-                      color: Color(0xff243588),
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'AvenirReg',
+                  TextButton(
+                    onPressed: () async {
+                      final Uri toLaunch = Uri(scheme: '${con.urlPath}', host: '${con.urlHost}', path: '${con.urlCriterios}');
+                      _launched = _launchInBrowser(toLaunch);
+                    },
+                    child: const Text('Criterios de exclusión.',
+                      style: TextStyle(
+                        color: Color(0xff243588),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'AvenirReg',
+                      ),
                     ),
                   )
                 ],
@@ -902,6 +926,27 @@ class _RegisterState extends State<RegisterPage> {
           )
     );
   }
+
+ 
+
+  // Future<void> _launchUrlTerminos() async {
+  
+  //   final Uri url = Uri.parse('${con.urlTerminos}');
+
+  //   if (!await launchUrl(url)) {
+  //     throw Exception('Could not launch $url');
+  //   }
+  // }
+
+  // _launchUrlCriterios() async {
+
+  //   final Uri url = Uri.parse('${con.urlCriterios}');
+
+  //   if (!await launchUrl(url)) {
+  //     throw Exception('Could not launch $url');
+  //   }
+  // }
+
   Widget _codeDialog(BuildContext context) {
     return TextButton(
       onPressed: () => showDialog<String>(

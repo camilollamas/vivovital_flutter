@@ -9,6 +9,7 @@ import 'package:vitalhelp_app/src/providers/json_provider.dart';
 import 'package:vitalhelp_app/src/models/departamentos.dart';
 import 'package:vitalhelp_app/src/models/ciudad.dart';
 import 'package:vitalhelp_app/src/models/mes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RegisterController extends GetxController {
   JsonProvider jsonProvider = JsonProvider();
@@ -55,13 +56,49 @@ class RegisterController extends GetxController {
   var validationCodeInput= '';
   var validationCodeGen= '12345';
 
+  var urlPath=''.obs;
+  var urlHost=''.obs;
+  var urlTerminos= ''.obs;
+  var urlCriterios= ''.obs;
+
   Map userData = {};
 
   RegisterController (){
     print('RegisterController -> Procede a consultar Departamentos -> 2');
     getCountries();
+    getUrls();
 
   }
+  void getUrls() async{
+    Json json = Json(
+        modelo: 'VIVO_AFI_APP',
+        metodo: 'URLS'
+    );
+    print('getUrls -> json:  $json');
+    ResponseApi res = await jsonProvider.json(json);
+
+    if(res.res == 'ok'){
+      print('Respuesta res URLS  -> ${res.result?.recordsets![0]}');
+      var result = res.result?.recordsets![0];
+      Map detail = result[0];
+      urlTerminos.value = detail['TERMINOS'];
+      urlCriterios.value = detail['CRITERIOS'];
+      urlPath.value = detail['PATHURL'];
+      urlHost.value = detail['HOST'];
+    }
+  }
+  void goToUrl(String urlString) async{
+    Uri url = Uri.parse(urlString);
+    if (!await launchUrl(
+      url
+      // mode: LaunchMode.inAppWebView,
+      // webViewConfiguration: const WebViewConfiguration(enableDomStorage: false),
+      )
+    ) {
+      throw Exception('Could not launch $url');
+    }
+  }
+  
   void getCountries() async{
     idCiudad= ''.obs;
     ciuOpt.clear();

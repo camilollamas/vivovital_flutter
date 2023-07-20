@@ -60,7 +60,9 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   }
 
   void _getFCMToken() async {
+    print('_getFCMTOKEN =======================================');
     final settings = await messaging.getNotificationSettings();
+    print('settings.authorizationStatus => ${settings.authorizationStatus}');
 
     if( settings.authorizationStatus != AuthorizationStatus.authorized ) return;
 
