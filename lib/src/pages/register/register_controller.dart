@@ -53,6 +53,7 @@ class RegisterController extends GetxController {
   var terms=false.obs;
   var exclusion=false.obs;
 
+  var mostrarCodigo='NO';
   var validationCodeInput= '';
   var validationCodeGen= '12345';
 
@@ -64,7 +65,6 @@ class RegisterController extends GetxController {
   Map userData = {};
 
   RegisterController (){
-    print('RegisterController -> Procede a consultar Departamentos -> 2');
     getCountries();
     getUrls();
 
@@ -74,11 +74,9 @@ class RegisterController extends GetxController {
         modelo: 'VIVO_AFI_APP',
         metodo: 'URLS'
     );
-    print('getUrls -> json:  $json');
     ResponseApi res = await jsonProvider.json(json);
 
     if(res.res == 'ok'){
-      print('Respuesta res URLS  -> ${res.result?.recordsets![0]}');
       var result = res.result?.recordsets![0];
       Map detail = result[0];
       urlTerminos.value = detail['TERMINOS'];
@@ -110,11 +108,9 @@ class RegisterController extends GetxController {
         metodo: 'DEPARTAMENTOS',
         parametros: {}
     );
-    print('getCountries -> json:  ${json}');
     ResponseApi res = await jsonProvider.json(json);
 
     if(res.res == 'ok'){
-      // print('Respuesta res  -> ${res.result?.recordsets![0]}');
       var result = Departamentos.fromJsonList(res.result?.recordsets![0]);
       deptos.addAll(result);
     }
@@ -123,7 +119,6 @@ class RegisterController extends GetxController {
     showLoadingDialog();
     idCiudad= ''.obs;
     ciuOpt.clear();
-    print('Consultar ciudades de  ${depto}');
     Json json = Json(
         modelo: 'VIVO_AFI_APP',
         metodo: 'CIUDADES',
@@ -131,17 +126,16 @@ class RegisterController extends GetxController {
           "DEPARTAMENTO":"${depto}"
         }
     );
-    //print('json:  ${json}');
     ResponseApi res = await jsonProvider.json(json);
     hideLoadingDialog();
 
     if(res.res == 'ok'){
-      print('Respuesta res  -> ${res.result?.recordsets![0]}');
-      var ciu = res.result?.recordsets![0];
       var result = Ciudad.fromJsonList(res.result?.recordsets![0]);
       ciuOpt.addAll(result);
     }
   }
+
+  TextEditingController inputCodeController  = TextEditingController();
 
   TextEditingController firstNameController   = TextEditingController();
   TextEditingController secNameController     = TextEditingController();
@@ -176,34 +170,6 @@ class RegisterController extends GetxController {
     String address = addressController.text.trim();
     String password = passwordController.text.trim();
     String confirmPassword = confirmPasswordController.text.trim();
-
-    print('firstName ${firstName}');
-    print('secName ${secName}');
-    print('lastName ${lastName}');
-    print('secondLastname ${secondLastname}');
-    print('docType ${docType}');
-    print('numberDocument ${numberDocument}');
-    print('gender ${gender}');
-
-    print('dayBird ${dayBird}');
-    print('MontBird ${MontBird}');
-    print('yearBird ${yearBird}');
-
-    print('phone ${phone}');
-    print('otherPhone ${otherPhone}');
-
-    print('email ${email}');
-    print('confirmEmail ${confirmEmail}');
-
-    print('idDepartamento ${idDepartamento}');
-    print('idCiudad ${idCiudad}');
-    print('address ${address}');
-
-    print('password ${password}');
-    print('confirmPassword ${confirmPassword}');
-
-    print('terms ${terms}');
-    print('exclusion ${exclusion}');
 
     userData = {
       'TIPO_DOC':      '${docType} ',
@@ -494,6 +460,7 @@ class RegisterController extends GetxController {
 
   void ValidateAccount (docType, numberDocument, email, phone, context) async{
     showLoadingDialog();
+    inputCodeController.text = '';
 
     Json json = Json(
         modelo: 'VIVO_AFI_APP',
@@ -509,7 +476,6 @@ class RegisterController extends GetxController {
     ResponseApi res = await jsonProvider.json(json);
     hideLoadingDialog();
 
-    print('Respuesta => ${res.result?.recordsets!}');
     if(res.res == 'ok') {
 
       if(res.result?.recordset![0].ok == 'OK'){
@@ -523,11 +489,13 @@ class RegisterController extends GetxController {
         List code = res.result?.recordsets![1];
         Map validateCode = code[0];
         validationCodeGen = validateCode['CODIGO'];
-        print('CODIGO DE VALIDACIÓN: ${validationCodeGen}');
+        mostrarCodigo = validateCode['MOSTRAR'];
 
+        if(mostrarCodigo == 'SI'){
+          inputCodeController.text = validationCodeGen;
+          validationCodeInput = validateCode['CODIGO'];
+        }
         showConfirmDialog(email, phone, context);
-
-
       }else{
         List Error = res.result?.recordsets![1];
         Map detail = Error[0];
@@ -564,18 +532,18 @@ class RegisterController extends GetxController {
         children: [
           Column(
             children: [
-              Text('Se ha enviado un código de validación al siguiente correo electrónico:'),
-              Text('${email}',
-                  style: TextStyle(
+              const Text('Se ha enviado un código de validación al siguiente correo electrónico:'),
+              Text('$email',
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w300,
                     color: Color(0xFF243588),
                     fontFamily: 'AvenirReg',
                   )
               ),
-              Text('También por mensaje de texto al número:'),
-              Text('${phone}',
-                  style: TextStyle(
+              const Text('También por mensaje de texto al número:'),
+              Text('$phone',
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w300,
                     color: Color(0xFF243588),
@@ -584,11 +552,11 @@ class RegisterController extends GetxController {
               ),
               TextField(
                   keyboardType: TextInputType.number,
-                  // controller: codeInput,
+                  controller: inputCodeController,
                   onChanged: (value){
                     validationCodeInput = value;
                   },
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Ingresar código',
                     // prefixIcon: Icon(Icons.val)
                   )
@@ -605,7 +573,7 @@ class RegisterController extends GetxController {
                               padding: EdgeInsets.symmetric(horizontal: 15),
                               shadowColor: Colors.transparent
                           ),
-                          child: Text(
+                          child: const Text(
                             'Cancelar',
                             style: TextStyle(
                               color: Colors.red,
@@ -619,7 +587,7 @@ class RegisterController extends GetxController {
                           style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.symmetric(horizontal: 15)
                           ),
-                          child: Text(
+                          child: const Text(
                             'Validar',
                             style: TextStyle(
                               color: Colors.white,
@@ -641,10 +609,6 @@ class RegisterController extends GetxController {
 
   }
   void validateCode(){
-    print('Validando Código');
-    print('Código Válido ${validationCodeGen}');
-    print('Código Ingresado ${validationCodeInput}');
-
     if(validationCodeGen == validationCodeInput){
       Get.snackbar(
           'Aviso: ',
@@ -653,7 +617,6 @@ class RegisterController extends GetxController {
           backgroundColor: Colors.green,
           icon: const Icon(Icons.check_circle_outline_outlined)
       );
-      print('Enviando datos de usuario ${userData}');
       saveUser();
     }else{
       Get.snackbar(
@@ -674,11 +637,9 @@ class RegisterController extends GetxController {
     );
 
     ResponseApi res = await jsonProvider.json(json);
-    print('Respuesta => ${res.result?.recordsets!}');
     hideLoadingDialog();
     if(res.res == 'ok') {
       if(res.result?.recordset![0].ok == 'OK'){
-        print('Respuesta => ${res.result?.recordsets!}');
         Get.toNamed('/');
       }else{
         List Error = res.result?.recordsets![1];
