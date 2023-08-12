@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:vitalhelp_app/src/pages/dates/dates_controller.dart';
 import 'package:vitalhelp_app/src/utils/drawer_menu.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/citas.dart';
 import '../../models/meses.dart';
@@ -21,6 +22,16 @@ class _DatesPageState extends State<DatesPage> {
 
   String fechaFormateada = '';
   String horaFormateada = '';
+
+  Future<void>? _launched;
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
 
 
 
@@ -85,6 +96,7 @@ class _DatesPageState extends State<DatesPage> {
     return GetBuilder<DatesController>(
         init: con,
         initState: (_) {
+          con.getStatus();
         },
         builder: (_) {
           return
@@ -148,25 +160,28 @@ class _DatesPageState extends State<DatesPage> {
                                 visible: con.showCitas.value,
                                 child: 
                                   Column(
-                                    children: con.citas.map((_) => FutureBuilder(
-                                      future: con.getPlanes(),
-                                      builder: (context, snapshot){
-                                        if(snapshot.hasData){
-                                          return
-                                            ListView.builder(
-                                              scrollDirection: Axis.vertical,
-                                              shrinkWrap: true,
-                                              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                                itemCount: snapshot.data?.length ?? 0,
-                                                itemBuilder: (_, index) {
-                                                  return _citasCard(snapshot.data![index], context);
-                                                }
-                                            );
-                                        }else{
-                                          return Text('Sin Citas');
+                                    children: [
+                                      FutureBuilder(
+                                        future: con.getPlanes(),
+                                        builder: (context, snapshot){
+                                          if(snapshot.hasData){
+                                            return
+                                              ListView.builder(
+                                                scrollDirection: Axis.vertical,
+                                                shrinkWrap: true,
+                                                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                                  itemCount: snapshot.data?.length ?? 0,
+                                                  itemBuilder: (_, index) {
+                                                    return _citasCard(snapshot.data![index], context);
+                                                  }
+                                              );
+                                          }else{
+                                            return Text('Sin Citas');
+                                          }
                                         }
-                                      }
-                                    )).toList(),
+
+                                      )
+                                    ],
                                   )
                               )
                             ]
@@ -271,8 +286,8 @@ class _DatesPageState extends State<DatesPage> {
       width: MediaQuery.of(context).size.width * 0.55,
       padding: const EdgeInsets.symmetric(horizontal: 0),
       child: 
-        Text('Día: ${fechaFormateada}',
-          style: TextStyle(
+        Text('Día: $fechaFormateada',
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w300,
             color: Color(0xFF243588),
@@ -464,13 +479,13 @@ class _DatesPageState extends State<DatesPage> {
   }
 
   Widget _citasCard(Cita cit, context){
-    final numberFormat = NumberFormat.currency(locale: 'es_MX', symbol:"\$");
+    //final numberFormat = NumberFormat.currency(locale: 'es_MX', symbol:"\$");
 
     return Container(
       margin: const EdgeInsets.only(top: 20),
       alignment: Alignment.center,
       child: Card(
-        color: Color(0xFFe3f2fd),
+        color: const Color(0xFFe3f2fd),
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
         clipBehavior: Clip.hardEdge,
         child: Container(
@@ -483,7 +498,7 @@ class _DatesPageState extends State<DatesPage> {
             ),
           ),
           child: Container(
-            margin: EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
+            margin: const EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -553,7 +568,7 @@ class _DatesPageState extends State<DatesPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Text('Deja Cancelar:',
+                    const Text('Muestra enlace :',
                         style: TextStyle(
                           fontSize: 14,
                           // fontWeight: FontWeight.w300,
@@ -561,7 +576,7 @@ class _DatesPageState extends State<DatesPage> {
                           fontFamily: 'AvenirReg',
                         )
                     ),
-                    Text(' ${cit.cancela}',
+                    Text(' ${cit.verenlace}',
                         style: const TextStyle(
                           fontSize: 14,
                           // fontWeight: FontWeight.w300,
@@ -570,6 +585,27 @@ class _DatesPageState extends State<DatesPage> {
                         )
                     ),
                   ],
+                ),
+                Visibility(
+                  visible: cit.verenlace == 'SI' ? true : false,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              final Uri toLaunch = Uri(scheme: 'https', host: 'meet.jit.si', path: '${cit.enlace}');
+                              _launched = _launchInBrowser(toLaunch);
+                            },
+                            child: 
+                            const Text('Abrir enlace de pago',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w300,
+                                      fontFamily: 'AvenirReg',
+                                    ),)
+                          ),
+                        ]
+                  )
                 ),
                 Visibility(
                   visible: cit.cancela == 'SI' ? true : false,

@@ -217,15 +217,20 @@ class PaidController extends GetxController {
     String prvkey = paid['keyPrivated'];
 
     // acceptance_token
-    // print('================= acceptance_token =========================');
+    print('================= acceptance_token =========================');
+    print('wompiURL == $wompiURL');
+    print('pubkey == $pubkey');
+    print('prvkey == $prvkey');
+    print('plnCost == $plnCost');
+    print('refWompi == $refWompi');
 
     dynamic res = await wompiProvider.acceptance_token(wompiURL, pubkey);
 
-    // print('=> acceptance_token -> ${res['data']['presigned_acceptance']['acceptance_token']}');
+    print('=> acceptance_token -> ${res['data']['presigned_acceptance']['acceptance_token']}');
     accToken = res['data']['presigned_acceptance']['acceptance_token'];
 
     //Create  Card
-    // print('================= Create  Card =========================');
+      print('================= Create  Card =========================');
       List<String> list = expiryDate.split('/');
       String year = list[1];
       int month = int.parse(list[0]);
@@ -251,10 +256,10 @@ class PaidController extends GetxController {
         return;
       }
       cardId = resp['data']['id'];
-      // print('cardId : ${cardId}');
+    print('cardId : ${cardId}');
 
     //Create payment source create_pay_source
-    // print('================= Create payment source =========================');
+    print('================= Create payment source =========================');
 
       Map<String, String> paymentSource = {
         "type": "CARD",
@@ -275,12 +280,12 @@ class PaidController extends GetxController {
         );
         return;
       }
-      // print('=> create_pay_source id -> ${respo['data']['id']}');
+    print('=> create_pay_source id -> ${respo['data']}');
       paySourceId = respo['data']['id'] as int;
 
 
-    //Create Transactions
-    // print('================= Create Transactions =========================');
+      //Create Transactions
+    print('================= Create Transactions =========================');
       Map<String, dynamic> transaction = {
         "acceptance_token": accToken,
         "amount_in_cents": plnCost*100,
@@ -311,7 +316,7 @@ class PaidController extends GetxController {
           "postal_code": "250001"
         }
       };
-      // print(transaction);
+      print(transaction);
 
       dynamic respon = await wompiProvider.create_transaction(wompiURL, transaction, prvkey);
       if(respo["status"] == 'ERROR'){
@@ -325,15 +330,15 @@ class PaidController extends GetxController {
         );
         return;
       }
-      // print('=> create_transaction id -> ${respon['data']}');
+      print('=> create_transaction id -> ${respon['data']}');
       // paySourceId = respo['data']['id'];
       idTransaction = respon['data']['id'];
 
       // print('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> entra delay');
       await Future.delayed(const Duration(seconds: 5));
-      // print('=======================================> sale delay');
+      print('=======================================> sale delay');
       // get transaction
-      // print('================= Get Transactions =========================');
+      print('================= Get Transactions =========================');
       dynamic response = await wompiProvider.get_transactions(wompiURL, idTransaction);
       if(response["status"] == 'ERROR'){
         hideLoadingDialog();
@@ -346,10 +351,10 @@ class PaidController extends GetxController {
         );
         return;
       }
-      // print('=> get_transactions data -> ${response}');
+      print('=> get_transactions data -> ${response}');
       dataTransaction = response;
       if(response['data']['status'] == 'APPROVED' ){
-        // print('======================> transaccion aprobada');
+        print('======================> transaccion aprobada');
 
         var afi = user.toJson();
         // print('idafiliado -> ${idafiliado['IDAFILIADO']}');
@@ -375,7 +380,17 @@ class PaidController extends GetxController {
         // Get.toNamed('/home');
         hideLoadingDialog();
         messagePostPaid(context);
-
+      }
+      if(response['data']['status'] == 'DECLINED' ){
+        print('======================> transaccion rechazada');
+        Get.snackbar(
+            'Transacción declinada! ',
+            'Intenta nuevamente o prueba con otra tarjeta.',
+            colorText: Colors.white,
+            backgroundColor: Colors.red,
+            icon: const Icon(Icons.error_outline)
+        );
+        hideLoadingDialog();
       }
 
     hideLoadingDialog();

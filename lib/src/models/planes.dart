@@ -11,12 +11,14 @@ class Planes {
     required this.refWompi,
     required this.estado,
     required this.valor,
+    required this.link
   });
 
   String idplan;
   String descplan;
   String refWompi;
   String estado;
+  String link;
   int valor;
 
   factory Planes.fromJson(Map<String, dynamic> json) => Planes(
@@ -25,6 +27,7 @@ class Planes {
     refWompi: json["REF_WOMPI"],
     estado: json["ESTADO"],
     valor: json["VALOR"],
+    link: json["LINK"],
   );
 
   static List<Planes> fromJsonList(List<dynamic> jsonList){
@@ -43,5 +46,6 @@ class Planes {
     "REF_WOMPI": refWompi,
     "ESTADO": estado,
     "VALOR": valor,
+    "LINK": link,
   };
 }

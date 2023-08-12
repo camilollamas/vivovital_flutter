@@ -100,7 +100,6 @@ class DatesController extends GetxController {
     hideLoadingDialog();
   }
   void getHoras(day) async{
-    print('day ===================================================> $day');
     if(day == null){
       return;
     }
@@ -157,6 +156,7 @@ class DatesController extends GetxController {
       Get.snackbar('Error', 'No se pudo agendar su cita');
     }
   }
+  
   void getDates() async{
     citas.clear();
 
@@ -168,12 +168,17 @@ class DatesController extends GetxController {
           "IDAFILIADO": "${user.idafiliado}"
         });
     ResponseApi res = await jsonProvider.json(json);
-
+    citas.clear();
     if(res.res == 'ok'){
       print('[1] citas - citas => ${res.result?.recordsets![0]}');
       var resu = Cita.fromJsonList(res.result?.recordsets![0]);
-      citas.addAll(resu);
       print('citas.length ${citas.length}');
+
+      citas.clear();
+      
+      citas.addAll(resu);
+      
+
       showCitas.value = true;
       //validate if have citas
         super.refresh();
@@ -219,6 +224,7 @@ class DatesController extends GetxController {
       );  
     }
   }
+  
   Future<List<Cita>> getPlanes() async {
     print('Devolviendo planes=> ${citas.toString()}');
     return citas;

@@ -433,6 +433,7 @@ class HomeController extends GetxController {
         });
     //
     ResponseApi res = await jsonProvider.json(json);
+    print('Respuesta res  -> ${res.result?.recordsets}');
 
     var result = Planes.fromJsonList(res.result?.recordsets![0]);
     planes.addAll(result);
@@ -440,6 +441,9 @@ class HomeController extends GetxController {
     super.refresh();
 
 
+  }
+  void onGenerateLinkPaid() async {
+    print('=>=>>>=>=> Generar enlace de PAGO');
   }
 
   void onSignatureHabeasData(context) {
@@ -609,6 +613,7 @@ class HomeController extends GetxController {
     ResponseApi res = await jsonProvider.json(json);
     hideLoadingDialog();
     var respuesta = res.result?.recordsets[0];
+    print('Respuesta => ${respuesta[0]}');
 
     keyPublic.value = respuesta[0]['KEYPUB'];
     keyPrivated.value = respuesta[0]['KEYPRIVATED'];

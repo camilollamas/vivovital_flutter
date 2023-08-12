@@ -21,6 +21,7 @@ class UtilController extends GetxController {
 
   }
   void goToRoute(String route){
-    Get.toNamed('/${route ?? 'home'}');
+    Get.offNamedUntil('/${route}', (route) => false);
+    // Get.toNamed('/${route ?? 'home'}');
   }
 }

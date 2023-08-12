@@ -22,6 +22,8 @@ class Cita {
     String? descripcion;
     String? idmedico;
     String? nombre;
+    String? verenlace;
+    String? enlace;
 
     Cita({
         this.fecha,
@@ -37,6 +39,8 @@ class Cita {
         this.descripcion,
         this.idmedico,
         this.nombre,
+        this.verenlace,
+        this.enlace,
     });
 
     factory Cita.fromJson(Map<String, dynamic> json) => Cita(
@@ -53,6 +57,8 @@ class Cita {
         descripcion: json["DESCRIPCION"],
         idmedico: json["IDMEDICO"],
         nombre: json["NOMBRE"],
+        verenlace: json["VERENLACE"],
+        enlace: json["ENLACE"],
     );
 
     static List<Cita> fromJsonList(List<dynamic> jsonList){
@@ -79,5 +85,7 @@ class Cita {
         "DESCRIPCION": descripcion,
         "IDMEDICO": idmedico,
         "NOMBRE": nombre,
+        "VERENLACE": verenlace,
+        "ENLACE": enlace,
     };
 }

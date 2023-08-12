@@ -1,3 +1,8 @@
+import 'dart:convert';
+import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -6,17 +11,50 @@ import 'package:vitalhelp_app/src/utils/drawer_menu.dart';
 import 'package:signature/signature.dart';
 import 'package:vitalhelp_app/src/models/planes.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../presentation/blocs/notifications/notifications_bloc.dart';
 
+
 class HomePage extends StatelessWidget {
   HomeController con = Get.put(HomeController());
+  Future<void>? _launched;
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
 
   var scaffoldKey = GlobalKey<ScaffoldState>();
+
+  bool webView = true;
+  bool webViewJs = true;
+
+  static const html = '''
+    <h1>Introducing Flutter</h1>
+    <h3>Google Developers</h3>
+    <p>Get started at <a href="https://flutter.io">https://flutter.io</a> today.</p>
+
+    <p>Flutter is Google’s mobile UI framework for crafting high-quality native interfaces on iOS and Android in record time. Flutter works with existing code, is used by developers and organizations around the world, and is free and open source.</p>
+
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/fq4N0hgOWzU"></iframe>
+
+    <h1>Filler text below</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent neque nibh, interdum bibendum enim ut, varius pretium lacus. Sed ut hendrerit eros, blandit lacinia risus. Maecenas sit amet ullamcorper arcu, vitae bibendum eros. Morbi ipsum urna, elementum non dui eu, tristique hendrerit ipsum. Donec ullamcorper neque libero, eu fermentum purus ultrices ac. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam dictum justo vel urna viverra maximus.</p>
+    <p>Donec porttitor vulputate diam, eu accumsan diam. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nunc egestas pellentesque molestie. Donec vitae vestibulum turpis. Mauris sodales lacus ac porttitor placerat. Nunc feugiat lorem et ultrices tincidunt. Nam vehicula efficitur leo eget dapibus. Sed id enim est.</p>
+    <p>Nam velit enim, elementum in egestas ac, faucibus non elit. Curabitur ac ultrices sem. Interdum et malesuada fames ac ante ipsum primis in faucibus. Proin mattis quis felis a maximus. Nulla diam ligula, tincidunt id viverra ut, consectetur eu odio. Quisque id nunc sed dui interdum tristique. Curabitur faucibus, lorem sit amet tempus porttitor, justo felis mollis justo, sit amet tempus massa nulla et mauris. Nulla viverra tortor sed velit malesuada, sed bibendum justo elementum. Quisque id nisl tristique, venenatis eros vitae, fermentum elit. Ut nec faucibus lacus. Proin nisl quam, ullamcorper id tellus at, mattis convallis orci. Maecenas viverra mollis ullamcorper. Donec tincidunt, elit id placerat consequat, nisi purus tincidunt erat, sed aliquet justo leo a felis.</p>
+    <p>Quisque sodales dui nec dictum bibendum. Aenean pellentesque efficitur elit, ut tincidunt leo laoreet ut. Aenean ac molestie dui, at fringilla mi. Vivamus mollis, ipsum ut suscipit molestie, augue nisl maximus lectus, id condimentum dui leo ac lectus. Donec arcu velit, pellentesque ut rutrum pharetra, convallis at ligula. Cras vel justo a nulla gravida porta. Sed vestibulum eget ipsum a scelerisque.</p>
+    <p>Ut venenatis et mauris at venenatis. Proin vitae lacus sagittis, ultrices lorem non, tincidunt enim. Mauris sit amet odio et sapien tristique sollicitudin vel ut nisl. Nulla mauris diam, commodo quis ex porta, ornare auctor eros. Aliquam egestas felis non libero sodales condimentum ac sed magna. Morbi vitae ante in ligula faucibus aliquam. Vivamus nec gravida odio. Duis pharetra diam a malesuada gravida. Curabitur sit amet tincidunt dui. In sagittis augue at nibh fringilla fringilla. Curabitur volutpat in leo id fringilla.</p>
+  ''';
   
   Widget? get builder => null;
 
   @override
+ 
 
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
@@ -92,37 +130,26 @@ class HomePage extends StatelessWidget {
                                 visible: con.showPlanes.value,
                                 child:
                                 Column(
-                                  children: con.planes.map((_) => FutureBuilder(
+                                  children: [ FutureBuilder(
                                           future: con.getPlanes(),
                                           builder: (context, snapshot){
                                            if(snapshot.hasData){
-                                              print('snapshot.hasData => ${snapshot}');
                                               return
                                                ListView.builder(
                                                  scrollDirection: Axis.vertical,
                                                  shrinkWrap: true,
-                                                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                                 padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                                                    itemCount: snapshot.data?.length ?? 0,
                                                    itemBuilder: (_, index) {
                                                      return _planesCard(snapshot.data![index], context);
                                                    }
                                                );
-
-
-                                              /*  ListView.builder(
-                                                itemCount: snapshot.data?.length ?? 0,
-                                                itemBuilder: (_, index) {
-                                                  return ListTile(
-                                                  );
-                                                  // return _Test(snapshot.data![index]);
-                                                },
-                                              );*/
                                             }else{
                                               return Text('Sin PLanes');
                                             }
                                           }
                                       )
-                                    ).toList(),
+                                    ]
                                   )
                             )
                           ],
@@ -190,9 +217,19 @@ class HomePage extends StatelessWidget {
                       fontFamily: 'AvenirBold',
                     )
                 ),
-                Divider(),
+                const Divider(),
                 // Text( '${ con.programaSeleccioando['CONS_INF'] == 0 ? 'Para continuar debe firmar el consentimiento informado': 'Continuar con el Pago.'}' , // '',
-                const Text( 'Continuar con el Pago.' , // '',
+                const Text( 'Continuar con el pago:' , // '',
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w300,
+                      color: Color(0xFF243588),
+                      fontFamily: 'AvenirBold',
+                    )
+                ),
+                const Divider(),
+                const Text( 'Enlace de pago:' , // '',
                     textAlign: TextAlign.justify,
                     style: TextStyle(
                       fontSize: 14,
@@ -201,53 +238,101 @@ class HomePage extends StatelessWidget {
                       fontFamily: 'AvenirReg',
                     )
                 ),
+                // Text(plan.link),
                 Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                              onPressed: () => {
-
-                                // if(con.programaSeleccioando['CONS_INF'] == 0){
-                                //   print('Firmar'),
-                                //   con.signatureController.clear(),
-                                //   Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //       builder: (BuildContext context ) => ConInfDialog(),
-                                //       fullscreenDialog: true,
-                                //     ),
-                                //   )
-                                // },
-                                // if(con.programaSeleccioando['CONS_INF'] == 1){
-                                  print('Pagar IDPLAN: ${plan.idplan}, VALOR: ${plan.valor}, DESC: ${plan.descplan}, REF_WOMPI: ${plan.refWompi}'),
-                                  con.onPagar(plan),
-                                // }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.symmetric(horizontal: 15)
-                              ),
-                              child: Text(
-                                '${ con.programaSeleccioando['CONS_INF'] == 0 ? 'Continuar': 'Pagar'}' ,
-                                style: const TextStyle(
-                                  color: Colors.white,
+                  margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                  child:
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          final Uri toLaunch = Uri(scheme: 'https', host: 'checkout.wompi.co', path: '/l/${plan.link}');
+                          _launched = _launchInBrowser(toLaunch);
+                        },
+                        child: 
+                        const Text('Abrir enlace de pago',
+                                style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w300,
                                   fontFamily: 'AvenirReg',
-                                ),
-                              )
-                          )
-                        ]
-                    )
-                )
-              ],
+                                ),)
+                      ),
+                    ]
+                  )
+                ),
+                // const Divider(),
+                // const Text( 'Pago con tarjeta:' , // '',
+                //     textAlign: TextAlign.justify,
+                //     style: TextStyle(
+                //       fontSize: 14,
+                //       fontWeight: FontWeight.w300,
+                //       color: Color(0xFF243588),
+                //       fontFamily: 'AvenirReg',
+                //     )
+                // ),
+                // Container(
+                //     margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                //     child: Row(
+                //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //         children: [
+                //           // TextButton(
+                //           //   onPressed: () {
+                //           //     print('Pagar IDPLAN: ${plan.idplan}, VALOR: ${plan.valor}, DESC: ${plan.descplan}, REF_WOMPI: ${plan.refWompi}');
+                //           //     con.onPagar(plan);
+                //           //   },
+                //           //   child: 
+                //           //   const Text('Continuar con el pago',
+                //           //           style: TextStyle(
+                //           //             fontSize: 18,
+                //           //             fontWeight: FontWeight.w300,
+                //           //             fontFamily: 'AvenirReg',
+                //           //           ),
+                //           //         )
+                //           // ),
+
+                //           // ElevatedButton(
+                //           //     onPressed: () => {
+                //           //       con.onPagar(plan),
+                //           //     },
+                //           //     style: ElevatedButton.styleFrom(
+                //           //         padding: EdgeInsets.symmetric(horizontal: 15)
+                //           //     ),
+                //           //     child: Text(
+                //           //       '${ con.programaSeleccioando['CONS_INF'] == 0 ? 'Pagar con Tarjeta': 'Pagar'}' ,
+                //           //       style: const TextStyle(
+                //           //         color: Colors.white,
+                //           //         fontSize: 18,
+                //           //         fontWeight: FontWeight.w300,
+                //           //         fontFamily: 'AvenirReg',
+                //           //       ),
+                //           //     )
+                //           // )
+                //         ]
+                //     )
+                // ),
+              ]
             ),
           ),
         ),
       ),
     );
 
+  }
+
+
+  Widget _inputEmail(){
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+      child: const TextField(
+          // controller: '',
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            hintText: 'Correo electrónico',
+            // prefixIcon: Icon(Icons.account_circle)
+          )
+      ),
+    );
   }
   
   Widget _cardSignature(BuildContext context){
@@ -484,7 +569,7 @@ class HomePage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text('${con.programaPagado.value['DESCPLAN']}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               // fontWeight: FontWeight.w300,
                               color: Color(0xFF243588),
@@ -583,6 +668,19 @@ class HomePage extends StatelessWidget {
   Widget _drawerList(){
     return CustomDrawerMenu();
   }
+}
+
+class _WidgetFactory extends WidgetFactory {
+  @override
+  final bool webView;
+
+  @override
+  final bool webViewJs;
+
+  _WidgetFactory({
+    required this.webView,
+    required this.webViewJs,
+  });
 }
 
 class FullScreenDialog extends StatelessWidget {

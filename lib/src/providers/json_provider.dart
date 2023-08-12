@@ -35,7 +35,7 @@ class JsonProvider extends GetConnect {
           'Content-Type': 'application/json'
         }
     );
-    print('json_provider => response ${response.statusCode}');
+    print('json_provider => response ${response}');
     if(response.body == null){
       Get.snackbar('Erorr', 'No se pudo ejecutar la peticion');
       return ResponseApi();
