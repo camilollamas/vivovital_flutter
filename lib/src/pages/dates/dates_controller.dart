@@ -69,6 +69,7 @@ class DatesController extends GetxController {
     citaValoracion.value = cV[0];
     hideLoadingDialog();
 
+    // ignore: invalid_use_of_protected_member
     if( citaValoracion.value['ESTADOPASO'] == 0 ){
       getDays();
       mostrarAgenda.value = '1';
@@ -125,7 +126,6 @@ class DatesController extends GetxController {
   }
   void onAgendar() async{
     showLoadingDialog();
-    var idafiliado = user.toJson();
 
     Json json = Json(
       modelo: 'VIVO_CIT',
@@ -182,7 +182,7 @@ class DatesController extends GetxController {
       showCitas.value = true;
       //validate if have citas
         super.refresh();
-      if(citas.length > 0){
+      if(citas.isNotEmpty){
         showCitas.value = true;
         super.refresh();
       }
