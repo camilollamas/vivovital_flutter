@@ -640,7 +640,7 @@ class _RegisterState extends State<RegisterPage> {
   Widget _inputCountry(BuildContext context){
     return Container(
       margin: EdgeInsets.only(top: 15),
-      width: MediaQuery.of(context).size.width * 0.4,
+      width: MediaQuery.of(context).size.width * 0.45,
         child: DropdownButton(
             underline: Container(
               alignment: Alignment.centerRight,
@@ -695,7 +695,7 @@ class _RegisterState extends State<RegisterPage> {
   Widget _textRegion(BuildContext context){
     return Container(
         margin: EdgeInsets.only(top: 0),
-        width: MediaQuery.of(context).size.width * 0.30,
+        width: MediaQuery.of(context).size.width * 0.35,
         child: Text(
           'Departamento:',
           style: TextStyle(
@@ -709,8 +709,8 @@ class _RegisterState extends State<RegisterPage> {
   Widget _inputRegion(List<Departamentos> departamentos){
     return Container(
       margin: EdgeInsets.only(top: 0),
-      width: MediaQuery.of(context).size.width * 0.50,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      width: MediaQuery.of(context).size.width * 0.45,
+      padding: EdgeInsets.symmetric(horizontal: 0),
       child: DropdownButton(
         underline: Container(
           alignment: Alignment.centerRight,
@@ -751,7 +751,7 @@ class _RegisterState extends State<RegisterPage> {
   Widget _textCity(BuildContext context){
     return Container(
         margin: EdgeInsets.only(top: 0),
-        width: MediaQuery.of(context).size.width * 0.30,
+        width: MediaQuery.of(context).size.width * 0.35,
         child: Text(
           'Ciudad:',
           style: TextStyle(
@@ -764,8 +764,8 @@ class _RegisterState extends State<RegisterPage> {
   Widget _inputCity(List<Ciudad> ciudades){
     return Container(
       margin: EdgeInsets.only(top: 0),
-      width: MediaQuery.of(context).size.width * 0.5,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      width: MediaQuery.of(context).size.width * 0.45,
+      padding: EdgeInsets.symmetric(horizontal: 0),
       child: DropdownButton(
         underline: Container(
           alignment: Alignment.centerRight,
