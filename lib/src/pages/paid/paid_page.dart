@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_form.dart';
-import 'package:flutter_credit_card/credit_card_model.dart';
 import 'package:flutter_credit_card/credit_card_brand.dart';
 import 'package:flutter_credit_card/credit_card_widget.dart';
 import 'package:flutter_credit_card/custom_card_type_icon.dart';
-import 'package:flutter_credit_card/glassmorphism_config.dart';
 import 'package:get/get.dart';
 import 'package:vitalhelp_app/src/pages/paid/paid_controller.dart';
 import 'package:vitalhelp_app/src/utils/drawer_menu.dart';
@@ -13,6 +11,8 @@ import 'package:intl/intl.dart';
 class PaidPage extends StatelessWidget {
   PaidController con = Get.put(PaidController());
   var scaffoldKey = GlobalKey<ScaffoldState>();
+
+  PaidPage({super.key});
 
 
   @override
@@ -49,7 +49,7 @@ class PaidPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text( '${con.paid['descPlan'] ?? ''}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w300,
                           color: Color(0xFF243588),
@@ -57,7 +57,7 @@ class PaidPage extends StatelessWidget {
                         )
                     ),
                     Text('Inversión: ${numberFormat.format(con.paid['PlanCost'])  ?? ''}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           // fontWeight: FontWeight.w300,
                           color: Color(0xFF243588),
@@ -88,7 +88,7 @@ class PaidPage extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   isChipVisible: true,
                   isSwipeGestureEnabled: true,
-                  animationDuration: Duration(milliseconds: 1000),
+                  animationDuration: const Duration(milliseconds: 1000),
                   frontCardBorder: Border.all(color: Colors.grey),
                   // backCardBorder: Border.all(color: Colors.grey),
                   onCreditCardWidgetChange: (CreditCardBrand creditCardBrand) {},
@@ -114,7 +114,7 @@ class PaidPage extends StatelessWidget {
                   // ],
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: CreditCardForm(
                     formKey: con.keyForm, // Required
                     onCreditCardModelChange: con.onCreditCardModelChange, // Required
@@ -124,10 +124,18 @@ class PaidPage extends StatelessWidget {
                     isHolderNameVisible: true,
                     // isCardNumberVisible: false,
                     isExpiryDateVisible: true,
-                    cardNumberValidator: (String? cardNumber){},
-                    expiryDateValidator: (String? expiryDate){},
-                    cvvValidator: (String? cvv) {},
-                    cardHolderValidator: (String? cardHolderName){},
+                    cardNumberValidator: (String? cardNumber){
+                      return null;
+                    },
+                    expiryDateValidator: (String? expiryDate){
+                      return null;
+                    },
+                    cvvValidator: (String? cvv) {
+                      return null;
+                    },
+                    cardHolderValidator: (String? cardHolderName){
+                      return null;
+                    },
                     onFormComplete: () {
                       // callback to execute at the end of filling card data
                     },
@@ -165,7 +173,7 @@ class PaidPage extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -175,7 +183,7 @@ class PaidPage extends StatelessWidget {
                   )
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -185,15 +193,15 @@ class PaidPage extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   child:
                       Row(
                         children: [
-                          Container(
+                          SizedBox(
                               width: MediaQuery.of(context).size.height * 0.2,
                               child: _buttonCancel(context)
                           ),
-                          Container(
+                          SizedBox(
                             width: MediaQuery.of(context).size.height * 0.2,
                             child: _buttonPaid(context),
                           )
@@ -247,7 +255,7 @@ class PaidPage extends StatelessWidget {
   Widget _bgDegrade(BuildContext context){
     return Container(
       height: MediaQuery.of(context).size.height * 0.3,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: Colors.white,
           boxShadow: <BoxShadow>[
             BoxShadow(
@@ -262,26 +270,26 @@ class PaidPage extends StatelessWidget {
   Widget _textInstallments(BuildContext context){
     return Container(
         width: MediaQuery.of(context).size.width * 0.4,
-        margin: EdgeInsets.only( top: 15 , left: 20, right: 0),
-        child: Text('Número de cuotas:')
+        margin: const EdgeInsets.only( top: 15 , left: 20, right: 0),
+        child: const Text('Número de cuotas:')
     );
   }
   Widget _inputInstallments(BuildContext context){
     return Container(
         width: MediaQuery.of(context).size.width * 0.2,
-        margin: EdgeInsets.only( top: 15 , left: 0, right: 5),
+        margin: const EdgeInsets.only( top: 15 , left: 0, right: 5),
         child: DropdownButton(
-          hint: Text('Cuotas'),
+          hint: const Text('Cuotas'),
           isExpanded: true,
           items: con.listInstallments.map((value) {
             return DropdownMenuItem(
                 value: value,
-                child: Text('${value.toString()}')
+                child: Text(value.toString())
             );
           }).toList(),
           value: con.InstallmentsController.value,
           onChanged: (value) {
-            print('================ value ${value}');
+            print('================ value $value');
             con.InstallmentsController.value = value as int;
             con.updateValues();
           },
@@ -291,9 +299,9 @@ class PaidPage extends StatelessWidget {
   Widget _inputDocumentType(BuildContext context){
     return Container(
         width: MediaQuery.of(context).size.height * 0.1,
-        margin: EdgeInsets.only( top: 15 , left: 20, right: 5),
+        margin: const EdgeInsets.only( top: 15 , left: 20, right: 5),
         child: DropdownButton(
-          hint: Text('Tipo'),
+          hint: const Text('Tipo'),
           isExpanded: true,
           items: con.documentTypes.map((value) {
             return DropdownMenuItem(
@@ -320,7 +328,7 @@ class PaidPage extends StatelessWidget {
           con.updateValues();
         },
         keyboardType: TextInputType.number,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           labelText: 'N° de documento',
           // prefixIcon: Icon(Icons.account_circle)
         )
@@ -359,7 +367,7 @@ class PaidPage extends StatelessWidget {
         ,
           style: ElevatedButton.styleFrom(
               backgroundColor: Colors.transparent,
-              padding: EdgeInsets.symmetric(horizontal: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 5),
               shadowColor: Colors.transparent
           ),
           child: const Text('Cancelar',

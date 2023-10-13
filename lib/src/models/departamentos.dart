@@ -22,10 +22,10 @@ class Departamentos {
 
   static List<Departamentos> fromJsonList(List<dynamic> jsonList){
     List<Departamentos> toList = [];
-    jsonList.forEach((dep) {
+    for (var dep in jsonList) {
       Departamentos departamento = Departamentos.fromJson(dep);
       toList.add(departamento);
-    });
+    }
 
     return toList;
   }

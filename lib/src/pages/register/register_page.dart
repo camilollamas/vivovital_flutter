@@ -12,6 +12,8 @@ import '../../models/mes.dart';
 bool isChecked = false;
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
 
   @override
   State<RegisterPage> createState() => _RegisterState();
@@ -29,6 +31,7 @@ class _RegisterState extends State<RegisterPage> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return
       Stack(
@@ -45,7 +48,7 @@ class _RegisterState extends State<RegisterPage> {
                 children: [
                   _boxFormRegister(context),
                   _buttonBack(),
-                  Column(
+                  const Column(
                       children:[
 
                         // _imageLogo(),
@@ -170,7 +173,7 @@ class _RegisterState extends State<RegisterPage> {
         ),
         child: SingleChildScrollView(
           //margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.08, left: 10, right: 0, bottom: 0),
-          padding: EdgeInsets.only(left: 30, right: 30),
+          padding: const EdgeInsets.only(left: 30, right: 30),
           child: Column(
               children: [
                // _textFieldEmail(),
@@ -491,12 +494,12 @@ class _RegisterState extends State<RegisterPage> {
 
   List<DropdownMenuItem<String?>> _dropDownItemsMeses(List<Mes> meses){
     List<DropdownMenuItem<String>> list = [];
-    meses.forEach((mes) {
+    for (var mes in meses) {
       list.add(DropdownMenuItem(
-        child: Text(mes.nombre ?? ''),
         value: mes.id,
+        child: Text(mes.nombre ?? ''),
       ));
-    });
+    }
     return list;
   }
   Widget _inputDayMont(BuildContext context, List<Mes> meses){
@@ -516,7 +519,7 @@ class _RegisterState extends State<RegisterPage> {
             items: _dropDownItemsMeses(meses),
             value: con.MontBird.value == '' ? null : con.MontBird.value,
             onChanged: (opt)=>{
-              print('Mes seleccionado -> ${opt}'),
+              print('Mes seleccionado -> $opt'),
               con.MontBird.value = opt.toString()
             },
           )
@@ -582,7 +585,7 @@ class _RegisterState extends State<RegisterPage> {
   Widget _inputOtherPhone(BuildContext context){
     return Container(
       width: MediaQuery.of(context).size.width * 0.4,
-      margin: EdgeInsets.only( top: 10 , left: 0, right: 8),
+      margin: const EdgeInsets.only( top: 10 , left: 0, right: 8),
       child: TextField(
           controller: con.otherPhoneController,
           keyboardType: TextInputType.phone,
@@ -596,11 +599,11 @@ class _RegisterState extends State<RegisterPage> {
 
   Widget _inputEmail(){
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
       child: TextField(
           controller: con.emailController,
           keyboardType: TextInputType.emailAddress,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: 'Correo electrónico',
             // prefixIcon: Icon(Icons.account_circle)
           )
@@ -609,11 +612,11 @@ class _RegisterState extends State<RegisterPage> {
   }
   Widget _inputConfirmEmail(){
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
       child: TextField(
           controller: con.confirmEmailController,
           keyboardType: TextInputType.emailAddress,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: 'Confirmar correo electrónico',
             // prefixIcon: Icon(Icons.account_circle)
           )
@@ -626,9 +629,9 @@ class _RegisterState extends State<RegisterPage> {
 
   Widget _textCountry(BuildContext context){
     return Container(
-        margin: EdgeInsets.only(top: 15),
+        margin: const EdgeInsets.only(top: 15),
         width: MediaQuery.of(context).size.width * 0.35,
-        child: Text(
+        child: const Text(
           'País:',
           style: TextStyle(
               fontSize: 17,
@@ -639,12 +642,12 @@ class _RegisterState extends State<RegisterPage> {
   }
   Widget _inputCountry(BuildContext context){
     return Container(
-      margin: EdgeInsets.only(top: 15),
+      margin: const EdgeInsets.only(top: 15),
       width: MediaQuery.of(context).size.width * 0.4,
         child: DropdownButton(
             underline: Container(
               alignment: Alignment.centerRight,
-              child: Icon(
+              child: const Icon(
                 Icons.arrow_drop_down_outlined,
                 color: Color(0xff243588),
               ),
@@ -684,19 +687,19 @@ class _RegisterState extends State<RegisterPage> {
 
   List<DropdownMenuItem<String?>> _dropDownItems(List<Departamentos> departamentos){
     List<DropdownMenuItem<String>> list = [];
-    departamentos.forEach((dep) {
+    for (var dep in departamentos) {
       list.add(DropdownMenuItem(
-          child: Text(dep.nombre ?? ''),
           value: dep.dpto,
+          child: Text(dep.nombre ?? ''),
       ));
-    });
+    }
     return list;
   }
   Widget _textRegion(BuildContext context){
     return Container(
-        margin: EdgeInsets.only(top: 0),
+        margin: const EdgeInsets.only(top: 0),
         width: MediaQuery.of(context).size.width * 0.30,
-        child: Text(
+        child: const Text(
           'Departamento:',
           style: TextStyle(
               fontSize: 17,
@@ -708,20 +711,20 @@ class _RegisterState extends State<RegisterPage> {
   
   Widget _inputRegion(List<Departamentos> departamentos){
     return Container(
-      margin: EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.only(top: 0),
       width: MediaQuery.of(context).size.width * 0.50,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: DropdownButton(
         underline: Container(
           alignment: Alignment.centerRight,
-            child: Icon(
+            child: const Icon(
               Icons.arrow_drop_down_outlined,
               color: Color(0xff243588),
             ),
         ),
         elevation: 3,
         isExpanded: true,
-        hint: Text('Seleccionar...',
+        hint: const Text('Seleccionar...',
           style: TextStyle(
             color: Colors.black38,
             fontSize: 16
@@ -730,7 +733,7 @@ class _RegisterState extends State<RegisterPage> {
         items:_dropDownItems(departamentos),
         value: con.idDepartamento.value == '' ? null : con.idDepartamento.value,
         onChanged: (opt)=>{
-          print('Opcion seleccionada -> ${opt}'),
+          print('Opcion seleccionada -> $opt'),
           con.idDepartamento.value = opt.toString(),
           con.getCityes(opt.toString())
         },
@@ -740,19 +743,19 @@ class _RegisterState extends State<RegisterPage> {
 
   List<DropdownMenuItem<String?>> _dropDownCiudades(List<Ciudad> ciudades){
     List<DropdownMenuItem<String>> list = [];
-    ciudades.forEach((dep) {
+    for (var dep in ciudades) {
       list.add(DropdownMenuItem(
-        child: Text(dep.nombre ?? ''),
         value: dep.ciudad,
+        child: Text(dep.nombre ?? ''),
       ));
-    });
+    }
     return list;
   }
   Widget _textCity(BuildContext context){
     return Container(
-        margin: EdgeInsets.only(top: 0),
+        margin: const EdgeInsets.only(top: 0),
         width: MediaQuery.of(context).size.width * 0.30,
-        child: Text(
+        child: const Text(
           'Ciudad:',
           style: TextStyle(
               fontSize: 17,
@@ -763,20 +766,20 @@ class _RegisterState extends State<RegisterPage> {
   }
   Widget _inputCity(List<Ciudad> ciudades){
     return Container(
-      margin: EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.only(top: 0),
       width: MediaQuery.of(context).size.width * 0.5,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: DropdownButton(
         underline: Container(
           alignment: Alignment.centerRight,
-          child: Icon(
+          child: const Icon(
             Icons.arrow_drop_down_outlined,
             color: Color(0xff243588),
           ),
         ),
         elevation: 3,
         isExpanded: true,
-        hint: Text('Seleccionar...',
+        hint: const Text('Seleccionar...',
           style: TextStyle(
               color: Colors.black38,
               fontSize: 16
@@ -785,7 +788,7 @@ class _RegisterState extends State<RegisterPage> {
         items: _dropDownCiudades(ciudades),
         value: con.idCiudad.value == '' ? null : con.idCiudad.value,
         onChanged: (opt)=>{
-          print('Ciudad seleccionada -> ${opt}'),
+          print('Ciudad seleccionada -> $opt'),
           con.idCiudad.value = opt.toString()
         },
       ),
@@ -794,11 +797,11 @@ class _RegisterState extends State<RegisterPage> {
 
   Widget _inputAddress(){
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
       child: TextField(
           controller: con.addressController,
           keyboardType: TextInputType.text,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: 'Dirección de residencia',
             // prefixIcon: Icon(Icons.account_circle)
           )
@@ -835,7 +838,7 @@ class _RegisterState extends State<RegisterPage> {
         child: TextField(
             controller: con.confirmPasswordController,
             obscureText: hidePassword,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
             //  border: OutlineInputBorder(),
               labelText: 'Confirmar contraseña',
             )
@@ -856,7 +859,7 @@ class _RegisterState extends State<RegisterPage> {
       return Colors.red;
     }
     return Container(
-        margin: EdgeInsets.only(top: 10),
+        margin: const EdgeInsets.only(top: 10),
         child:
           Column(
             children:[
@@ -952,17 +955,17 @@ class _RegisterState extends State<RegisterPage> {
       onPressed: () => showDialog<String>(
           context: context,
           builder: (BuildContext context)=>AlertDialog(
-            title: Text('Dialogo'),
-            content: Text('Contenido'),
+            title: const Text('Dialogo'),
+            content: const Text('Contenido'),
             actions: [
               TextButton(
                   onPressed: ()=>Navigator.pop(context, 'Cancelar'),
-                  child: Text('Cancela')
+                  child: const Text('Cancela')
               )
             ],
           ),
       ),
-      child: Text('Mostrar Dialog'),
+      child: const Text('Mostrar Dialog'),
     );
   }
 

@@ -22,10 +22,10 @@ class Dia {
 
     static List<Dia> fromJsonList(List<dynamic> jsonList){
       List<Dia> toList = [];
-      jsonList.forEach((day) {
+      for (var day in jsonList) {
         Dia da = Dia.fromJson(day);
         toList.add(da);
-      });
+      }
       return toList;
     }
 

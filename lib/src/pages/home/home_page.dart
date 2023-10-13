@@ -1,7 +1,4 @@
-import 'dart:convert';
 import 'dart:async';
-import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,12 +11,19 @@ import 'package:intl/intl.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../models/alerta.dart';
 import '../../presentation/blocs/notifications/notifications_bloc.dart';
+import 'package:vitalhelp_app/src/models/user.dart';
+import 'package:get_storage/get_storage.dart';
 
 
 class HomePage extends StatelessWidget {
   HomeController con = Get.put(HomeController());
   Future<void>? _launched;
+
+  User user = User.fromJson(GetStorage().read('user') ?? {});
+
+  HomePage({super.key});
   Future<void> _launchInBrowser(Uri url) async {
     if (!await launchUrl(
       url,
@@ -96,7 +100,9 @@ class HomePage extends StatelessWidget {
                 body: Stack(
                   children: [
                     Column(
+                      
                           children: [
+                            _nameUser(context),
                             Visibility(
                               visible: con.habeasData.value['ESTADOPASO'] == 0 ? true : false,
                               child: _cardSignature(context)
@@ -112,10 +118,6 @@ class HomePage extends StatelessWidget {
                             // Visibility(
                             //     child: Text('Consultar planes')
                             // ),
-                            Visibility(
-                              visible: con.programaPagado.value['ESTADOPASO'] == 1 ? true : false,
-                              child: _cardPlanPagado(context)
-                            ),
                             Visibility(
                               visible: con.showButtonNotify.value, 
                               child: _notificacionAcivated(context),
@@ -145,13 +147,26 @@ class HomePage extends StatelessWidget {
                                                    }
                                                );
                                             }else{
-                                              return Text('Sin PLanes');
+                                              return const Text('  ');
                                             }
                                           }
                                       )
                                     ]
                                   )
                             )
+                            ,_textNotificaciones(context)
+                            ,Visibility(
+                              // ignore: unrelated_type_equality_checks
+                              visible: con.showNotify == true,
+                              child: _listView(), 
+                            )
+                            ,Visibility(
+                              // ignore: unrelated_type_equality_checks
+                              visible: con.notify.isEmpty,
+                              child: _noNotificaciones(context), 
+                            )
+                            
+                            ,_notificacionesButton(context)
                           ],
                         )
                   ],
@@ -167,13 +182,132 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  Widget _nameUser(BuildContext context){
+    return 
+    Container(
+      // margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      margin: const EdgeInsets.only(left: 0, top: 10, bottom: 0),
+      alignment: Alignment.topLeft,
+      child: 
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row (
+              mainAxisAlignment: MainAxisAlignment.center,
+
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundImage: user.sexo == 'Masculino'
+                        ? const AssetImage('assets/img/avatars/male.png')
+                        : const AssetImage('assets/img/avatars/female.png'),
+                    //child: FlutterLogo(size: 42.0),
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                        'Hola,',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w300,
+                          color: Color(0xFF243588),
+                          fontFamily: 'AvenirReg',
+                        )
+                    ),
+                    RichText(
+                      softWrap: true,
+                      maxLines: 2,
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF243588),
+                          fontFamily: 'AvenirReg',
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(text: '${con.user.pnombre} ${con.user.snombre} \n'),
+                          TextSpan(text: '${con.user.papellido} ${con.user.sapellido}')
+                          // TextSpan(text: 'bold', style: TextStyle(fontWeight: FontWeight.bold)),
+                        ]
+                        )
+                    ),
+                    // Divider(),
+                ],),
+              ],
+            ),
+            Divider(),
+            Visibility(
+              visible: con.programaPagado.value['ESTADOPASO'] == 1 ? true : false,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    // crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _imageLogo(),
+                      Container(
+                        margin: const EdgeInsets.only(left: 10, top: 0, bottom: 0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                                'Tu plan actual es:',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w300,
+                                  color: Color(0xFF243588),
+                                  fontFamily: 'AvenirReg',
+                                )
+                            ),
+                            Text('${con.programaSeleccioando['DESCPLAN']}',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w900,
+                                  color: Color(0xFF243588),
+                                  fontFamily: 'AvenirReg',
+                                )
+                            ),
+                            const Divider()
+                        ],)
+                      ),
+                    ],
+                  ),
+                ]
+              )
+            ),
+          ],
+        ),
+    );
+  }
+  Widget _imageLogo(){
+    return SafeArea(
+      child: Container(
+        margin: const EdgeInsets.only(top: 0),
+        alignment: Alignment.center,
+        child: Image.asset(
+          'assets/icon/app-icon-2.png',
+          width: 50,
+        )
+      ),
+    );
+  }
   Widget _planesCard(Planes plan, context){
     final numberFormat = NumberFormat.currency(locale: 'es_MX', symbol:"\$");
     return Container(
       margin: const EdgeInsets.only(top: 20),
       alignment: Alignment.topLeft,
       child: Card(
-        color: Color(0xFFe3f2fd),
+        color: const Color(0xFFe3f2fd),
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
         clipBehavior: Clip.hardEdge,
         child: Container(
@@ -320,6 +454,282 @@ class HomePage extends StatelessWidget {
 
   }
 
+  Widget _textNotificaciones(BuildContext context){
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      alignment: Alignment.topLeft,
+      child: 
+      const Column(
+          children: [
+            Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.notifications,
+                  color: Color(0xff72246c),
+                  size: 30,
+                ),
+                Text('Notificaciones de hoy',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w300,
+                    color: Color(0xff72246c),
+                    fontFamily: 'AvenirReg',
+                  )
+                ),
+              ]
+            ),
+          ]
+      )
+    );
+
+  }
+  Widget _noNotificaciones(BuildContext context){
+    return Container(
+      margin: const EdgeInsets.only(left: 0, top: 20, bottom: 0),
+      child: 
+      const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.notifications_off,
+              color: Color.fromARGB(255, 200, 200, 200),
+              size: 100,
+            ),
+            Text('Sin Notificaciones',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w300,
+                color: Color.fromARGB(255, 200, 200, 200),
+                fontFamily: 'AvenirReg',
+              )
+            ),
+          ]
+      )
+    );
+  }
+  Widget _notificacionesButton(BuildContext context){
+    return
+    //Button notifications
+    Container(
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      child: 
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextButton(
+            onPressed: () async {
+              con.goToRoute('notifications');
+            },
+            child: const Text('Ir a Notificaciones.',
+                style: TextStyle(
+                  color: Color(0xff243588),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'AvenirReg',
+                )
+            ),
+          )
+        ]
+      )
+    );
+
+  }
+  Widget _listView(){
+    return FutureBuilder(
+        future: con.sendNotify(),
+        builder: (context, snapshot){
+          if(snapshot.hasData){
+            return
+              Column(
+                children: [
+                  ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      itemCount: snapshot.data?.length ?? 0,
+                      itemBuilder: (_, index){
+                        print('index => $index context => ${context.toString()}');
+                        return _NotifyCards(snapshot.data![index], context);
+                      }
+                  ),
+                ],
+              );
+          }else{
+            return const Text('Sin Notificaciones');
+          }
+        }
+    );
+  }
+  Widget _NotifyCards(Alerta alerta, BuildContext context){
+    return Container(
+        margin: const EdgeInsets.only(top: 20),
+        alignment: Alignment.center,
+        child: Card(
+          color: const Color(0xFFc1f4cd),
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+          clipBehavior: Clip.hardEdge,
+          child: Container(
+            decoration: const BoxDecoration(
+              border: Border.symmetric(
+                  vertical: BorderSide(
+                      color: Color(0xFF21ba45),
+                      width: 5
+                  )
+              ),
+            ),
+            child: Container(
+              margin: const EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(left: 10, right: 10),
+                              child: Ink(
+                                decoration: _colorNotify(alerta.tipo),
+                                child: InkWell(
+                                  onTap: () {
+                                    // con.chooseDate();
+                                  },
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: _iconNotify(alerta.tipo),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 200,
+                              child:Text('${alerta.titulo ?? ''} ',
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    // fontWeight: FontWeight.w300,
+                                    color: Color(0xFF243588),
+                                    fontFamily: 'AvenirReg',
+                                  )
+                              ),
+                            )
+                          ],
+                        ),
+                        Divider(),
+                        Container(
+                          margin: const EdgeInsets.only(left: 10, right: 10),
+                          child: Text('${alerta.descripcion ?? ''} ',
+                              style: const TextStyle(
+                                fontSize: 15,
+                                // fontWeight: FontWeight.w300,
+                                color: Color(0xFF243588),
+                                fontFamily: 'AvenirBold',
+                              )
+                          ),
+                        ),
+                        Visibility(
+                          visible: alerta.tipo  == 'Video',
+                            child: FloatingActionButton.extended(
+                                onPressed: () => {
+                                  // con.getVideo(context,alerta.iddocs, alerta.titulo, alerta.descripcion),
+                                  // showLoadingDialog(),
+                                  // setState(() {
+                                  //   setVideoController(alerta.iddocs);
+                                  //   Future.delayed(const Duration(seconds: 3), (){
+                                  //     hideLoadingDialog();
+                                  //     // con.getVideo(context,alerta.iddocs, alerta.titulo, alerta.descripcion);
+                                  //     _tabController.index = 1;
+                                  //     _videoPlayerController.play();
+
+                                  //   });
+                                  // })
+
+                                },
+                                icon: const Icon(Icons.play_arrow, color: Colors.white),
+                                backgroundColor: const Color(0xFF03a9f4),
+                                label: const Text(
+                                  'Ver',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w300,
+                                    fontFamily: 'AvenirReg',
+                                  ),
+                                )
+                            )
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              )
+            ),
+          )
+        )
+    );
+  }
+  Decoration _colorNotify(String? type){
+    if(type == 'Video' ){
+      return BoxDecoration(
+          border: Border.all(color: const Color(0xFF03a9f4), width: 2),
+          color: const Color(0xFF03a9f4), //Colors.white,
+          borderRadius: BorderRadius.circular(50.0)
+      );
+    }
+    if(type == 'Recordatorio'){
+      return BoxDecoration(
+          border: Border.all(color: const Color(0xFFff9800), width: 2),
+          color: const Color(0xFFff9800), //Colors.white,
+          borderRadius: BorderRadius.circular(50.0)
+      );
+    }
+    if(type == 'Audio'){
+      return BoxDecoration(
+          border: Border.all(color: const Color(0xFF21ba45), width: 2),
+          color: const Color(0xFF21ba45), //Colors.white,
+          borderRadius: BorderRadius.circular(50.0)
+      );
+    }
+
+    return BoxDecoration(
+        border: Border.all(color: const Color(0xFFff9800), width: 2),
+        color: const Color(0xFFff9800), //Colors.white,
+        borderRadius: BorderRadius.circular(50.0)
+    );
+  }
+
+  Widget _iconNotify(String? type){
+    if(type == 'Video' ){
+      return const Icon(
+          Icons.video_camera_front,
+          size: 20.0,
+          color: Colors.white// Color(0xFF243588),
+      );
+    }
+    if(type == 'Recordatorio'){
+      return const Icon(
+          Icons.notifications_active,
+          size: 20.0,
+          color: Colors.white// Color(0xFF243588),
+      );
+    }
+    if(type == 'Audio'){
+      return const Icon(
+          Icons.headphones,
+          size: 20.0,
+          color: Colors.white// Color(0xFF243588),
+      );
+    }
+
+    return const Icon(
+        Icons.notifications_active,
+        size: 20.0,
+        color: Colors.white// Color(0xFF243588),
+    );
+  }
+
 
   Widget _inputEmail(){
     return Container(
@@ -337,11 +747,11 @@ class HomePage extends StatelessWidget {
   
   Widget _cardSignature(BuildContext context){
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       alignment: Alignment.center,
       child: Card(
-        color: Color(0xFFe3f2fd),
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+        color: const Color(0xFFe3f2fd),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
         clipBehavior: Clip.hardEdge,
         child: Container( 
           decoration: const BoxDecoration(
@@ -353,7 +763,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
           child: Container(
-            margin: EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
+            margin: const EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -409,8 +819,8 @@ class HomePage extends StatelessWidget {
       margin: const EdgeInsets.only(top: 20),
       alignment: Alignment.center,
       child: Card(
-        color: Color(0xFFe3f2fd),
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+        color: const Color(0xFFe3f2fd),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
         clipBehavior: Clip.hardEdge,
         child: Container(
           decoration: const BoxDecoration(
@@ -470,11 +880,11 @@ class HomePage extends StatelessWidget {
   }
   Widget _cardCitaValoracion(BuildContext context){
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       alignment: Alignment.center,
       child: Card(
-        color: Color(0xFFe3f2fd),
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+        color: const Color(0xFFe3f2fd),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
         clipBehavior: Clip.hardEdge,
         child: Container(
           decoration: const BoxDecoration(
@@ -532,61 +942,7 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-  Widget _cardPlanPagado(BuildContext context){
-    return Container(
-      margin: EdgeInsets.only(top: 20),
-      alignment: Alignment.center,
-      child: Card(
-        color: Color(0xFFe3f2fd),
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-        clipBehavior: Clip.hardEdge,
-        child: Container(
-          decoration: const BoxDecoration(
-            border: Border.symmetric(
-                vertical: BorderSide(
-                    color: Color(0xFF243588),
-                    width: 5
-                )
-            ),
-          ),
-          child: Container(
-            margin: const EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Text(
-                    'Gracias por ser parte de VitalHelp tu plan actual es.',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w300,
-                      color: Color(0xFF243588),
-                      fontFamily: 'AvenirReg',
-                    )
-                ),
-                Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text('${con.programaPagado.value['DESCPLAN']}',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              // fontWeight: FontWeight.w300,
-                              color: Color(0xFF243588),
-                              fontFamily: 'AvenirBold',
-                            )
-                          )
-                        ]
-                    )
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-  
+ 
   Widget _notificacionAcivated(BuildContext context){
     return
     Row(
@@ -685,12 +1041,14 @@ class _WidgetFactory extends WidgetFactory {
 
 class FullScreenDialog extends StatelessWidget {
   HomeController con = Get.put(HomeController());
+
+  FullScreenDialog({super.key});
   @override
   Widget build(BuildContext context){
     return 
     Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff243588),
+        backgroundColor: const Color(0xff243588),
         foregroundColor: Colors.white,
         title: const Text (
             'Tratamiento de datos personales',
@@ -705,7 +1063,7 @@ class FullScreenDialog extends StatelessWidget {
         child: SingleChildScrollView(
           // padding: EdgeInsets.only(left: 30, right: 30),
           child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Column(
                 children: [
                   const Text('Autorización para el tratamiento de datos personales de',
@@ -749,7 +1107,7 @@ class FullScreenDialog extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+                    margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
                     child: Column(
                       children: [
                         const Text('Firmar: ',
@@ -782,7 +1140,7 @@ class FullScreenDialog extends StatelessWidget {
   //Widgets
   Widget _buildButtons(BuildContext context){
     return Container(
-      color: Color(0xff243588),
+      color: const Color(0xff243588),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -808,14 +1166,14 @@ class FullScreenDialog extends StatelessWidget {
           );
         }
       },
-      icon: Icon(Icons.check, color: Colors.green)
+      icon: const Icon(Icons.check, color: Colors.green)
     );
   }
   Widget buildClear(){
     return IconButton(
         iconSize: 36,
         onPressed: () => con.signatureController.clear(),
-        icon: Icon(Icons.clear , color: Colors.red)
+        icon: const Icon(Icons.clear , color: Colors.red)
     );
   }
 
@@ -825,11 +1183,13 @@ class ConInfDialog extends StatelessWidget{
   HomeController con = Get.put(HomeController());
   // TODO: implement key tipo
   var tipo =  '';
+
+  ConInfDialog({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff243588),
+        backgroundColor: const Color(0xff243588),
         foregroundColor: Colors.white,
         title: const Text (
           'Consentimiento Informado',
@@ -844,7 +1204,7 @@ class ConInfDialog extends StatelessWidget{
       body: Center(
           child: SingleChildScrollView(
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Column(
                 children: [
                   const Text('CONSENTIMIENTO INFORMADO',
@@ -863,7 +1223,7 @@ class ConInfDialog extends StatelessWidget{
                       fontFamily: 'AvenirBold',
                     ),
                   ),
-                  Text('${con.p1ConInf ?? ''}',
+                  Text(con.p1ConInf ?? '',
                     textAlign: TextAlign.justify,
                     style: const TextStyle(
                       color: Colors.black,
@@ -871,7 +1231,7 @@ class ConInfDialog extends StatelessWidget{
                       fontFamily: 'AvenirReg',
                     ),
                   ),
-                  Text('${con.p2ConInf ?? ''}',
+                  Text(con.p2ConInf ?? '',
                     textAlign: TextAlign.justify,
                     style: const TextStyle(
                       color: Colors.black,
@@ -879,7 +1239,7 @@ class ConInfDialog extends StatelessWidget{
                       fontFamily: 'AvenirReg',
                     ),
                   ),
-                  Text('${con.p3ConInf ?? ''}',
+                  Text(con.p3ConInf ?? '',
                     textAlign: TextAlign.justify,
                     style: const TextStyle(
                       color: Colors.black,
@@ -887,7 +1247,7 @@ class ConInfDialog extends StatelessWidget{
                       fontFamily: 'AvenirReg',
                     ),
                   ),
-                  Text('${con.p4ConInf ?? ''}',
+                  Text(con.p4ConInf ?? '',
                     textAlign: TextAlign.justify,
                     style: const TextStyle(
                       color: Colors.black,
@@ -895,7 +1255,7 @@ class ConInfDialog extends StatelessWidget{
                       fontFamily: 'AvenirReg',
                     ),
                   ),
-                  Text('${con.p5ConInf ?? ''}',
+                  Text(con.p5ConInf ?? '',
                     textAlign: TextAlign.justify,
                     style: const TextStyle(
                       color: Colors.black,
@@ -903,7 +1263,7 @@ class ConInfDialog extends StatelessWidget{
                       fontFamily: 'AvenirReg',
                     ),
                   ),
-                  Text('${con.p6ConInf ?? ''}',
+                  Text(con.p6ConInf ?? '',
                     textAlign: TextAlign.justify,
                     style: const TextStyle(
                       color: Colors.black,
@@ -911,7 +1271,7 @@ class ConInfDialog extends StatelessWidget{
                       fontFamily: 'AvenirReg',
                     ),
                   ),
-                  Text('${con.p7ConInf ?? ''}',
+                  Text(con.p7ConInf ?? '',
                     textAlign: TextAlign.justify,
                     style: const TextStyle(
                       color: Colors.black,
@@ -938,7 +1298,7 @@ class ConInfDialog extends StatelessWidget{
                       fontFamily: 'AvenirReg',
                     ),
                   ),
-                  Text('${con.p8ConInf ?? ''}',
+                  Text(con.p8ConInf ?? '',
                     textAlign: TextAlign.justify,
                     style: const TextStyle(
                       color: Colors.black,
@@ -946,7 +1306,7 @@ class ConInfDialog extends StatelessWidget{
                       fontFamily: 'AvenirReg',
                     ),
                   ),
-                  Text('${con.p9ConInf ?? ''}',
+                  Text(con.p9ConInf ?? '',
                     textAlign: TextAlign.justify,
                     style: const TextStyle(
                       color: Colors.black,
@@ -954,7 +1314,7 @@ class ConInfDialog extends StatelessWidget{
                       fontFamily: 'AvenirReg',
                     ),
                   ),
-                  Text('${con.p10ConInf ?? ''}',
+                  Text(con.p10ConInf ?? '',
                     textAlign: TextAlign.left,
                     style: const TextStyle(
                       color: Color(0xff243588),
@@ -963,7 +1323,7 @@ class ConInfDialog extends StatelessWidget{
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+                    margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
                     child: Column(
                       children: [
                         const Text('Firmar: ',
@@ -996,7 +1356,7 @@ class ConInfDialog extends StatelessWidget{
 
   Widget _singButtos(BuildContext context, String tipo){
     return Container(
-      color: Color(0xff243588),
+      color: const Color(0xff243588),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -1029,7 +1389,7 @@ class ConInfDialog extends StatelessWidget{
     return IconButton(
         iconSize: 36,
         onPressed: () => con.signatureController.clear(),
-        icon: Icon(Icons.clear , color: Colors.red)
+        icon: const Icon(Icons.clear , color: Colors.red)
     );
   }
 }

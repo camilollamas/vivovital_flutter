@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:load/load.dart';
@@ -41,7 +40,7 @@ class RegisterController extends GetxController {
   );
   var MontBird=''.obs;
 
-  List<String> birtYear = List.generate(57, (int index) => "${(1950+index).toString()}" );
+  List<String> birtYear = List.generate(57, (int index) => (1950+index).toString() );
   var yearBird=''.obs;
 
   var idDepartamento= ''.obs;
@@ -123,7 +122,7 @@ class RegisterController extends GetxController {
         modelo: 'VIVO_AFI_APP',
         metodo: 'CIUDADES',
         parametros: {
-          "DEPARTAMENTO":"${depto}"
+          "DEPARTAMENTO":"$depto"
         }
     );
     ResponseApi res = await jsonProvider.json(json);
@@ -172,24 +171,24 @@ class RegisterController extends GetxController {
     String confirmPassword = confirmPasswordController.text.trim();
 
     userData = {
-      'TIPO_DOC':      '${docType} ',
-      'DOCIDAFILIADO': '${numberDocument}',
-      'PNOMBRE':       '${firstName}',
-      'SNOMBRE':       '${secName}',
-      'PAPELLIDO':     '${lastName}',
-      'SAPELLIDO':     '${secondLastname}',
-      'SEXO':          '${gender}',
-      'FDIA':          '${dayBird}',
-      'FMES':          '${MontBird}',
-      'FANIO':         '${yearBird}',
-      'EMAIL':         '${email}',
-      'CELULAR':       '${phone}',
-      'CELULAR2':      '${otherPhone}',
+      'TIPO_DOC':      '$docType ',
+      'DOCIDAFILIADO': numberDocument,
+      'PNOMBRE':       firstName,
+      'SNOMBRE':       secName,
+      'PAPELLIDO':     lastName,
+      'SAPELLIDO':     secondLastname,
+      'SEXO':          '$gender',
+      'FDIA':          '$dayBird',
+      'FMES':          '$MontBird',
+      'FANIO':         '$yearBird',
+      'EMAIL':         email,
+      'CELULAR':       phone,
+      'CELULAR2':      otherPhone,
       'PAIS':          'CO',
-      'DEPARTAMENTO':  '${idDepartamento}',
-      'CIUDAD':        '${idCiudad}',
-      'DIRECCION':     '${address}',
-      'CLAVE':         '${password}'
+      'DEPARTAMENTO':  '$idDepartamento',
+      'CIUDAD':        '$idCiudad',
+      'DIRECCION':     address,
+      'CLAVE':         password
     };
 
     if(
@@ -466,10 +465,10 @@ class RegisterController extends GetxController {
         modelo: 'VIVO_AFI_APP',
         metodo: 'VALIDAR',
         parametros: {
-          'TIPO_DOC': '${docType}',
-          'DOCIDAFILIADO': '${numberDocument}',
-          'EMAIL': '${email}',
-          'CELULAR': '${phone}'
+          'TIPO_DOC': '$docType',
+          'DOCIDAFILIADO': '$numberDocument',
+          'EMAIL': '$email',
+          'CELULAR': '$phone'
         }
     );
 
@@ -516,12 +515,12 @@ class RegisterController extends GetxController {
     showDialog(
       context: context,
       builder: (_) => SimpleDialog(
-        contentPadding: EdgeInsets.only(left: 30, right: 30),
+        contentPadding: const EdgeInsets.only(left: 30, right: 30),
         title:
         Container(
-          margin: EdgeInsets.only(bottom: 20),
+          margin: const EdgeInsets.only(bottom: 20),
           child:
-            Text('Código de validación:',
+            const Text('Código de validación:',
               style: TextStyle(
                 fontSize: 22,
                 color: Color(0xFF243588),
@@ -570,7 +569,7 @@ class RegisterController extends GetxController {
                           onPressed: () => Navigator.pop(context, true),
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
-                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
                               shadowColor: Colors.transparent
                           ),
                           child: const Text(
@@ -585,7 +584,7 @@ class RegisterController extends GetxController {
                       ElevatedButton(
                           onPressed: () => validateCode(),
                           style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(horizontal: 15)
+                              padding: const EdgeInsets.symmetric(horizontal: 15)
                           ),
                           child: const Text(
                             'Validar',

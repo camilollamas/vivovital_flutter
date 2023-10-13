@@ -15,10 +15,11 @@ import 'package:vitalhelp_app/src/models/response_api.dart';
 
 import 'package:dio/dio.dart';
 import 'dart:convert';
-import 'package:money2/money2.dart';
 import 'package:vitalhelp_app/src/enviroment/enviroment.dart';
 
+import '../../models/alerta.dart';
 import '../../presentation/blocs/notifications/notifications_bloc.dart';
+import '../../models/notification.dart';
 
 
 class EstadoUser {
@@ -45,7 +46,11 @@ class HomeController extends GetxController {
 
   User user = User.fromJson(GetStorage().read('user') ?? {});
   JsonProvider jsonProvider = JsonProvider();
-  String api_url = '${Enviroment.API_URL}';
+  String api_url = Enviroment.API_URL;
+
+  var selectedDate = DateTime.now().obs;
+  var showNotify = false.obs;
+  List<Alerta> notify = [];
 
   // Variables de procesos
   var habeasData = {}.obs;
@@ -76,18 +81,59 @@ class HomeController extends GetxController {
     GetStorage().write('paid', {});
     changeValue('2');
     p1ConsInf = '${user.pnombre}';
+    getDay();
 
     // GetStatusUser();
     // print('Home_Controller -> User : ${user.toJson()}');
     // update();
 
   }
- void rintStatus() {
+  void getDay() async{
+    notify.clear();
+    showNotify.value = false;
+    print('====> getDay <====');
+    String date = '2023-08-11'; //selectedDate.value.toString();
+    print('====> FECHA: ${date.substring(0,10)}');
+    print('====> IDAFILIADO: ${user.idafiliado}');
+
+    
+    Json json = Json(
+        modelo: 'NOTIFICACIONES',
+        metodo: 'GET_DIA',
+        parametros: {
+          "FECHA": date.substring(0,10),
+          "IDAFILIADO": "${user.idafiliado}"
+        }
+    );
+
+    ResponseApi res = await jsonProvider.json(json);
+    hideLoadingDialog();
+    Map <String, dynamic> result = res.result?.recordsets![0][0];
+    if(result['RESULT'] != null ){
+      var data = result['RESULT'];
+      var not = notificacionFromJson(data);
+      List? asd = not[0].notif;
+      var alertas = Alerta.fromJsonList(asd!);
+
+      notify.addAll(alertas);
+      showNotify.value= true;
+    }
+    super.refresh();
+    print('====> getDay Out <====');
+  }
+
+  Future<List<Alerta>> sendNotify() async {
+    print('sendNotify =>${notify.toString()}');
+    return notify;
+  }
+
+
+  void rintStatus() {
   }
 
 
   SignatureController signatureController = SignatureController(
-      penColor: Color(0xff243588)
+      penColor: const Color(0xff243588)
   );
   void changeValue(String dato){
     tratDatos.value = dato;
@@ -200,7 +246,7 @@ class HomeController extends GetxController {
 
 
     } else {
-      print('No sucess => ${jsonData}');
+      print('No sucess => $jsonData');
     }
     return;
   }
@@ -252,7 +298,7 @@ class HomeController extends GetxController {
   }
   
   void SedImage(data) async{
-    Dio dio = new Dio();
+    Dio dio = Dio();
     dio.post('${api_url}upload/archivoMpld', data: data).then((response) {
       var jsonResponse = jsonDecode(response.toString());
       // print(jsonResponse);
@@ -455,7 +501,7 @@ class HomeController extends GetxController {
         builder: (BuildContext context ) => 
           Scaffold(
             appBar: AppBar(
-              backgroundColor: Color(0xff243588),
+              backgroundColor: const Color(0xff243588),
               foregroundColor: Colors.white,
               title: const Text (
                   'Tratamiento de datos personales',
@@ -470,7 +516,7 @@ class HomeController extends GetxController {
               child: SingleChildScrollView(
                 // padding: EdgeInsets.only(left: 30, right: 30),
                 child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                     child: Column(
                       children: [
                         const Text('Autorización para el tratamiento de datos personales de',
@@ -514,7 +560,7 @@ class HomeController extends GetxController {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+                          margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
                           child: Column(
                             children: [
                               const Text('Firmar: ',
@@ -533,7 +579,7 @@ class HomeController extends GetxController {
                               ),
                                 //Buttons:
                                 Container(
-                                  color: Color(0xff243588),
+                                  color: const Color(0xff243588),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
@@ -552,12 +598,12 @@ class HomeController extends GetxController {
                                             );
                                           }
                                         },
-                                        icon: Icon(Icons.check, color: Colors.green)
+                                        icon: const Icon(Icons.check, color: Colors.green)
                                       ),
                                       IconButton(
                                         iconSize: 36,
                                         onPressed: () => signatureController.clear(),
-                                        icon: Icon(Icons.clear , color: Colors.red)
+                                        icon: const Icon(Icons.clear , color: Colors.red)
                                       )
                                     ],
                                   ),
@@ -635,6 +681,9 @@ class HomeController extends GetxController {
     Get.toNamed('/paid');
     update();
   }
-
+  void goToRoute(String route){
+      Get.offNamedUntil('/$route', (route) => false);
+      // Get.toNamed('/${route ?? 'home'}');
+    }
 
 }

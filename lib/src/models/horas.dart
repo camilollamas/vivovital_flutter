@@ -26,10 +26,10 @@ class Hora {
     );
     static List<Hora> fromJsonList(List<dynamic> jsonList){
       List<Hora> toList = [];
-      jsonList.forEach((hora) {
+      for (var hora in jsonList) {
         Hora hor = Hora.fromJson(hora);
         toList.add(hor);
-      });
+      }
 
       return toList;
     }

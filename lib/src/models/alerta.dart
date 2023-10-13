@@ -31,10 +31,10 @@ class Alerta {
 
   static List<Alerta> fromJsonList(List<dynamic> jsonList){
     List<Alerta> toList = [];
-    jsonList.forEach((ale) {
+    for (var ale in jsonList) {
       Alerta alertas = Alerta.fromJson(ale);
       toList.add(alertas);
-    });
+    }
 
     return toList;
   }

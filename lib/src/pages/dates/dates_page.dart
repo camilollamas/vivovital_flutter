@@ -6,11 +6,11 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/citas.dart';
-import '../../models/meses.dart';
-import '../../models/dias.dart';
 import '../../models/horas.dart';
 
 class DatesPage extends StatefulWidget {
+  const DatesPage({super.key});
+
   @override
   State<DatesPage> createState() => _DatesPageState();
 }
@@ -82,11 +82,12 @@ class _DatesPageState extends State<DatesPage> {
       },
     );
     con.getHoras(pickedDate);
-    if (pickedDate != null && pickedDate != con.currentDate)
+    if (pickedDate != null && pickedDate != con.currentDate) {
       setState(() {
         con.currentDate = pickedDate;
         fechaFormateada = dateFormat.format(pickedDate);
       });
+    }
   }
   
   var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -176,7 +177,7 @@ class _DatesPageState extends State<DatesPage> {
                                                   }
                                               );
                                           }else{
-                                            return Text('Sin Citas');
+                                            return const Text('Sin Citas');
                                           }
                                         }
 
@@ -355,12 +356,12 @@ class _DatesPageState extends State<DatesPage> {
   }
   List<DropdownMenuItem<String?>> _dropDownHoras(List<Hora> horas){
     List<DropdownMenuItem<String>> list = [];
-    horas.forEach((ho) {
+    for (var ho in horas) {
       list.add(DropdownMenuItem(
-          child: Text(ho.hora ?? ''),
           value: ho.consecutivo,
+          child: Text(ho.hora ?? ''),
       ));
-    });
+    }
     return list;
   }
 
@@ -370,7 +371,7 @@ class _DatesPageState extends State<DatesPage> {
       width: MediaQuery.of(context).size.width * 0.60,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: const Color(0xff243588),
+          backgroundColor: const Color(0xff243588),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5.0),
           ),
@@ -380,8 +381,8 @@ class _DatesPageState extends State<DatesPage> {
           if(con.idHora.value == ''){
             Get.snackbar('Error',
               'Debe seleccionar una hora para agendar su cita.',
-              colorText: Color.fromARGB(255, 253, 252, 252),
-              backgroundColor: Color.fromARGB(255, 247, 0, 0),
+              colorText: const Color.fromARGB(255, 253, 252, 252),
+              backgroundColor: const Color.fromARGB(255, 247, 0, 0),
               icon: const Icon(Icons.error)
             )
           }else{
@@ -408,7 +409,7 @@ class _DatesPageState extends State<DatesPage> {
           title: const Text('Confirmación de cita'),
           content: Text(
             'Confirma que desea agendar la cita de valoración:\n'
-            'Fecha: ${fechaFormateada} \n'
+            'Fecha: $fechaFormateada \n'
             'Hora: $horaFormateada \n'
             'Para confirmar presione aceptar.',
           ),
@@ -460,7 +461,7 @@ class _DatesPageState extends State<DatesPage> {
       width: MediaQuery.of(context).size.width * 0.60,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: Color.fromARGB(255, 39, 156, 64),
+          backgroundColor: const Color.fromARGB(255, 39, 156, 64),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5.0),
           ),
@@ -614,7 +615,7 @@ class _DatesPageState extends State<DatesPage> {
                         children: [
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.red,
+                              backgroundColor: Colors.red,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5.0),
                               ),

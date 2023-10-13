@@ -5,6 +5,8 @@ import 'package:vitalhelp_app/src/pages/login/login_controller.dart';
 class LoginPage extends StatelessWidget {
   LoginController con = Get.put(LoginController());
 
+  LoginPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return
@@ -39,7 +41,7 @@ class LoginPage extends StatelessWidget {
   Widget _imageLogo(){
     return SafeArea(
       child: Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         alignment: Alignment.center,
         child: Image.asset(
           'assets/img/LogoLogin.png',
@@ -62,7 +64,7 @@ class LoginPage extends StatelessWidget {
   Widget _bgDegrade(BuildContext context){
     return Container(
       height: MediaQuery.of(context).size.height * 0.4,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: Colors.transparent,
           boxShadow: <BoxShadow>[
             BoxShadow(
@@ -89,7 +91,7 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _textLogin(){
-    return Text(
+    return const Text(
       'Iniciar Sesión',
       style: TextStyle(
         fontSize: 30,
@@ -102,20 +104,20 @@ class LoginPage extends StatelessWidget {
 
   Widget _textDontHaveAccount(){
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Row(
         children:[
-          Text(
+          const Text(
               '¿No tienes cuenta?',
               style: TextStyle(
                   fontSize: 14,
                   fontFamily: 'AvenirReg',
               )
           ),
-          SizedBox(width: 7),
+          const SizedBox(width: 7),
           GestureDetector(
            onTap: () => con.goToRegisterPage(),
-            child: Text(
+            child: const Text(
               'Registrate aquí',
               style: TextStyle(
                 color: Color(0xff243588),
@@ -151,11 +153,11 @@ class LoginPage extends StatelessWidget {
 
   Widget _textFieldEmail(){
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
       child: TextField(
         controller: con.emailController,
         keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           hintText: 'Correo Electrónico',
           prefixIcon: Icon(Icons.email)
         )
@@ -164,12 +166,12 @@ class LoginPage extends StatelessWidget {
   }
   Widget _textFieldPassword(){
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 0),
+      margin: const EdgeInsets.symmetric(horizontal: 0),
       child: TextField(
           controller: con.passwordController,
           keyboardType: TextInputType.text,
           obscureText: true,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
               hintText: 'Contraseña',
               prefixIcon: Icon(Icons.lock)
           )
@@ -179,7 +181,7 @@ class LoginPage extends StatelessWidget {
   Widget _buttonLogin(BuildContext context){
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
       child: ElevatedButton(
           onPressed: () =>
           {
@@ -187,9 +189,9 @@ class LoginPage extends StatelessWidget {
           con.login(context),
           },
           style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 5)
+            padding: const EdgeInsets.symmetric(vertical: 5)
           ),
-          child: Text(
+          child: const Text(
             'Ingresar',
             style: TextStyle(
               color: Colors.white,

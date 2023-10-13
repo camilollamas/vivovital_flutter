@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:vitalhelp_app/src/enviroment/enviroment.dart';
 import '../models/json.dart';
@@ -24,7 +23,7 @@ class JsonProvider extends GetConnect {
   }
 
   Future<ResponseApi> json(Json json) async {
-    print('====> URL  => ${url}');
+    print('====> URL  => $url');
     print('====> JSON => ${json.toJson()}');
     // print('====> JSON-METODO => ${json.metodo}');
     // print('====> JSON-PARAMETROS => ${json.parametros}');
@@ -35,7 +34,7 @@ class JsonProvider extends GetConnect {
           'Content-Type': 'application/json'
         }
     );
-    print('json_provider => response ${response}');
+    print('json_provider => response $response');
     if(response.body == null){
       Get.snackbar('Erorr', 'No se pudo ejecutar la peticion');
       return ResponseApi();
@@ -45,8 +44,8 @@ class JsonProvider extends GetConnect {
   }
 
   Future<dynamic> readDocs(Map json) async {
-    print('====> URL  => ${url2}');
-    print('====> JSON => ${json}');
+    print('====> URL  => $url2');
+    print('====> JSON => $json');
     // print('====> JSON-METODO => ${json.metodo}');
     // print('====> JSON-PARAMETROS => ${json.parametros}');
     Response response = await post(

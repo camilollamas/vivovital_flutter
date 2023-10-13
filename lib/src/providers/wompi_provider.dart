@@ -1,8 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:vitalhelp_app/src/enviroment/enviroment.dart';
-import '../models/json.dart';
-import '../models/response_api.dart';
 
 // import "package:http/http.dart" as http;
 
@@ -10,9 +6,9 @@ class WompiProvider extends GetConnect {
   
   String url = 'https://sandbox.wompi.co/v1/';
 
-  Future<dynamic> acceptance_token(String UrlWompi, String pub_key) async {
+  Future<dynamic> acceptance_token(String UrlWompi, String pubKey) async {
     dynamic response = await get(
-        '${UrlWompi}merchants/${pub_key}',
+        '${UrlWompi}merchants/$pubKey',
         headers: {
           'Content-Type': 'application/json'
         }
@@ -25,14 +21,14 @@ class WompiProvider extends GetConnect {
     return response.body;
   }
 
-  Future<dynamic> create_card(String UrlWompi, Map data, String pub_key) async {
+  Future<dynamic> create_card(String UrlWompi, Map data, String pubKey) async {
     print(data);
     dynamic response = await post(
-        '${UrlWompi}/tokens/cards',
+        '$UrlWompi/tokens/cards',
         data,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${pub_key}',
+          'Authorization': 'Bearer $pubKey',
         }
     );
     print('create_card =>  ${response.body}');
@@ -44,15 +40,15 @@ class WompiProvider extends GetConnect {
 
   }
 
-  Future<dynamic> create_pay_source(String UrlWompi, Map data, String prv_key) async {
+  Future<dynamic> create_pay_source(String UrlWompi, Map data, String prvKey) async {
     print('create_pay_source data: $data');
-    print('create_pay_source prv_key: $prv_key');
+    print('create_pay_source prv_key: $prvKey');
     dynamic response = await post(
-        '${UrlWompi}/payment_sources',
+        '$UrlWompi/payment_sources',
         data,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${prv_key}',
+          'Authorization': 'Bearer $prvKey',
         }
     );
     print('wompi_provider => create_pay_source statusCode ${response.statusCode}');
@@ -65,13 +61,13 @@ class WompiProvider extends GetConnect {
     }
   }
 
-  Future<dynamic> create_transaction(String UrlWompi, Map data, String prv_key) async {
+  Future<dynamic> create_transaction(String UrlWompi, Map data, String prvKey) async {
     dynamic response = await post(
-        '${UrlWompi}/transactions/',
+        '$UrlWompi/transactions/',
         data,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${prv_key}',
+          'Authorization': 'Bearer $prvKey',
         }
     );
     print('wompi_provider => create_transaction statusCode ${response.statusCode}');
@@ -86,7 +82,7 @@ class WompiProvider extends GetConnect {
 
   Future<dynamic> get_transactions(String UrlWompi, String id) async {
     dynamic response = await get(
-        '${UrlWompi}transactions/${id}',
+        '${UrlWompi}transactions/$id',
         headers: {
           'Content-Type': 'application/json'
         }

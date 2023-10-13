@@ -26,15 +26,7 @@ class NotificationsController extends GetxController {
 
   var selectedDate = DateTime.now().obs;
   var showNotify = false.obs;
-  @override
-  void onInit(){
-    super.onInit();
-  }
 
-  @override
-  void onReady(){
-    super.onReady();
-  }
 
   chooseDate() async{
     DateTime? pickedDate = await showDatePicker(
@@ -60,7 +52,7 @@ class NotificationsController extends GetxController {
                 ),
                 textButtonTheme: TextButtonThemeData(
                   style: TextButton.styleFrom(
-                    primary: Color(0xFF243588),
+                    foregroundColor: const Color(0xFF243588),
                   )
                 )
               ),
@@ -89,7 +81,7 @@ class NotificationsController extends GetxController {
         modelo: 'NOTIFICACIONES',
         metodo: 'GET_DIA',
         parametros: {
-          "FECHA": "${date.substring(0,10)}",
+          "FECHA": date.substring(0,10),
           "IDAFILIADO": "${user.idafiliado}"
         }
     );
@@ -97,18 +89,19 @@ class NotificationsController extends GetxController {
     ResponseApi res = await jsonProvider.json(json);
     hideLoadingDialog();
     Map <String, dynamic> result = res.result?.recordsets![0][0];
-    if(result!=null && result['RESULT'] != null ){
+    if(result['RESULT'] != null ){
       var data = result['RESULT'];
       var not = notificacionFromJson(data);
       List? asd = not[0].notif;
       var alertas = Alerta.fromJsonList(asd!);
 
-      notify.addAll(alertas!);
+      notify.addAll(alertas);
       showNotify.value= true;
     }
     super.refresh();
     print('====> getDay Out <====');
   }
+  
   Future<List<Alerta>> sendNotify() async {
     print('sendNotify =>${notify.toString()}');
     return notify;
@@ -120,7 +113,7 @@ class NotificationsController extends GetxController {
     descVideo.value=desc!;
     update();
 
-    print('===>>> getVideo <<<=== ${iddoc}');
+    print('===>>> getVideo <<<=== $iddoc');
 
     // return true;
 
@@ -128,22 +121,22 @@ class NotificationsController extends GetxController {
     Json json = Json(
         modelo: 'NOTIFICACIONES',
         metodo: 'GET_VIDEO',
-        parametros: { 'IDDOC':'${iddoc}' }
+        parametros: { 'IDDOC':'$iddoc' }
     );
 
     ResponseApi res = await jsonProvider.json(json);
 
     var result = res.result!.recordsets[0][0];
-    print('=>>> ${result}');
+    print('=>>> $result');
     Map<String, dynamic> readDocs =
     {
       'Tabla':'DOCS',
       'NumPagina':1,
       'TamPagina':1,
-      'CondicionAdicional':"DocumentoID='${iddoc}'",
+      'CondicionAdicional':"DocumentoID='$iddoc'",
       'DocExtension':'${result['DocExtension']}',
       'DocNombre':'${result['DocNombre']}',
-      'DocumentoID':'${iddoc}',
+      'DocumentoID':'$iddoc',
     };
 
     dynamic resp = await jsonProvider.readDocs(readDocs);
@@ -171,7 +164,7 @@ class NotificationsController extends GetxController {
     showDialog(
         context: context,
         builder: (_) => SimpleDialog(
-          contentPadding: EdgeInsets.only(left: 5, right: 5, bottom: 5),
+          contentPadding: const EdgeInsets.only(left: 5, right: 5, bottom: 5),
           // title:
           // Container(
           //     margin: EdgeInsets.only(bottom: 20),
@@ -187,8 +180,8 @@ class NotificationsController extends GetxController {
           children: [
             Column(
               children: [
-                Text('${url}',
-                  style: TextStyle(
+                Text('$url',
+                  style: const TextStyle(
                       fontSize: 16,
                       color: Colors.black,
                       fontFamily: 'AvenirReg'
@@ -196,21 +189,21 @@ class NotificationsController extends GetxController {
                 ),
                 true //urlVideo.value.isInitialized
                   ? AspectRatio(aspectRatio: urlVideo.value.aspectRatio, child: VideoPlayer(urlVideo),
-                  ) : Container(child: Text('No mostrar ${urlVideo}')),
+                  ) : Container(child: Text('No mostrar $urlVideo')),
                 Container(
                     child: VideoProgressIndicator(
                         urlVideo,
                         allowScrubbing: true,
-                        colors:VideoProgressColors(
+                        colors:const VideoProgressColors(
                           backgroundColor: Colors.redAccent,
                           playedColor: Colors.green,
                           bufferedColor: Colors.purple,
                         )
                     )
                 ),
-                Text('info ${urlVideo}'),
+                Text('info $urlVideo'),
                 Container( //duration of video
-                  child: Text("Total Duration: " + urlVideo.value.duration.toString()),
+                  child: Text("Total Duration: ${urlVideo.value.duration}"),
                 ),
                 FloatingActionButton(
                   onPressed: () {
@@ -231,7 +224,7 @@ class NotificationsController extends GetxController {
                           onPressed: () => Navigator.pop(context, true),
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
-                              padding: EdgeInsets.symmetric(horizontal: 5),
+                              padding: const EdgeInsets.symmetric(horizontal: 5),
                               shadowColor: Colors.transparent
                           ),
                           child: const Text(
@@ -261,8 +254,8 @@ class NotificationsController extends GetxController {
   }
 
   void changeTab(context, int? tab){
-    print('contexto => ${context}');
-    DefaultTabController.of(context)?.animateTo(1);
+    print('contexto => $context');
+    DefaultTabController.of(context).animateTo(1);
     updates();
   }
 

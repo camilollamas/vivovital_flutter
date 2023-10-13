@@ -40,7 +40,7 @@ class UpdatePropfileController extends GetxController {
         { "id": '11', "Nombre": "Noviembre"},
         { "id": '12', "Nombre": "Diciembre"}]
   );
-  List<String> birtYear = List.generate(57, (int index) => "${(1950+index).toString()}" );
+  List<String> birtYear = List.generate(57, (int index) => (1950+index).toString() );
 
   var idDepartamento= ''.obs;
   List<Departamentos> deptos = <Departamentos>[].obs;
@@ -98,8 +98,8 @@ class UpdatePropfileController extends GetxController {
     int month = int.parse(user.fnacimiento!.substring(5, 7));
     int year = int.parse(user.fnacimiento!.substring(0,4));
 
-    dayBird.value= '${day}';
-    yearBird.value= '${year}';
+    dayBird.value= '$day';
+    yearBird.value= '$year';
     var mesSel = birtMonth[month-1];
     MontBird.value = mesSel.id!;
 
@@ -156,7 +156,7 @@ class UpdatePropfileController extends GetxController {
         modelo: 'VIVO_AFI_APP',
         metodo: 'CIUDADES',
         parametros: {
-          "DEPARTAMENTO":"${depto}"
+          "DEPARTAMENTO":"$depto"
         }
     );
     //print('json:  ${json}');
@@ -274,36 +274,36 @@ class UpdatePropfileController extends GetxController {
     String address = addressController.text.trim();
     String company = companyController.text.trim();
 
-    String mes = MontBird.value.length == 1 ? '0'+MontBird.value : MontBird.value;
+    String mes = MontBird.value.length == 1 ? '0${MontBird.value}' : MontBird.value;
 
     userData = {
       'IDAFILIADO':    '${user.idafiliado} ',
       'TIPO_DOC':      '${docType.trim()} ',
-      'DOCIDAFILIADO': '${numberDocument}',
-      'PNOMBRE':       '${firstName}',
-      'SNOMBRE':       '${secName}',
-      'PAPELLIDO':     '${lastName}',
-      'SAPELLIDO':     '${secondLastname}',
-      'SEXO':          '${gender}',
+      'DOCIDAFILIADO': numberDocument,
+      'PNOMBRE':       firstName,
+      'SNOMBRE':       secName,
+      'PAPELLIDO':     lastName,
+      'SAPELLIDO':     secondLastname,
+      'SEXO':          '$gender',
 
-      'FNACIMIENTO':   '${yearBird}-${mes}-${dayBird.value}',
-      'CELULAR':       '${phone}',
-      'TELEFONORES':   '${otherPhone}',
-      'EMAIL':         '${email}',
+      'FNACIMIENTO':   '$yearBird-$mes-${dayBird.value}',
+      'CELULAR':       phone,
+      'TELEFONORES':   otherPhone,
+      'EMAIL':         email,
 
       'PAIS':          'CO',
-      'DEPARTAMENTO':  '${idDepartamento}',
-      'CIUDAD':        '${idCiudad}',
-      'DIRECCION':     '${address}',
+      'DEPARTAMENTO':  '$idDepartamento',
+      'CIUDAD':        '$idCiudad',
+      'DIRECCION':     address,
 
-      'ESTADOCIVIL':    '${civilStat}',
-      'OCUPACION':      '${ocupation.value}',
-      'EMPRESAINST':    '${company}',
-      'ESCOLARIDAD':    '${school.value}',
-      'EPS':            '${eps.value}',
-      'TIPOVIN_EPS':    '${typeAfi.value}',
-      'PREPAGADA':      '${prepaid.value}',
-      'TIPO_PREPAGADA': '${prepaidEps.value}',
+      'ESTADOCIVIL':    civilStat,
+      'OCUPACION':      ocupation.value,
+      'EMPRESAINST':    company,
+      'ESCOLARIDAD':    school.value,
+      'EPS':            eps.value,
+      'TIPOVIN_EPS':    typeAfi.value,
+      'PREPAGADA':      prepaid.value,
+      'TIPO_PREPAGADA': prepaidEps.value,
     };
     if(
       validateForm(
@@ -564,7 +564,7 @@ class UpdatePropfileController extends GetxController {
   }
 
   void updateValues (){
-    print('prepaid=> ${prepaid}');
+    print('prepaid=> $prepaid');
     super.refresh();
   }
 }

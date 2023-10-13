@@ -20,10 +20,10 @@ class Tgensel {
 
   static List<Tgensel> fromJsonList(List<dynamic> jsonList){
     List<Tgensel> toList = [];
-    jsonList.forEach((tgensel) {
+    for (var tgensel in jsonList) {
       Tgensel tgen = Tgensel.fromJson(tgensel);
       toList.add(tgen);
-    });
+    }
 
     return toList;
   }

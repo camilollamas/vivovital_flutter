@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:vitalhelp_app/src/utils/utils_controller.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -11,6 +10,8 @@ class CustomDrawerMenu extends StatelessWidget {
 
   User user = User.fromJson(GetStorage().read('user') ?? {});
 
+  CustomDrawerMenu({super.key});
+
   @override
   Widget build(BuildContext context) {
     var route = ModalRoute.of(context);
@@ -20,12 +21,12 @@ class CustomDrawerMenu extends StatelessWidget {
         '${user.papellido! ?? ''} ${user.sapellido! ?? ''} ',
       ),
       accountEmail: Text(
-        '${user.email! ?? ''}'
+        user.email! ?? ''
       ),
       currentAccountPicture: CircleAvatar(
         backgroundImage: user.sexo == 'Masculino'
-            ? AssetImage('assets/img/avatars/male.png') as ImageProvider
-            : AssetImage('assets/img/avatars/female.png') as ImageProvider,
+            ? const AssetImage('assets/img/avatars/male.png')
+            : const AssetImage('assets/img/avatars/female.png'),
         //child: FlutterLogo(size: 42.0),
       ),
     );
@@ -36,22 +37,22 @@ class CustomDrawerMenu extends StatelessWidget {
           drawerHeader,
           Container(
             color: '/home' == route?.settings.name
-                ? Color(0xFF243588)
+                ? const Color(0xFF243588)
                 : Colors.white,
             child: ListTile(
               iconColor: '/home' == route?.settings.name
-                  ? Colors.white : Color(0xFF243588),
+                  ? Colors.white : const Color(0xFF243588),
               title: Text(
                 'Inicio',
                 style: TextStyle(
                   fontSize: 20,
                   color: '/home' == route?.settings.name
-                      ? Colors.white :Color(0xFF243588),
+                      ? Colors.white :const Color(0xFF243588),
                   fontWeight: FontWeight.w300,
                   fontFamily: 'AvenirReg',
                 ),
               ),
-              leading: Icon(
+              leading: const Icon(
                 Icons.home,
                 size: 30,
               ),
@@ -60,22 +61,22 @@ class CustomDrawerMenu extends StatelessWidget {
           ),
           Container(
             color: '/profile' == route?.settings.name
-                ? Color(0xFF243588)
+                ? const Color(0xFF243588)
                 : Colors.white,
             child: ListTile(
               iconColor: '/profile' == route?.settings.name
-              ? Colors.white : Color(0xFF243588),
+              ? Colors.white : const Color(0xFF243588),
               title: Text(
                 'Perfil',
                 style: TextStyle(
                   fontSize: 20,
                   color: '/profile' == route?.settings.name
-                      ? Colors.white :Color(0xFF243588),
+                      ? Colors.white :const Color(0xFF243588),
                   fontWeight: FontWeight.w300,
                   fontFamily: 'AvenirReg',
                 ),
               ),
-              leading: Icon(
+              leading: const Icon(
                 Icons.person,
                 // color: Color(0xFF243588),
                 size: 30,
@@ -109,22 +110,22 @@ class CustomDrawerMenu extends StatelessWidget {
           // ),
           Container(
             color: '/dates' == route?.settings.name
-                ? Color(0xFF243588)
+                ? const Color(0xFF243588)
                 : Colors.white,
             child: ListTile(
               iconColor: '/dates' == route?.settings.name
-                  ? Colors.white : Color(0xFF243588),
+                  ? Colors.white : const Color(0xFF243588),
               title: Text(
                 'Citas Médicas',
                 style: TextStyle(
                   fontSize: 20,
                   color: '/dates' == route?.settings.name
-                      ? Colors.white :Color(0xFF243588),
+                      ? Colors.white :const Color(0xFF243588),
                   fontWeight: FontWeight.w300,
                   fontFamily: 'AvenirReg',
                 ),
               ),
-              leading: Icon(
+              leading: const Icon(
                 Icons.date_range,
                 size: 30,
               ),
@@ -133,22 +134,22 @@ class CustomDrawerMenu extends StatelessWidget {
           ),
           Container(
             color: '/notifications' == route?.settings.name
-                ? Color(0xFF243588)
+                ? const Color(0xFF243588)
                 : Colors.white,
             child: ListTile(
               iconColor: '/notifications' == route?.settings.name
-                  ? Colors.white : Color(0xFF243588),
+                  ? Colors.white : const Color(0xFF243588),
               title: Text(
                 'Notificaciones',
                 style: TextStyle(
                   fontSize: 20,
                   color: '/notifications' == route?.settings.name
-                      ? Colors.white :Color(0xFF243588),
+                      ? Colors.white :const Color(0xFF243588),
                   fontWeight: FontWeight.w300,
                   fontFamily: 'AvenirReg',
                 ),
               ),
-              leading: Icon(
+              leading: const Icon(
                 Icons.notifications_active_outlined,
                 size: 30,
               ),
@@ -156,7 +157,7 @@ class CustomDrawerMenu extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: Text(
+            title: const Text(
               'Cerrar Sesión',
               style: TextStyle(
                 fontSize: 20,
@@ -165,7 +166,7 @@ class CustomDrawerMenu extends StatelessWidget {
                 fontFamily: 'AvenirReg',
               ),
             ),
-            leading: Icon(
+            leading: const Icon(
               Icons.logout,
               color: Color(0xFF243588),
               size: 30,
