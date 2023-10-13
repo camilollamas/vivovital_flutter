@@ -63,10 +63,10 @@ class Cita {
 
     static List<Cita> fromJsonList(List<dynamic> jsonList){
     List<Cita> toList = [];
-    jsonList.forEach((cit) {
+    for (var cit in jsonList) {
       Cita citas = Cita.fromJson(cit);
       toList.add(citas);
-    });
+    }
 
     return toList;
   }

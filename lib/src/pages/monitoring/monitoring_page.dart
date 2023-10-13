@@ -7,6 +7,8 @@ class MonitoringPage extends StatelessWidget {
   MonitoringController con = Get.put(MonitoringController());
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
+  MonitoringPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<MonitoringController>(
@@ -88,7 +90,7 @@ class MonitoringPage extends StatelessWidget {
   Widget _bgDegrade(BuildContext context){
     return Container(
       height: MediaQuery.of(context).size.height * 0.4,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: Colors.transparent,
           boxShadow: <BoxShadow>[
             BoxShadow(
@@ -116,10 +118,10 @@ class MonitoringPage extends StatelessWidget {
   Widget _buttonBack() {
     return SafeArea(
         child: Container(
-            margin: EdgeInsets.only(left: 20),
+            margin: const EdgeInsets.only(left: 20),
             child: IconButton(
               onPressed: () => Get.offNamed('/home'),
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back_ios,
                 color: Color(0xFF243588),
                 size: 20,
@@ -144,11 +146,11 @@ class MonitoringPage extends StatelessWidget {
   //Widget do download file pdf
   Widget _textTitleLabs(){
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.only(top: 20),
+            margin: const EdgeInsets.only(top: 20),
             alignment: Alignment.center,
             child: const Text(
               'Exámenes de laboratorio',
@@ -166,11 +168,11 @@ class MonitoringPage extends StatelessWidget {
   }
   Widget _textdescLabs(){
     return Container(
-      margin: EdgeInsets.only(top: 0),
+      margin: const EdgeInsets.only(top: 0),
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.only(top: 0, left: 30, right: 5),
+            margin: const EdgeInsets.only(top: 0, left: 30, right: 5),
             alignment: Alignment.center,
             child: const Text(
               'Los resultados de los exámenes deben tener una vigencia inferior a 30 días hábiles y deben estar en formato PDF',
@@ -188,12 +190,12 @@ class MonitoringPage extends StatelessWidget {
   }
   Widget _btnDownloadFile(){
     return Container(
-      margin: EdgeInsets.only(top: 10, left: 5, right: 0, bottom: 15 ),
+      margin: const EdgeInsets.only(top: 10, left: 5, right: 0, bottom: 15 ),
         child: FloatingActionButton.extended(
           onPressed: () { con.genPDfLabs(); },
-          backgroundColor: Color(0xFF243588),
-          icon: Icon(Icons.download, color: Colors.white),
-          label: Text(
+          backgroundColor: const Color(0xFF243588),
+          icon: const Icon(Icons.download, color: Colors.white),
+          label: const Text(
               'Descargar Orden en PDF',
               style: TextStyle(
                 fontSize: 20,

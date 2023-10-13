@@ -33,7 +33,7 @@ class MonitoringController extends GetxController {
           pageFormat: PdfPageFormat.a4,
           build: (pw.Context context) {
             return pw.ConstrainedBox(
-              constraints: pw.BoxConstraints.expand(),
+              constraints: const pw.BoxConstraints.expand(),
               child: pw.FittedBox(
                 child: pw.Text(
                   'Hello World',

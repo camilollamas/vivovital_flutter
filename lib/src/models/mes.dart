@@ -19,10 +19,10 @@ class Mes {
 
   static List<Mes> fromJsonList(List<dynamic> jsonList){
     List<Mes> toList = [];
-    jsonList.forEach((item) {
+    for (var item in jsonList) {
       Mes mes = Mes.fromJson(item);
       toList.add(mes);
-    });
+    }
 
     return toList;
   }

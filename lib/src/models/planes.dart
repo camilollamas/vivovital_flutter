@@ -32,10 +32,10 @@ class Planes {
 
   static List<Planes> fromJsonList(List<dynamic> jsonList){
     List<Planes> toList = [];
-    jsonList.forEach((pln) {
+    for (var pln in jsonList) {
       Planes planes = Planes.fromJson(pln);
       toList.add(planes);
-    });
+    }
 
     return toList;
   }

@@ -37,8 +37,8 @@ void main() async {
         BlocProvider(create: (_) => NotificationsBloc())
         ], 
       child: LoadingProvider(
-                child: MyApp(),
-                themeData: LoadingThemeData()
+                themeData: LoadingThemeData(),
+                child: const MyApp()
             )
       )
   );
@@ -74,13 +74,13 @@ class _MyAppState extends State<MyApp> {
       initialRoute: userSession.idafiliado != null  ? '/home' :  '/',
       getPages: [
         GetPage(name: '/', page: () => LoginPage() ),
-        GetPage(name: '/register', page: () => RegisterPage() ),
+        GetPage(name: '/register', page: () => const RegisterPage() ),
         GetPage(name: '/home', page: () => HomePage() ),
         GetPage(name: '/profile', page: () => ProfilePage() ),
         GetPage(name: '/update_profile', page: () => UpdateProfilePage() ),
         GetPage(name: '/monitoring', page: () => MonitoringPage() ),
-        GetPage(name: '/notifications', page: () => NotificationsPage() ),
-        GetPage(name: '/dates', page: () => DatesPage() ),
+        GetPage(name: '/notifications', page: () => const NotificationsPage() ),
+        GetPage(name: '/dates', page: () => const DatesPage() ),
         GetPage(name: '/paid', page: () => PaidPage() )
       ],
       theme: ThemeData(
@@ -113,6 +113,7 @@ class HandleNotificationInteractions extends StatefulWidget {
 
   final Widget child;
   const HandleNotificationInteractions({Key? key, required this.child});
+  // const HandleNotificationInteractions({super.key, Key? key, required this.child});
 
   @override
   _HandleNotificationInteractionsState createState() => _HandleNotificationInteractionsState();

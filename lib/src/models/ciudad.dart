@@ -20,10 +20,10 @@ class Ciudad {
 
   static List<Ciudad> fromJsonList(List<dynamic> jsonList){
     List<Ciudad> toList = [];
-    jsonList.forEach((ciu) {
+    for (var ciu in jsonList) {
       Ciudad ciudad = Ciudad.fromJson(ciu);
       toList.add(ciudad);
-    });
+    }
 
     return toList;
   }

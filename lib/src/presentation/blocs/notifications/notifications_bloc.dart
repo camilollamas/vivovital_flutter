@@ -9,7 +9,6 @@ import 'package:get_storage/get_storage.dart';
 import '../../../../firebase_options.dart';
 import '../../../domain/entities/push_message.dart';
 import '../../../models/json.dart';
-import '../../../models/response_api.dart';
 import '../../../models/user.dart';
 import '../../../providers/json_provider.dart';
 import '../../../utils/local_notifications.dart';

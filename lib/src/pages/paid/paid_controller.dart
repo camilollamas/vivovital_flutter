@@ -116,10 +116,10 @@ class PaidController extends GetxController {
       showDialog(
           context: context,
           builder: (_) => SimpleDialog(
-            contentPadding: EdgeInsets.only(left: 30, right: 30, bottom: 30),
+            contentPadding: const EdgeInsets.only(left: 30, right: 30, bottom: 30),
             title:
             Container(
-                margin: EdgeInsets.only(bottom: 20),
+                margin: const EdgeInsets.only(bottom: 20),
                 child:
                 const Text('Confirmación de pago',
                     style: TextStyle(
@@ -148,7 +148,7 @@ class PaidController extends GetxController {
                             onPressed: () => Navigator.pop(context, true),
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.white,
-                                padding: EdgeInsets.symmetric(horizontal: 15),
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
                                 shadowColor: Colors.transparent
                             ),
                             child: const Text(
@@ -166,7 +166,7 @@ class PaidController extends GetxController {
                               Navigator.pop(context, true)
                             },
                             style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.symmetric(horizontal: 15)
+                                padding: const EdgeInsets.symmetric(horizontal: 15)
                             ),
                             child: const Text(
                               'Pagar',
@@ -256,15 +256,15 @@ class PaidController extends GetxController {
         return;
       }
       cardId = resp['data']['id'];
-    print('cardId : ${cardId}');
+    print('cardId : $cardId');
 
     //Create payment source create_pay_source
     print('================= Create payment source =========================');
 
       Map<String, String> paymentSource = {
         "type": "CARD",
-        "token": '${cardId}',
-        "acceptance_token": '${accToken}',
+        "token": cardId,
+        "acceptance_token": accToken,
         "customer_email": '${user.email}'
       };
 
@@ -298,12 +298,12 @@ class PaidController extends GetxController {
         },
         "payment_source_id": paySourceId,
         "redirect_url": "https://mitienda.com.co/pago/resultado",
-        "reference": '${refWompi}_${paySourceId}',
+        "reference": '${refWompi}_$paySourceId',
         "customer_data": {
           "phone_number": "57${user.celular}",
           "full_name": "${user.pnombre} ${user.snombre ?? ''} ${user.papellido ?? ''} ${user.sapellido ?? ''}",
           "legal_id": "${user.docidafiliado}",
-          "legal_id_type": "${user.tipoDoc!.trim()}"
+          "legal_id_type": user.tipoDoc!.trim()
         },
         "shipping_address": {
           "address_line_1": "${user.direccion}",
@@ -351,7 +351,7 @@ class PaidController extends GetxController {
         );
         return;
       }
-      print('=> get_transactions data -> ${response}');
+      print('=> get_transactions data -> $response');
       dataTransaction = response;
       if(response['data']['status'] == 'APPROVED' ){
         print('======================> transaccion aprobada');
@@ -417,10 +417,10 @@ class PaidController extends GetxController {
       barrierDismissible: false,
         context: context,
         builder: (_) => SimpleDialog(
-          contentPadding: EdgeInsets.only(left: 30, right: 30, bottom: 30),
+          contentPadding: const EdgeInsets.only(left: 30, right: 30, bottom: 30),
           title:
           Container(
-              margin: EdgeInsets.only(bottom: 20),
+              margin: const EdgeInsets.only(bottom: 20),
               child:
               const Text('Pago Aprobado!',
                   style: TextStyle(
@@ -506,7 +506,7 @@ class PaidController extends GetxController {
                             goToProfile()
                           },
                           style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(horizontal: 15)
+                              padding: const EdgeInsets.symmetric(horizontal: 15)
                           ),
                           child: const Text(
                             'Continuar ',
@@ -540,9 +540,9 @@ class PaidController extends GetxController {
 
   String getMonth(int month){
     if(month < 10){
-      return '0${month}';
+      return '0$month';
     }else{
-      return '${month}';
+      return '$month';
     }
 
   }

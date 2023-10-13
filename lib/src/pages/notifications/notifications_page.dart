@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:load/load.dart';
 import 'package:vitalhelp_app/src/pages/notifications/notifications_controller.dart';
-import 'package:vitalhelp_app/src/presentation/blocs/notifications/notifications_bloc.dart';
 import 'package:vitalhelp_app/src/utils/drawer_menu.dart';
 import 'package:intl/intl.dart';
 
@@ -16,10 +14,14 @@ import 'package:flutter/foundation.dart';
 String longVideo = "http://192.168.1.11:90/docs/0DA29342-FC20-4405-A5C2-CFD24F629B11.mp4"; //con.urlVideo.value!;
 
 class NotificationsPage extends StatefulWidget {
+  const NotificationsPage({super.key});
+
   @override
   State<NotificationsPage> createState() => _NotificationsPageState();
 }
 class NotificationsPageState extends StatefulWidget {
+  const NotificationsPageState({super.key});
+
   @override
   _NotificationsPageState createState() => _NotificationsPageState();
 }
@@ -152,7 +154,7 @@ class _NotificationsPageState extends State<NotificationsPage>
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
                                           Container(
-                                              margin: EdgeInsets.only(left: 20),
+                                              margin: const EdgeInsets.only(left: 20),
                                               child: IconButton(
                                                 onPressed: () => {
                                                   setState(() {
@@ -169,7 +171,7 @@ class _NotificationsPageState extends State<NotificationsPage>
                                                 ),
                                               )
                                           ),
-                                          Text('${con.titleVideo.value ?? ''}',
+                                          Text(con.titleVideo.value ?? '',
                                             style: const TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w300,
@@ -233,7 +235,7 @@ class _NotificationsPageState extends State<NotificationsPage>
     // Future.delayed(const Duration(seconds: 4), () {
     setState(() {
         _videoPlayerController = VideoPlayerController.network(
-          "http://5.161.183.200:82/docs/${urlVideo}.mp4",
+          "http://5.161.183.200:82/docs/$urlVideo.mp4",
         )..initialize().then((value) => con.updates());
 
         _customVideoPlayerController = CustomVideoPlayerController(
@@ -261,17 +263,17 @@ class _NotificationsPageState extends State<NotificationsPage>
                   ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                       itemCount: snapshot.data?.length ?? 0,
                       itemBuilder: (_, index){
-                        print('index => ${index} context => ${context.toString()}');
+                        print('index => $index context => ${context.toString()}');
                         return _NotifyCards(snapshot.data![index], context);
                       }
                   ),
                 ],
               );
           }else{
-            return Text('Sin Notificaciones');
+            return const Text('Sin Notificaciones');
           }
         }
     );
@@ -279,11 +281,11 @@ class _NotificationsPageState extends State<NotificationsPage>
 
   Widget _NotifyCards(Alerta alerta, BuildContext context){
     return Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         alignment: Alignment.center,
         child: Card(
-          color: Color(0xFFc1f4cd),
-          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+          color: const Color(0xFFc1f4cd),
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
           clipBehavior: Clip.hardEdge,
           child: Container(
             decoration: const BoxDecoration(
@@ -306,7 +308,7 @@ class _NotificationsPageState extends State<NotificationsPage>
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Container(
-                              margin: EdgeInsets.only(left: 10, right: 10),
+                              margin: const EdgeInsets.only(left: 10, right: 10),
                               child: Ink(
                                 decoration: _colorNotify(alerta.tipo),
                                 child: InkWell(
@@ -315,13 +317,13 @@ class _NotificationsPageState extends State<NotificationsPage>
                                   },
                                   borderRadius: BorderRadius.circular(30.0),
                                   child: Padding(
-                                    padding: EdgeInsets.all(5.0),
+                                    padding: const EdgeInsets.all(5.0),
                                     child: _iconNotify(alerta.tipo),
                                   ),
                                 ),
                               ),
                             ),
-                            Container(
+                            SizedBox(
                               width: 200,
                               child:Text('${alerta.titulo ?? ''} ',
                                   style: const TextStyle(
@@ -336,7 +338,7 @@ class _NotificationsPageState extends State<NotificationsPage>
                         ),
                         _divider(),
                         Container(
-                          margin: EdgeInsets.only(left: 10, right: 10),
+                          margin: const EdgeInsets.only(left: 10, right: 10),
                           child: Text('${alerta.descripcion ?? ''} ',
                               style: const TextStyle(
                                 fontSize: 15,
@@ -364,8 +366,8 @@ class _NotificationsPageState extends State<NotificationsPage>
                                   })
 
                                 },
-                                icon: Icon(Icons.play_arrow, color: Colors.white),
-                                backgroundColor: Color(0xFF03a9f4),
+                                icon: const Icon(Icons.play_arrow, color: Colors.white),
+                                backgroundColor: const Color(0xFF03a9f4),
                                 label: const Text(
                                   'Ver',
                                   style: TextStyle(
@@ -391,29 +393,29 @@ class _NotificationsPageState extends State<NotificationsPage>
   Decoration _colorNotify(String? type){
     if(type == 'Video' ){
       return BoxDecoration(
-          border: Border.all(color: Color(0xFF03a9f4), width: 2),
-          color: Color(0xFF03a9f4), //Colors.white,
+          border: Border.all(color: const Color(0xFF03a9f4), width: 2),
+          color: const Color(0xFF03a9f4), //Colors.white,
           borderRadius: BorderRadius.circular(50.0)
       );
     }
     if(type == 'Recordatorio'){
       return BoxDecoration(
-          border: Border.all(color: Color(0xFFff9800), width: 2),
-          color: Color(0xFFff9800), //Colors.white,
+          border: Border.all(color: const Color(0xFFff9800), width: 2),
+          color: const Color(0xFFff9800), //Colors.white,
           borderRadius: BorderRadius.circular(50.0)
       );
     }
     if(type == 'Audio'){
       return BoxDecoration(
-          border: Border.all(color: Color(0xFF21ba45), width: 2),
-          color: Color(0xFF21ba45), //Colors.white,
+          border: Border.all(color: const Color(0xFF21ba45), width: 2),
+          color: const Color(0xFF21ba45), //Colors.white,
           borderRadius: BorderRadius.circular(50.0)
       );
     }
 
     return BoxDecoration(
-        border: Border.all(color: Color(0xFFff9800), width: 2),
-        color: Color(0xFFff9800), //Colors.white,
+        border: Border.all(color: const Color(0xFFff9800), width: 2),
+        color: const Color(0xFFff9800), //Colors.white,
         borderRadius: BorderRadius.circular(50.0)
     );
   }
@@ -463,13 +465,13 @@ class _NotificationsPageState extends State<NotificationsPage>
           ),
         ),
         Container(
-          margin: EdgeInsets.only(left: 20),
+          margin: const EdgeInsets.only(left: 20),
           child: Material(
             type: MaterialType.transparency,
             child: Ink(
               decoration: BoxDecoration(
-                border: Border.all(color: Color(0xFF243588), width: 2),
-                color: Color(0xFF243588), //Colors.white,
+                border: Border.all(color: const Color(0xFF243588), width: 2),
+                color: const Color(0xFF243588), //Colors.white,
                 borderRadius: BorderRadius.circular(50.0)
               ),
               child: InkWell(
@@ -495,7 +497,7 @@ class _NotificationsPageState extends State<NotificationsPage>
 
   Widget _divider(){
     return
-      Divider(
+      const Divider(
         color: Colors.black54,
         height: 10,
         thickness: 0,
@@ -507,7 +509,7 @@ class _NotificationsPageState extends State<NotificationsPage>
   Widget _bgDegrade(BuildContext context){
     return Container(
       height: MediaQuery.of(context).size.height * 0.4,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: Colors.transparent,
           boxShadow: <BoxShadow>[
             BoxShadow(
@@ -537,10 +539,10 @@ class _NotificationsPageState extends State<NotificationsPage>
 
   Widget _buttonBack() {
     return Container(
-            margin: EdgeInsets.only(left: 10),
+            margin: const EdgeInsets.only(left: 10),
             child: IconButton(
               onPressed: () => Get.offNamed('/home'),
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back_ios,
                 color: Color(0xFF243588),
                 size: 20,

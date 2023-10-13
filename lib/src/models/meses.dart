@@ -27,10 +27,10 @@ class Mes {
 
     static List<Mes> fromJsonList(List<dynamic> jsonList){
       List<Mes> toList = [];
-      jsonList.forEach((me) {
+      for (var me in jsonList) {
         Mes mes = Mes.fromJson(me);
         toList.add(mes);
-      });
+      }
 
       return toList;
     }

@@ -10,5 +10,5 @@ abstract class NotificationsEvent extends Equatable {
 
 class NotifiactionsStatusChange extends NotificationsEvent {
   final AuthorizationStatus status;
-  NotifiactionsStatusChange(this.status);
+  const NotifiactionsStatusChange(this.status);
 }

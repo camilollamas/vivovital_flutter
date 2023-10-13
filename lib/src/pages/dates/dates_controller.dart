@@ -218,8 +218,8 @@ class DatesController extends GetxController {
     }else{
       Get.snackbar('Error',
         'No se pudo cancelar su cita.',
-        colorText: Color.fromARGB(255, 253, 252, 252),
-        backgroundColor: Color.fromARGB(255, 247, 0, 0),
+        colorText: const Color.fromARGB(255, 253, 252, 252),
+        backgroundColor: const Color.fromARGB(255, 247, 0, 0),
         icon: const Icon(Icons.error)
       );  
     }
