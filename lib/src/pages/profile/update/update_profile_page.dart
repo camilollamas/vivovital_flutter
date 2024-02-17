@@ -672,7 +672,7 @@ class UpdateProfilePage extends StatelessWidget {
   Widget _textRegion(BuildContext context){
     return Container(
         margin: const EdgeInsets.only(top: 0),
-        width: MediaQuery.of(context).size.width * 0.30,
+        width: MediaQuery.of(context).size.width * 0.35,
         child: const Text(
           'Departamento:',
           style: TextStyle(
@@ -686,7 +686,7 @@ class UpdateProfilePage extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(top: 0),
       width: MediaQuery.of(context).size.width * 0.50,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 0),
       child: DropdownButton(
         underline: Container(
           alignment: Alignment.centerRight,
@@ -742,7 +742,7 @@ class UpdateProfilePage extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(top: 0),
       width: MediaQuery.of(context).size.width * 0.5,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 0),
       child: DropdownButton(
         underline: Container(
           alignment: Alignment.centerRight,
