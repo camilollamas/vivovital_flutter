@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/link.dart';
 import 'package:vitalhelp_app/src/pages/home/home_controller.dart';
 import 'package:vitalhelp_app/src/utils/drawer_menu.dart';
 import 'package:signature/signature.dart';
@@ -65,6 +66,7 @@ class HomePage extends StatelessWidget {
         init: con,
         initState: (_) {
           con.GetStatusUser();
+          con.getDay();
         },
       builder: (_) {
       return
@@ -549,7 +551,7 @@ class HomePage extends StatelessWidget {
                       itemCount: snapshot.data?.length ?? 0,
                       itemBuilder: (_, index){
                         print('index => $index context => ${context.toString()}');
-                        return _NotifyCards(snapshot.data![index], context);
+                        return _notifyCards(snapshot.data![index], context);
                       }
                   ),
                 ],
@@ -560,15 +562,16 @@ class HomePage extends StatelessWidget {
         }
     );
   }
-  Widget _NotifyCards(Alerta alerta, BuildContext context){
+  Widget _notifyCards(Alerta alerta, BuildContext context){
     return Container(
         margin: const EdgeInsets.only(top: 20),
         alignment: Alignment.center,
         child: Card(
           color: const Color(0xFFc1f4cd),
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+          margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
           clipBehavior: Clip.hardEdge,
-          child: Container(
+          child: 
+          Container(
             decoration: const BoxDecoration(
               border: Border.symmetric(
                   vertical: BorderSide(
@@ -577,19 +580,19 @@ class HomePage extends StatelessWidget {
                   )
               ),
             ),
-            child: Container(
-              margin: const EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
+            child: 
+            Container(
+              margin: const EdgeInsets.only(top: 10, right: 10, bottom: 0, left: 10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Container(
-                    child: Column(
+                  Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Container(
-                              margin: const EdgeInsets.only(left: 10, right: 10),
+                              margin: const EdgeInsets.only(left: 0, right: 10),
                               child: Ink(
                                 decoration: _colorNotify(alerta.tipo),
                                 child: InkWell(
@@ -608,29 +611,29 @@ class HomePage extends StatelessWidget {
                               width: 200,
                               child:Text('${alerta.titulo ?? ''} ',
                                   style: const TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     // fontWeight: FontWeight.w300,
                                     color: Color(0xFF243588),
-                                    fontFamily: 'AvenirReg',
+                                    fontFamily: 'AvenirBold',
                                   )
                               ),
                             )
                           ],
                         ),
-                        Divider(),
+                        const Divider(),
                         Container(
-                          margin: const EdgeInsets.only(left: 10, right: 10),
+                          margin: const EdgeInsets.only(left: 0, right: 0),
+                          alignment: Alignment.centerLeft,
                           child: Text('${alerta.descripcion ?? ''} ',
                               style: const TextStyle(
-                                fontSize: 15,
+                                fontSize: 14,
                                 // fontWeight: FontWeight.w300,
                                 color: Color(0xFF243588),
-                                fontFamily: 'AvenirBold',
+                                fontFamily: 'AvenirReg',
                               )
                           ),
                         ),
-                        Visibility(
-                          visible: alerta.tipo  == 'Video',
+                        Visibility( visible: alerta.tipo  == 'Video',
                             child: FloatingActionButton.extended(
                                 onPressed: () => {
                                   // con.getVideo(context,alerta.iddocs, alerta.titulo, alerta.descripcion),
@@ -659,10 +662,29 @@ class HomePage extends StatelessWidget {
                                   ),
                                 )
                             )
+                        ),
+                        Visibility( visible: alerta.tipo  == 'Enlace',
+                            child: Container(
+                              alignment: Alignment.bottomRight,
+                              child: Link(
+                                      uri: Uri.parse(alerta.enlace ?? '' ),
+                                      target: LinkTarget.blank,
+                                      builder: (BuildContext ctx, FollowLink? openLink) {
+                                        return TextButton.icon(
+                                          onPressed: openLink,
+                                          label: const Text('Abrir enlace'),
+                                          icon: const Icon(Icons.chevron_right_sharp),
+                                          style: ButtonStyle(
+                                            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.zero),
+                                            alignment: Alignment.centerRight, // Alinea el contenido a la derecha
+                                          ),
+                                        );
+                                      },
+                                    ),
+                            )
                         )
                       ],
                     ),
-                  )
                 ],
               )
             ),

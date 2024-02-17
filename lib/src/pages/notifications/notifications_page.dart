@@ -4,6 +4,8 @@ import 'package:load/load.dart';
 import 'package:vitalhelp_app/src/pages/notifications/notifications_controller.dart';
 import 'package:vitalhelp_app/src/utils/drawer_menu.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/link.dart';
 
 import '../../models/alerta.dart';
 
@@ -31,6 +33,15 @@ class _NotificationsPageState extends State<NotificationsPage>
   late final _tabController = TabController(length: 2, vsync: this);
 
   NotificationsController con = Get.put(NotificationsController());
+  Future<void>? _launched;
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
 
 
 
@@ -267,7 +278,7 @@ class _NotificationsPageState extends State<NotificationsPage>
                       itemCount: snapshot.data?.length ?? 0,
                       itemBuilder: (_, index){
                         print('index => $index context => ${context.toString()}');
-                        return _NotifyCards(snapshot.data![index], context);
+                        return _notifyCards(snapshot.data![index], context);
                       }
                   ),
                 ],
@@ -279,13 +290,13 @@ class _NotificationsPageState extends State<NotificationsPage>
     );
   }
 
-  Widget _NotifyCards(Alerta alerta, BuildContext context){
+  Widget _notifyCards(Alerta alerta, BuildContext context){
     return Container(
         margin: const EdgeInsets.only(top: 20),
         alignment: Alignment.center,
         child: Card(
           color: const Color(0xFFc1f4cd),
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+          margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
           clipBehavior: Clip.hardEdge,
           child: Container(
             decoration: const BoxDecoration(
@@ -297,23 +308,22 @@ class _NotificationsPageState extends State<NotificationsPage>
               ),
             ),
             child: Container(
-              margin: const EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
+              margin: const EdgeInsets.only(top: 10, right: 10, bottom: 0, left: 10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Container(
-                    child: Column(
+                  Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Container(
-                              margin: const EdgeInsets.only(left: 10, right: 10),
+                              margin: const EdgeInsets.only(left: 0, right: 10),
                               child: Ink(
                                 decoration: _colorNotify(alerta.tipo),
                                 child: InkWell(
                                   onTap: () {
-                                    con.chooseDate();
+                                    // con.chooseDate();
                                   },
                                   borderRadius: BorderRadius.circular(30.0),
                                   child: Padding(
@@ -327,61 +337,85 @@ class _NotificationsPageState extends State<NotificationsPage>
                               width: 200,
                               child:Text('${alerta.titulo ?? ''} ',
                                   style: const TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     // fontWeight: FontWeight.w300,
                                     color: Color(0xFF243588),
-                                    fontFamily: 'AvenirReg',
+                                    fontFamily: 'AvenirBold',
                                   )
                               ),
                             )
                           ],
                         ),
-                        _divider(),
+                        const Divider(),
                         Container(
-                          margin: const EdgeInsets.only(left: 10, right: 10),
+                          margin: const EdgeInsets.only(left: 0, right: 0),
+                          alignment: Alignment.centerLeft,
                           child: Text('${alerta.descripcion ?? ''} ',
                               style: const TextStyle(
-                                fontSize: 15,
+                                fontSize: 14,
                                 // fontWeight: FontWeight.w300,
                                 color: Color(0xFF243588),
-                                fontFamily: 'AvenirBold',
+                                fontFamily: 'AvenirReg',
                               )
                           ),
                         ),
-                        Visibility(
-                          visible: alerta.tipo  == 'Video',
-                            child: FloatingActionButton.extended(
-                                onPressed: () => {
-                                  con.getVideo(context,alerta.iddocs, alerta.titulo, alerta.descripcion),
-                                  showLoadingDialog(),
-                                  setState(() {
-                                    setVideoController(alerta.iddocs);
-                                    Future.delayed(const Duration(seconds: 3), (){
-                                      hideLoadingDialog();
-                                      // con.getVideo(context,alerta.iddocs, alerta.titulo, alerta.descripcion);
-                                      _tabController.index = 1;
-                                      _videoPlayerController.play();
-
-                                    });
-                                  })
-
-                                },
-                                icon: const Icon(Icons.play_arrow, color: Colors.white),
-                                backgroundColor: const Color(0xFF03a9f4),
-                                label: const Text(
-                                  'Ver',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w300,
-                                    fontFamily: 'AvenirReg',
-                                  ),
-                                )
+                        Visibility( visible: alerta.tipo  == 'Video',
+                            child: Container(
+                              padding: const EdgeInsets.only(top: 5, bottom: 5),
+                              alignment: Alignment.bottomRight,
+                              child: FloatingActionButton.extended(
+                                extendedPadding: const EdgeInsets.only(top: 0, bottom: 0, left: 10, right: 10),
+                                  onPressed: () => {
+                                    con.getVideo(context,alerta.iddocs, alerta.titulo, alerta.descripcion),
+                                    showLoadingDialog(),
+                                    setState(() {
+                                      setVideoController(alerta.iddocs);
+                                      Future.delayed(const Duration(seconds: 3), (){
+                                        hideLoadingDialog();
+                                        // con.getVideo(context,alerta.iddocs, alerta.titulo, alerta.descripcion);
+                                        _tabController.index = 1;
+                                        _videoPlayerController.play();
+                            
+                                      });
+                                    })
+                            
+                                  },
+                                  icon: const Icon(Icons.play_arrow, color: Colors.white),
+                                  backgroundColor: const Color(0xFF03a9f4),
+                                  label: const Text(
+                                    'Ver video',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w300,
+                                      fontFamily: 'AvenirReg',
+                                    ),
+                                  )
+                              ),
+                            )
+                        ),
+                        Visibility( visible: alerta.tipo  == 'Enlace',
+                            child: Container(
+                              alignment: Alignment.bottomRight,
+                              child: Link(
+                                      uri: Uri.parse(alerta.enlace ?? '' ),
+                                      target: LinkTarget.blank,
+                                      builder: (BuildContext ctx, FollowLink? openLink) {
+                                        return TextButton.icon(
+                                          onPressed: openLink,
+                                          label: const Text('Abrir enlace'),
+                                          icon: const Icon(Icons.chevron_right_sharp),
+                                          style: ButtonStyle(
+                                            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.zero),
+                                            alignment: Alignment.centerRight, // Alinea el contenido a la derecha
+                                          ),
+                                        );
+                                      },
+                                    ),
                             )
                         )
                       ],
                     ),
-                  )
                 ],
               )
             ),

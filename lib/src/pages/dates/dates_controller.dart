@@ -32,7 +32,6 @@ class DatesController extends GetxController {
   List<Cita> citas = [];
   var showCitas = false.obs;
 
-
   DatesController(){
     idDia = ''.obs;
     idHora = ''.obs;
@@ -74,6 +73,7 @@ class DatesController extends GetxController {
       getDays();
       mostrarAgenda.value = '1';
     }else{
+      getDays();
       getDates();
     }
 
@@ -100,11 +100,11 @@ class DatesController extends GetxController {
     }
     hideLoadingDialog();
   }
+
   void getHoras(day) async{
     if(day == null){
       return;
     }
- 
     
     idHora = ''.obs;
     horasOpt.clear();
@@ -156,10 +156,8 @@ class DatesController extends GetxController {
       Get.snackbar('Error', 'No se pudo agendar su cita');
     }
   }
-  
   void getDates() async{
     citas.clear();
-
     // showLoadingDialog();
     Json json = Json(
         modelo: 'VIVO_CIT',
@@ -175,9 +173,7 @@ class DatesController extends GetxController {
       print('citas.length ${citas.length}');
 
       citas.clear();
-      
       citas.addAll(resu);
-      
 
       showCitas.value = true;
       //validate if have citas

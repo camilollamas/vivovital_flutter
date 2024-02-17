@@ -23,6 +23,7 @@ class _DatesPageState extends State<DatesPage> {
   String fechaFormateada = '';
   String horaFormateada = '';
 
+  // ignore: unused_field
   Future<void>? _launched;
   Future<void> _launchInBrowser(Uri url) async {
     if (!await launchUrl(
@@ -33,13 +34,10 @@ class _DatesPageState extends State<DatesPage> {
     }
   }
 
-
-
-
-
   void _selectDate(BuildContext context) async {
     List<DateTime> dates = con.diasDisponibles;
 
+    // ignore: no_leading_underscores_for_local_identifiers
     bool _decideWhichDayToEnable(DateTime day) {
       if (dates.contains(day)) {
         return true;
@@ -81,15 +79,17 @@ class _DatesPageState extends State<DatesPage> {
         );
       },
     );
+
     con.getHoras(pickedDate);
+    
     if (pickedDate != null && pickedDate != con.currentDate) {
+      print('================================================  '+pickedDate.toString()+'  ================================');
       setState(() {
         con.currentDate = pickedDate;
         fechaFormateada = dateFormat.format(pickedDate);
       });
     }
   }
-  
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -143,7 +143,8 @@ class _DatesPageState extends State<DatesPage> {
                               ),
                               _divider(),
                               Visibility(
-                                visible: con.mostrarAgenda.value == '1' ? true : false,
+                                // visible: con.mostrarAgenda.value == '1' ? true : false,
+                                visible: true,
                                 child: 
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -157,11 +158,27 @@ class _DatesPageState extends State<DatesPage> {
                                     ],
                                   ),
                               ),
+                              const Divider(
+                                color: Colors.black54,
+                                height: 10,
+                                thickness: 0,
+                                indent: 10,
+                                endIndent: 10,
+                              ),
+                              
                               Visibility(
                                 visible: con.showCitas.value,
                                 child: 
                                   Column(
                                     children: [
+                                      const Text('Citas Agendadas:',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w300,
+                                          color: Color(0xFF243588),
+                                          fontFamily: 'AvenirReg',
+                                        )
+                                      ),
                                       FutureBuilder(
                                         future: con.getPlanes(),
                                         builder: (context, snapshot){
@@ -170,7 +187,7 @@ class _DatesPageState extends State<DatesPage> {
                                               ListView.builder(
                                                 scrollDirection: Axis.vertical,
                                                 shrinkWrap: true,
-                                                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                                padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
                                                   itemCount: snapshot.data?.length ?? 0,
                                                   itemBuilder: (_, index) {
                                                     return _citasCard(snapshot.data![index], context);
@@ -269,15 +286,20 @@ class _DatesPageState extends State<DatesPage> {
       );
   }
   Widget _textDateD(){
-    return const Text(
-        'Para continuar con tu proceso por favor agenda tu cita de valoración.',
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w300,
-          color: Color(0xFF243588),
-          fontFamily: 'AvenirReg',
-        )
-    );
+    return  
+      Container(
+        margin:const EdgeInsets.only(top: 5),
+        width: MediaQuery.of(context).size.width * 0.90,
+        child: const Text(
+            'Para continuar con tu proceso por favor agenda tu cita.',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w300,
+              color: Color(0xFF243588),
+              fontFamily: 'AvenirReg',
+            )
+          )
+      );
   }
   
   //seleccionar hora
@@ -344,6 +366,7 @@ class _DatesPageState extends State<DatesPage> {
           onChanged: (opt)=>{
             con.idHora.value = opt.toString(),
             //find in list
+            // ignore: avoid_function_literals_in_foreach_calls
             con.horasOpt.forEach((element) {
               if(element.consecutivo == opt){
                 horaFormateada = element.hora ?? '';
@@ -483,17 +506,17 @@ class _DatesPageState extends State<DatesPage> {
     //final numberFormat = NumberFormat.currency(locale: 'es_MX', symbol:"\$");
 
     return Container(
-      margin: const EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 5),
       alignment: Alignment.center,
       child: Card(
-        color: const Color(0xFFe3f2fd),
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+        color: cit.estadocit == 'Pendiente' ? Color.fromARGB(255, 245, 225, 200) : Color(0xFFe3f2fd),
+        margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
         clipBehavior: Clip.hardEdge,
         child: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             border: Border.symmetric(
                 vertical: BorderSide(
-                    color: Color(0xFF243588),
+                    color: cit.estadocit == 'Pendiente' ? Color.fromARGB(255, 243, 160, 51) : Color(0xFF243599),
                     width: 5
                 )
             ),
@@ -504,41 +527,20 @@ class _DatesPageState extends State<DatesPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Fecha: ${cit.fecha}',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          // fontWeight: FontWeight.w300,
-                          color: Color(0xFF243588),
-                          fontFamily: 'AvenirReg',
-                        )
-                    ),
-                    Text('${cit.estadocit ?? ''} ',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          // fontWeight: FontWeight.w300,
-                          color: Color(0xFF243588),
-                          fontFamily: 'AvenirReg',
-                        )
-                    ),
-                  ],
-                ),
-                Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Text('Servicio:',
-                        style: TextStyle(
-                          fontSize: 14,
-                          // fontWeight: FontWeight.w300,
-                          color: Color(0xFF243588),
-                          fontFamily: 'AvenirReg',
-                        )
-                    ),
-                    Text(' ${cit.descservicio}',
+                    // const Text('Servicio:',
+                    //     style: TextStyle(
+                    //       fontSize: 14,
+                    //       // fontWeight: FontWeight.w300,
+                    //       color: Color(0xFF243588),
+                    //       fontFamily: 'AvenirReg',
+                    //     )
+                    // ),
+                    Text('${cit.descservicio}',
                         style: const TextStyle(
-                          fontSize: 14,
-                          // fontWeight: FontWeight.w300,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w900,
                           color: Color(0xFF243588),
                           fontFamily: 'AvenirReg',
                         )
@@ -567,17 +569,9 @@ class _DatesPageState extends State<DatesPage> {
                   ],
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Muestra enlace :',
-                        style: TextStyle(
-                          fontSize: 14,
-                          // fontWeight: FontWeight.w300,
-                          color: Color(0xFF243588),
-                          fontFamily: 'AvenirReg',
-                        )
-                    ),
-                    Text(' ${cit.verenlace}',
+                    Text('Fecha: ${cit.fecha}',
                         style: const TextStyle(
                           fontSize: 14,
                           // fontWeight: FontWeight.w300,
@@ -585,8 +579,37 @@ class _DatesPageState extends State<DatesPage> {
                           fontFamily: 'AvenirReg',
                         )
                     ),
+                    Text('${cit.estadocit ?? ''} ',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          // fontWeight: FontWeight.w300,
+                          color: Color(0xFF243588),
+                          fontFamily: 'AvenirReg',
+                        )
+                    ),
                   ],
                 ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.start,
+                //   children: [
+                //     const Text('Muestra enlace :',
+                //         style: TextStyle(
+                //           fontSize: 14,
+                //           // fontWeight: FontWeight.w300,
+                //           color: Color(0xFF243588),
+                //           fontFamily: 'AvenirReg',
+                //         )
+                //     ),
+                //     Text(' ${cit.verenlace}',
+                //         style: const TextStyle(
+                //           fontSize: 14,
+                //           // fontWeight: FontWeight.w300,
+                //           color: Color(0xFF243588),
+                //           fontFamily: 'AvenirReg',
+                //         )
+                //     ),
+                //   ],
+                // ),
                 Visibility(
                   visible: cit.verenlace == 'SI' ? true : false,
                   child: Row(

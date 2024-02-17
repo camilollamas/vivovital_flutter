@@ -18,6 +18,7 @@ class Alerta {
     this.titulo,
     this.descripcion,
     this.iddocs,
+    this.enlace,
   });
 
   int? iddos;
@@ -28,6 +29,7 @@ class Alerta {
   String? titulo;
   String? descripcion;
   String? iddocs;
+  String? enlace;
 
   static List<Alerta> fromJsonList(List<dynamic> jsonList){
     List<Alerta> toList = [];
@@ -48,6 +50,7 @@ class Alerta {
     titulo: json["TITULO"],
     descripcion: json["DESCRIPCION"],
     iddocs: json["IDDOCS"],
+    enlace: json["ENLACE"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -59,5 +62,6 @@ class Alerta {
     "TITULO": titulo,
     "DESCRIPCION": descripcion,
     "IDDOCS": iddocs,
+    "ENLACE": enlace,
   };
 }

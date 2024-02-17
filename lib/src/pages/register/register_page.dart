@@ -270,7 +270,7 @@ class _RegisterState extends State<RegisterPage> {
   Widget _buttonRegister(BuildContext context){
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.only(top: 10, left: 80, right: 80, bottom: 60 ),
+      margin: const EdgeInsets.only(top: 10, left: 40, right:40, bottom: 60 ),
       child: ElevatedButton(
           onPressed: () => con.register(context),
           style: ElevatedButton.styleFrom(
@@ -280,7 +280,7 @@ class _RegisterState extends State<RegisterPage> {
             'Registrarse',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 25,
+              fontSize: 20,
               fontWeight: FontWeight.w300,
               fontFamily: 'AvenirReg',
             ),

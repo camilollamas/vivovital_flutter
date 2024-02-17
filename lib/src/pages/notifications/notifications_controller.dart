@@ -32,8 +32,8 @@ class NotificationsController extends GetxController {
     DateTime? pickedDate = await showDatePicker(
         context: Get.context!,
         initialDate: selectedDate.value,
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2024),
+        firstDate: DateTime(2022, 1, 1),
+        lastDate: DateTime(2027, 1, 1),
         builder: (context, child) {
           return Theme(
               data: Theme.of(context).copyWith(
@@ -258,8 +258,6 @@ class NotificationsController extends GetxController {
     DefaultTabController.of(context).animateTo(1);
     updates();
   }
-
-
 
   NotificationsController(){
     print('Notifications Controller -> User -> : ${user.toJson()}');

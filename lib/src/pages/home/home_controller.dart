@@ -40,8 +40,6 @@ class EstadoUser {
 class HomeController extends GetxController {
  final NotificationsBloc notificationsBloc = NotificationsBloc();
 
-  
-
 
 
   User user = User.fromJson(GetStorage().read('user') ?? {});
@@ -81,7 +79,6 @@ class HomeController extends GetxController {
     GetStorage().write('paid', {});
     changeValue('2');
     p1ConsInf = '${user.pnombre}';
-    getDay();
 
     // GetStatusUser();
     // print('Home_Controller -> User : ${user.toJson()}');
@@ -92,16 +89,12 @@ class HomeController extends GetxController {
     notify.clear();
     showNotify.value = false;
     print('====> getDay <====');
-    String date = '2023-08-11'; //selectedDate.value.toString();
-    print('====> FECHA: ${date.substring(0,10)}');
     print('====> IDAFILIADO: ${user.idafiliado}');
 
-    
     Json json = Json(
         modelo: 'NOTIFICACIONES',
-        metodo: 'GET_DIA',
+        metodo: 'GET_DIA_HOY',
         parametros: {
-          "FECHA": date.substring(0,10),
           "IDAFILIADO": "${user.idafiliado}"
         }
     );
@@ -118,6 +111,7 @@ class HomeController extends GetxController {
       notify.addAll(alertas);
       showNotify.value= true;
     }
+    
     super.refresh();
     print('====> getDay Out <====');
   }
