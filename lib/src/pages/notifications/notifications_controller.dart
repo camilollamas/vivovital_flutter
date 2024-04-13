@@ -148,7 +148,7 @@ class NotificationsController extends GetxController {
       urlVideo.value = 'http://5.161.183.200:82/${resp['result']['sourcePath']}';
       // print('urlVideo ${urlVideo.value}');
       return true;
-      showVideo(context, urlVideo.value);
+      // showVideo(context, urlVideo.value);
     }
     return false;
   }
