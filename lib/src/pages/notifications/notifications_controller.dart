@@ -17,6 +17,7 @@ class NotificationsController extends GetxController {
   User user = User.fromJson(GetStorage().read('user') ?? {});
   JsonProvider jsonProvider = JsonProvider();
   Notificacion notificacion = Notificacion();
+  // ignore: prefer_typing_uninitialized_variables
   late final tabController;
 
   List<Alerta> notify = [];
@@ -155,6 +156,7 @@ class NotificationsController extends GetxController {
 
   void showVideo (context, String? url) {
     late VideoPlayerController urlVideo;
+    // ignore: deprecated_member_use
     urlVideo = VideoPlayerController.network('http://5.161.183.200:82/docs/0DA29342-FC20-4405-A5C2-CFD24F629B11.mp4')
     ..initialize().then((_) {
     // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
@@ -190,22 +192,19 @@ class NotificationsController extends GetxController {
                 ),
                 true //urlVideo.value.isInitialized
                   ? AspectRatio(aspectRatio: urlVideo.value.aspectRatio, child: VideoPlayer(urlVideo),
-                  ) : Container(child: Text('No mostrar $urlVideo')),
-                Container(
-                    child: VideoProgressIndicator(
-                        urlVideo,
-                        allowScrubbing: true,
-                        colors:const VideoProgressColors(
-                          backgroundColor: Colors.redAccent,
-                          playedColor: Colors.green,
-                          bufferedColor: Colors.purple,
-                        )
+                  // ignore: dead_code
+                  ) : Text('No mostrar $urlVideo'),
+                VideoProgressIndicator(
+                    urlVideo,
+                    allowScrubbing: true,
+                    colors:const VideoProgressColors(
+                      backgroundColor: Colors.redAccent,
+                      playedColor: Colors.green,
+                      bufferedColor: Colors.purple,
                     )
                 ),
                 Text('info $urlVideo'),
-                Container( //duration of video
-                  child: Text("Total Duration: ${urlVideo.value.duration}"),
-                ),
+                Text("Total Duration: ${urlVideo.value.duration}"),
                 FloatingActionButton(
                   onPressed: () {
                     urlVideo.value.isPlaying ? urlVideo.pause() : urlVideo.play();
