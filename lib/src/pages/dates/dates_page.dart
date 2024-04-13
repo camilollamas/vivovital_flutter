@@ -9,11 +9,12 @@ import '../../models/citas.dart';
 import '../../models/horas.dart';
 
 class DatesPage extends StatefulWidget {
-  const DatesPage({super.key});
+  const DatesPage({Key? key}) : super(key: key); // Corrección aquí
 
   @override
   State<DatesPage> createState() => _DatesPageState();
 }
+
 
 class _DatesPageState extends State<DatesPage> {
   DatesController con = Get.put(DatesController());
@@ -48,7 +49,7 @@ class _DatesPageState extends State<DatesPage> {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       locale: const Locale("es", "ES"),
-      initialDate: con.diasDisponibles[0], //con.currentDate, //DateTime.now(),
+      initialDate: con.diasDisponibles[0] ?? DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2025),
       // initialDatePickerMode: DatePickerMode.day,
@@ -74,6 +75,7 @@ class _DatesPageState extends State<DatesPage> {
                 onSurface: Colors.black
             )
           ), // This will change to light theme.
+          key: UniqueKey(), 
           child:
           child ?? const Text('No se pudo seleccionar la fecha'), 
         );
@@ -88,9 +90,17 @@ class _DatesPageState extends State<DatesPage> {
         con.currentDate = pickedDate;
         fechaFormateada = dateFormat.format(pickedDate);
       });
+    }else if (con.diasDisponibles.isNotEmpty) {
+      setState(() {
+        con.currentDate = con.diasDisponibles[0];
+        fechaFormateada = dateFormat.format(con.diasDisponibles[0]);
+      });
+      con.getHoras(con.diasDisponibles[0]);
     }
+
   }
-  var scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +120,7 @@ class _DatesPageState extends State<DatesPage> {
                   ),
                   _bgDegrade(context),
                   Scaffold(
+                    key: _scaffoldKey, 
                     backgroundColor: Colors.transparent,
                     appBar: AppBar(
                       leading: IconButton(
@@ -118,7 +129,7 @@ class _DatesPageState extends State<DatesPage> {
                           color: Color(0xFFFFFFFF),
                           size: 30,
                         ),
-                        onPressed: () => {scaffoldKey.currentState?.openDrawer()},
+                        onPressed: () => _scaffoldKey.currentState?.openDrawer(),
                       ),
                       title: const Text(
                           'VitalHelp App',
@@ -143,13 +154,12 @@ class _DatesPageState extends State<DatesPage> {
                               ),
                               _divider(),
                               Visibility(
-                                // visible: con.mostrarAgenda.value == '1' ? true : false,
-                                visible: true,
+                                visible: con.haveDates.value,
                                 child: 
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      _textDateD(),
+                                      _textDateD(context),
                                       _divider(),
                                       _selectDay(context),
                                       _textHora(),
@@ -157,6 +167,10 @@ class _DatesPageState extends State<DatesPage> {
                                       _buttonAgendar()
                                     ],
                                   ),
+                              ),
+                              Visibility(
+                                visible: !con.haveDates.value,
+                                child: _noDates(context)
                               ),
                               const Divider(
                                 color: Colors.black54,
@@ -210,7 +224,6 @@ class _DatesPageState extends State<DatesPage> {
                       // children: [
                     //   ],
                     // ),
-                    key: scaffoldKey,
                     drawer: Drawer(
                       child: _drawerList(),
                     ),
@@ -223,6 +236,7 @@ class _DatesPageState extends State<DatesPage> {
 
   Widget _bgDegrade(BuildContext context){
     return Container(
+      key: UniqueKey(), 
       height: MediaQuery.of(context).size.height * 0.4,
       decoration: const BoxDecoration(
           color: Colors.transparent,
@@ -244,6 +258,7 @@ class _DatesPageState extends State<DatesPage> {
   }
   Widget _imageBgWhite(){
     return Container(
+      key: UniqueKey(), 
       width: double.infinity,
       height: double.infinity,
       color: Colors.white,
@@ -252,21 +267,23 @@ class _DatesPageState extends State<DatesPage> {
 
   Widget _buttonBack() {
     return Container(
-            margin: const EdgeInsets.only(left: 20),
-            child: IconButton(
-              onPressed: () => Get.offNamed('/home'),
-              icon: const Icon(
-                Icons.arrow_back_ios,
-                color: Color(0xFF243588),
-                size: 20,
-              ),
-            )
+      key: UniqueKey(), 
+      margin: const EdgeInsets.only(left: 20),
+      child: IconButton(
+        onPressed: () => Get.offNamed('/home'),
+        icon: const Icon(
+          Icons.arrow_back_ios,
+          color: Color(0xFF243588),
+          size: 20,
+        ),
+      )
     );
   }
   Widget _textTitlePage(){
-    return const Text(
+    return Text(
         'Citas Médicas',
-        style: TextStyle(
+        key: UniqueKey(),
+        style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w300,
           color: Color(0xFF243588),
@@ -277,7 +294,8 @@ class _DatesPageState extends State<DatesPage> {
 
   Widget _divider(){
     return
-      const Divider(
+      Divider(
+        key: UniqueKey(),
         color: Colors.black54,
         height: 10,
         thickness: 0,
@@ -285,26 +303,54 @@ class _DatesPageState extends State<DatesPage> {
         endIndent: 10,
       );
   }
-  Widget _textDateD(){
-    return  
-      Container(
-        margin:const EdgeInsets.only(top: 5),
-        width: MediaQuery.of(context).size.width * 0.90,
-        child: const Text(
-            'Para continuar con tu proceso por favor agenda tu cita.',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w300,
-              color: Color(0xFF243588),
-              fontFamily: 'AvenirReg',
-            )
-          )
-      );
-  }
+  Widget _textDateD(BuildContext context) {
+  return Container(
+    key: UniqueKey(),
+    margin: const EdgeInsets.only(top: 5),
+    width: MediaQuery.of(context).size.width * 0.90,
+    child: const Center(
+      child:  Text(
+        'Conocerte es muy importante y poder garantizar un resultado exitoso.',
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w300,
+          color: Color(0xFF243588),
+          fontFamily: 'AvenirReg',
+        ),
+        textAlign: TextAlign.center,
+      ),
+    ),
+  );
+}
   
+  Widget _noDates(BuildContext context){
+    return Container(
+      key: UniqueKey(),
+      margin: const EdgeInsets.only(left: 0, top: 20, bottom: 0),
+      child: 
+      const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.calendar_month,
+              color: Color.fromARGB(255, 200, 200, 200),
+              size: 100,
+            ),
+            Text('No hay fechas para agendar.',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w300,
+                color: Color.fromARGB(255, 200, 200, 200),
+                fontFamily: 'AvenirReg',
+              )
+            ),
+          ]
+      )
+    );
+  }
   //seleccionar hora
    Widget _textHora(){
     return Container(
+      key: UniqueKey(),
       margin: const EdgeInsets.only(top: 10),
       width: MediaQuery.of(context).size.width * 0.55,
       padding: const EdgeInsets.symmetric(horizontal: 0),
@@ -322,6 +368,7 @@ class _DatesPageState extends State<DatesPage> {
   
   Widget _inputHour(List<Hora> horas, BuildContext context){
     return Container(
+      key: UniqueKey(),
       margin: const EdgeInsets.only(top: 0),
       width: MediaQuery.of(context).size.width * 0.60,
       padding: const EdgeInsets.symmetric(horizontal: 6),
@@ -381,6 +428,7 @@ class _DatesPageState extends State<DatesPage> {
     List<DropdownMenuItem<String>> list = [];
     for (var ho in horas) {
       list.add(DropdownMenuItem(
+          key: UniqueKey(),
           value: ho.consecutivo,
           child: Text(ho.hora ?? ''),
       ));
@@ -390,6 +438,7 @@ class _DatesPageState extends State<DatesPage> {
 
   Widget _buttonAgendar(){
     return Container(
+      key: UniqueKey(),
       margin: const EdgeInsets.only(top: 20),
       width: MediaQuery.of(context).size.width * 0.60,
       child: ElevatedButton(
@@ -429,6 +478,7 @@ class _DatesPageState extends State<DatesPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          key: UniqueKey(),
           title: const Text('Confirmación de cita'),
           content: Text(
             'Confirma que desea agendar la cita de valoración:\n'
@@ -480,6 +530,7 @@ class _DatesPageState extends State<DatesPage> {
   Widget _selectDay(BuildContext context){
     return 
     Container(
+      key: UniqueKey(),
       margin: const EdgeInsets.only(top: 20),
       width: MediaQuery.of(context).size.width * 0.60,
       child: ElevatedButton(
@@ -506,6 +557,7 @@ class _DatesPageState extends State<DatesPage> {
     //final numberFormat = NumberFormat.currency(locale: 'es_MX', symbol:"\$");
 
     return Container(
+      key: UniqueKey(),
       margin: const EdgeInsets.only(top: 5),
       alignment: Alignment.center,
       child: Card(
@@ -714,7 +766,6 @@ class _DatesPageState extends State<DatesPage> {
       },
     );
   }
-
 
 
   Widget _drawerList(){

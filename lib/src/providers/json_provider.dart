@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vitalhelp_app/src/enviroment/enviroment.dart';
 import '../models/json.dart';
@@ -9,7 +11,6 @@ class JsonProvider extends GetConnect {
   String url = '${Enviroment.API_URL}json';
   String url2 = '${Enviroment.API_URL}read_docs';
   //String url = 'https://108.175.10.79/api/json';
-
 
   Future<Response> create(Json json) async {
     Response response = await post(
@@ -23,8 +24,10 @@ class JsonProvider extends GetConnect {
   }
 
   Future<ResponseApi> json(Json json) async {
-    print('====> URL  => $url');
-    print('====> JSON => ${json.toJson()}');
+    if(kDebugMode){
+      print('====> URL  => $url');
+      print('====> JSON => ${json.toJson()}');
+    }
     // print('====> JSON-METODO => ${json.metodo}');
     // print('====> JSON-PARAMETROS => ${json.parametros}');
     Response response = await post(
@@ -34,9 +37,20 @@ class JsonProvider extends GetConnect {
           'Content-Type': 'application/json'
         }
     );
-    print('json_provider => response $response');
+    if(kDebugMode){
+      print('json_provider => response $response');
+    }
     if(response.body == null){
-      Get.snackbar('Erorr', 'No se pudo ejecutar la peticion');
+      Get.snackbar(
+        'Aviso: ',
+        'Revise su conexión a internet y vuelva a intentarlo.',
+        colorText: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 255, 94, 0),
+        icon: const Icon(
+          Icons.priority_high,
+          color: Colors.white
+        )
+      );
       return ResponseApi();
     }
     ResponseApi responseApi = ResponseApi.fromJson(response.body);
@@ -44,8 +58,10 @@ class JsonProvider extends GetConnect {
   }
 
   Future<dynamic> readDocs(Map json) async {
-    print('====> URL  => $url2');
-    print('====> JSON => $json');
+    if(kDebugMode){
+      print('====> URL  => $url2');
+      print('====> JSON => $json');
+    }
     // print('====> JSON-METODO => ${json.metodo}');
     // print('====> JSON-PARAMETROS => ${json.parametros}');
     Response response = await post(
@@ -55,10 +71,21 @@ class JsonProvider extends GetConnect {
           'Content-Type': 'application/json'
         }
     );
-    print('json_provider => response ${response.statusCode}');
-    print('json_provider => body ${response.body}');
+    if(kDebugMode){
+      print('json_provider => response ${response.statusCode}');
+      print('json_provider => body ${response.body}');
+    }
     if(response.body == null){
-      Get.snackbar('Erorr', 'No se pudo ejecutar la peticion');
+      Get.snackbar(
+        'Aviso: ',
+        'Revise su conexión a internet y vuelva a intentarlo.',
+        colorText: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 255, 94, 0),
+        icon: const Icon(
+          Icons.priority_high,
+          color: Colors.white
+        )
+      );
       return ResponseApi();
     }
     // ResponseApi responseApi = ResponseApi.fromJson(response.body);

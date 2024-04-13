@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import "package:http/http.dart" as http;
 import 'package:http_parser/http_parser.dart';
 
@@ -88,8 +89,10 @@ class HomeController extends GetxController {
   void getDay() async{
     notify.clear();
     showNotify.value = false;
-    print('====> getDay <====');
-    print('====> IDAFILIADO: ${user.idafiliado}');
+    if(kDebugMode){
+      print('====> getDay <====');
+      print('====> IDAFILIADO: ${user.idafiliado}');
+    }
 
     Json json = Json(
         modelo: 'NOTIFICACIONES',
@@ -113,11 +116,15 @@ class HomeController extends GetxController {
     }
     
     super.refresh();
-    print('====> getDay Out <====');
+    if(kDebugMode){
+      print('====> getDay Out <====');
+    }
   }
 
   Future<List<Alerta>> sendNotify() async {
-    print('sendNotify =>${notify.toString()}');
+    if(kDebugMode){
+      print('sendNotify =>${notify.toString()}');
+    }
     return notify;
   }
 
@@ -235,12 +242,16 @@ class HomeController extends GetxController {
     hideLoadingDialog();
     var jsonData = jsonDecode(respStr);
     if (response.statusCode == 200) {
-      print('sucess => ${jsonData['result']}');
+      if(kDebugMode){
+        print('sucess => ${jsonData['result']}');
+      }
       getFirma(jsonData['result'], document);
 
 
     } else {
-      print('No sucess => $jsonData');
+      if(kDebugMode){
+        print('No sucess => $jsonData');
+      }
     }
     return;
   }
@@ -261,7 +272,9 @@ class HomeController extends GetxController {
 
     ResponseApi res = await jsonProvider.json(json);
     hideLoadingDialog();
-    print('Respuesta => ${res.result?.recordsets!}');
+    if(kDebugMode){
+      print('Respuesta => ${res.result?.recordsets!}');
+    }
     // var datos = {
     //   'MODELO': 'VIVO_AFI_APP',
     //   'METODO': 'FIRMARDOCUMENTO',
@@ -283,7 +296,10 @@ class HomeController extends GetxController {
         'Firma guardada',
         colorText: Colors.white,
         backgroundColor: Colors.green,
-        icon: const Icon(Icons.check)
+        icon: const Icon(
+          Icons.done,
+          color: Colors.white
+        )
     );
     Get.toNamed('/home');
     // Get.back();
@@ -353,8 +369,9 @@ class HomeController extends GetxController {
     // print('Respuesta res  -> ${res.result?.recordsets}');
 
     List<dynamic> estadoUser = res.result?.recordsets![0];
-
-    print('Estado USER =======>>>> $estadoUser');
+    if(kDebugMode){
+      print('Estado USER =======>>>> $estadoUser');
+    }
     
 
     // List<Map<String, dynamic>> listaObjetos = res.result?.recordsets![0][0];
@@ -394,9 +411,10 @@ class HomeController extends GetxController {
 
     }
     
-
-    print('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ${citaValoracionCumpli.value}');
-    print('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ${citaValoracionCumpli['ESTADOPASO']}');
+    if(kDebugMode){
+      print('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ${citaValoracionCumpli.value}');
+      print('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ${citaValoracionCumpli['ESTADOPASO']}');
+    }
     if(citaValoracionCumpli['ESTADOPASO'] == 1){
       getPrograma();
     }
@@ -461,7 +479,9 @@ class HomeController extends GetxController {
   }
 
   void getPrograma() async{
-    print('Consultando planes');
+    if(kDebugMode){
+      print('Consultando planes');
+    }
 
     var idafiliado = user.toJson();
     // showLoadingDialog();
@@ -473,7 +493,9 @@ class HomeController extends GetxController {
         });
     //
     ResponseApi res = await jsonProvider.json(json);
-    print('Respuesta res  -> ${res.result?.recordsets}');
+    if(kDebugMode){
+      print('Respuesta res  -> ${res.result?.recordsets}');
+    }
 
     var result = Planes.fromJsonList(res.result?.recordsets![0]);
     planes.addAll(result);
@@ -483,7 +505,9 @@ class HomeController extends GetxController {
 
   }
   void onGenerateLinkPaid() async {
-    print('=>=>>>=>=> Generar enlace de PAGO');
+    if(kDebugMode){
+      print('=>=>>>=>=> Generar enlace de PAGO');
+    }
   }
 
   void onSignatureHabeasData(context) {
@@ -584,11 +608,14 @@ class HomeController extends GetxController {
                                             confirmSignature(context,'TRATAMIENTO');
                                           }else{
                                             Get.snackbar(
-                                                'Aviso: ',
-                                                'Debe Firmar',
-                                                colorText: Colors.white,
-                                                backgroundColor: Colors.red,
-                                                icon: const Icon(Icons.error_outline, color: Colors.white)
+                                              'Aviso: ',
+                                              'Debe Firmar',
+                                              colorText: Colors.white,
+                                              backgroundColor: Colors.red,
+                                              icon: const Icon(
+                                                Icons.error_outline,
+                                                color: Colors.white
+                                              )
                                             );
                                           }
                                         },
@@ -619,7 +646,9 @@ class HomeController extends GetxController {
   }
 
   Future<List<Planes>> getPlanes() async {
-    print('Devolviendo planes=> ${planes.toString()}');
+    if(kDebugMode){
+      print('Devolviendo planes=> ${planes.toString()}');
+    }
     return planes;
   }
   // Consentimiento Informado
@@ -653,7 +682,9 @@ class HomeController extends GetxController {
     ResponseApi res = await jsonProvider.json(json);
     hideLoadingDialog();
     var respuesta = res.result?.recordsets[0];
-    print('Respuesta => ${respuesta[0]}');
+    if(kDebugMode){
+      print('Respuesta => ${respuesta[0]}');
+    }
 
     keyPublic.value = respuesta[0]['KEYPUB'];
     keyPrivated.value = respuesta[0]['KEYPRIVATED'];

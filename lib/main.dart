@@ -12,6 +12,7 @@ import 'package:vitalhelp_app/src/pages/notifications/notifications_page.dart';
 import 'package:vitalhelp_app/src/pages/profile/profile_page.dart';
 import 'package:vitalhelp_app/src/pages/profile/update/update_profile_page.dart';
 import 'package:vitalhelp_app/src/pages/register/register_page.dart';
+import 'package:vitalhelp_app/src/pages/rememberPassword/remember_page.dart';
 import 'package:vitalhelp_app/src/pages/home/home_page.dart';
 import 'package:vitalhelp_app/src/pages/paid/paid_page.dart';
 
@@ -73,8 +74,9 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: userSession.idafiliado != null  ? '/home' :  '/',
       getPages: [
-        GetPage(name: '/', page: () => LoginPage() ),
+        GetPage(name: '/', page: () => const LoginPage() ),
         GetPage(name: '/register', page: () => const RegisterPage() ),
+        GetPage(name: '/remember', page: () => RememberPage() ),
         GetPage(name: '/home', page: () => HomePage() ),
         GetPage(name: '/profile', page: () => ProfilePage() ),
         GetPage(name: '/update_profile', page: () => UpdateProfilePage() ),

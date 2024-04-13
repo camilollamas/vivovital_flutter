@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -71,10 +72,10 @@ class NotificationsController extends GetxController {
   void getDay() async{
     notify.clear();
     showNotify.value = false;
-    print('====> getDay <====');
+    // print('====> getDay <====');
     String date = selectedDate.value.toString();
-    print('====> FECHA: ${date.substring(0,10)}');
-    print('====> IDAFILIADO: ${user.idafiliado}');
+    // print('====> FECHA: ${date.substring(0,10)}');
+    // print('====> IDAFILIADO: ${user.idafiliado}');
 
     showLoadingDialog();
     Json json = Json(
@@ -99,11 +100,11 @@ class NotificationsController extends GetxController {
       showNotify.value= true;
     }
     super.refresh();
-    print('====> getDay Out <====');
+    // print('====> getDay Out <====');
   }
   
   Future<List<Alerta>> sendNotify() async {
-    print('sendNotify =>${notify.toString()}');
+    // print('sendNotify =>${notify.toString()}');
     return notify;
   }
 
@@ -113,7 +114,7 @@ class NotificationsController extends GetxController {
     descVideo.value=desc!;
     update();
 
-    print('===>>> getVideo <<<=== $iddoc');
+    // print('===>>> getVideo <<<=== $iddoc');
 
     // return true;
 
@@ -127,7 +128,7 @@ class NotificationsController extends GetxController {
     ResponseApi res = await jsonProvider.json(json);
 
     var result = res.result!.recordsets[0][0];
-    print('=>>> $result');
+    // print('=>>> $result');
     Map<String, dynamic> readDocs =
     {
       'Tabla':'DOCS',
@@ -143,9 +144,9 @@ class NotificationsController extends GetxController {
 
     hideLoadingDialog();
     if(resp['res'] == 'ok'){
-      print('RESP=> ${resp['result']}');
+      // print('RESP=> ${resp['result']}');
       urlVideo.value = 'http://5.161.183.200:82/${resp['result']['sourcePath']}';
-      print('urlVideo ${urlVideo.value}');
+      // print('urlVideo ${urlVideo.value}');
       return true;
       showVideo(context, urlVideo.value);
     }
@@ -160,7 +161,7 @@ class NotificationsController extends GetxController {
       super.refresh();
     });
 
-    print('urlVideo => ${urlVideo.value.aspectRatio}');
+    // print('urlVideo => ${urlVideo.value.aspectRatio}');
     showDialog(
         context: context,
         builder: (_) => SimpleDialog(
@@ -254,12 +255,14 @@ class NotificationsController extends GetxController {
   }
 
   void changeTab(context, int? tab){
-    print('contexto => $context');
+    // print('contexto => $context');
     DefaultTabController.of(context).animateTo(1);
     updates();
   }
 
   NotificationsController(){
-    print('Notifications Controller -> User -> : ${user.toJson()}');
+    if(kDebugMode){
+      print('Notifications Controller -> User -> : ${user.toJson()}');
+    }
   }
 }

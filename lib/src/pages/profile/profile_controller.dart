@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:vitalhelp_app/src/models/user.dart';
@@ -18,7 +19,9 @@ class ProfileController extends GetxController {
   Tgensel prepagada = Tgensel();
 
   ProfileController(){
-    print('Profile Controller -> User -> : ${user.toJson()}');
+    if(kDebugMode){
+      print('Profile Controller -> User -> : ${user.toJson()}');
+    }
   }
 
   void onEditProfile(){
@@ -29,9 +32,10 @@ class ProfileController extends GetxController {
   }
 
   void setValues(){
-    print('====>  setValuesProfile <====');
-    print('user.EPS => ${user.aseguradora}');
-
+    if(kDebugMode){
+      print('====>  setValuesProfile <====');
+      print('user.EPS => ${user.aseguradora}');
+    }
     if(user.aseguradora != null){
       getEPS();
     }

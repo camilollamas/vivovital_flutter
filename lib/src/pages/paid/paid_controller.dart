@@ -53,7 +53,10 @@ class PaidController extends GetxController {
           'Error en los números de la tarjeta.',
           colorText: Colors.white,
           backgroundColor: Colors.red,
-          icon: const Icon(Icons.error_outline)
+          icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
       );
       return false;
     }
@@ -63,7 +66,10 @@ class PaidController extends GetxController {
           'Error en la fecha de expiración.',
           colorText: Colors.white,
           backgroundColor: Colors.red,
-          icon: const Icon(Icons.error_outline)
+          icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
       );
       return false;
     }
@@ -73,7 +79,10 @@ class PaidController extends GetxController {
           'Error en el nombre del titular.',
           colorText: Colors.white,
           backgroundColor: Colors.red,
-          icon: const Icon(Icons.error_outline)
+          icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
       );
       return false;
     }
@@ -83,7 +92,10 @@ class PaidController extends GetxController {
           'Error en el código de seguridad.',
           colorText: Colors.white,
           backgroundColor: Colors.red,
-          icon: const Icon(Icons.error_outline)
+          icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
       );
       return false;
     }
@@ -93,7 +105,10 @@ class PaidController extends GetxController {
           'Error en el tipo de documento del titular.',
           colorText: Colors.white,
           backgroundColor: Colors.red,
-          icon: const Icon(Icons.error_outline)
+          icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
       );
       return false;
     }
@@ -103,7 +118,10 @@ class PaidController extends GetxController {
           'Error en el número de documento del titular.',
           colorText: Colors.white,
           backgroundColor: Colors.red,
-          icon: const Icon(Icons.error_outline)
+          icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
       );
       return false;
     }
@@ -251,15 +269,18 @@ class PaidController extends GetxController {
             'Ha ocurrido un error, vuelva a intentar.',
             colorText: Colors.white,
             backgroundColor: Colors.red,
-            icon: const Icon(Icons.error_outline)
+            icon: const Icon(
+              Icons.error_outline,
+              color: Colors.white
+            )
         );
         return;
       }
       cardId = resp['data']['id'];
-    print('cardId : $cardId');
+    // print('cardId : $cardId');
 
     //Create payment source create_pay_source
-    print('================= Create payment source =========================');
+    // print('================= Create payment source =========================');
 
       Map<String, String> paymentSource = {
         "type": "CARD",
@@ -276,11 +297,14 @@ class PaidController extends GetxController {
             'Ha ocurrido un error, vuelva a intentar.',
             colorText: Colors.white,
             backgroundColor: Colors.red,
-            icon: const Icon(Icons.error_outline)
+            icon: const Icon(
+              Icons.error_outline,
+              color: Colors.white
+            )
         );
         return;
       }
-    print('=> create_pay_source id -> ${respo['data']}');
+    // print('=> create_pay_source id -> ${respo['data']}');
       paySourceId = respo['data']['id'] as int;
 
 
@@ -326,7 +350,10 @@ class PaidController extends GetxController {
             'Ha ocurrido un error, vuelva a intentar.',
             colorText: Colors.white,
             backgroundColor: Colors.red,
-            icon: const Icon(Icons.error_outline)
+            icon: const Icon(
+              Icons.error_outline,
+              color: Colors.white
+            )
         );
         return;
       }
@@ -347,7 +374,10 @@ class PaidController extends GetxController {
             'Ha ocurrido un error, vuelva a intentar.',
             colorText: Colors.white,
             backgroundColor: Colors.red,
-            icon: const Icon(Icons.error_outline)
+            icon: const Icon(
+              Icons.error_outline,
+              color: Colors.white
+            )
         );
         return;
       }
@@ -375,7 +405,10 @@ class PaidController extends GetxController {
             'Pago procesado correctamente!',
             colorText: Colors.white,
             backgroundColor: Colors.green,
-            icon: const Icon(Icons.check)
+            icon: const Icon(
+              Icons.done,
+              color: Colors.white
+            )
         );
         // Get.toNamed('/home');
         hideLoadingDialog();
@@ -388,7 +421,10 @@ class PaidController extends GetxController {
             'Intenta nuevamente o prueba con otra tarjeta.',
             colorText: Colors.white,
             backgroundColor: Colors.red,
-            icon: const Icon(Icons.error_outline)
+            icon: const Icon(
+              Icons.error_outline,
+              color: Colors.white
+            )
         );
         hideLoadingDialog();
       }

@@ -19,6 +19,7 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterState();
 }
 class _RegisterState extends State<RegisterPage> {
+  
   RegisterController con = Get.put(RegisterController());
   Future<void>? _launched;
 
@@ -441,9 +442,12 @@ class _RegisterState extends State<RegisterPage> {
         margin: const EdgeInsets.only( top: 20 , left: 0, right: 0),
         child: Text(
           'Fecha de nacimiento: '
-              '${con.dayBird == '' ? 'dd' : con.dayBird}'
-              '/${con.MontBird == '' ? 'mm' : con.MontBird}'
-              '/${con.yearBird == '' ? 'aaaa' : con.yearBird}',
+              // ignore: unrelated_type_equality_checks
+              '${con.dayBird == '' ? '' : con.dayBird}'
+              // ignore: unrelated_type_equality_checks
+              '/${con.MontBird == '' ? '' : con.MontBird}'
+              // ignore: unrelated_type_equality_checks
+              '/${con.yearBird == '' ? '' : con.yearBird}',
           style: const TextStyle(
             color: Colors.black,
               fontSize: 17

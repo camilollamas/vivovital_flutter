@@ -420,7 +420,8 @@ class ProfilePage extends StatelessWidget {
             // Text('okbd=> ${con.user.okbd ?? ''}'),
 
             Visibility(
-              visible: con.user.okbd == '0',
+              // ignore: unrelated_type_equality_checks
+              visible: con.user.okbd == 0,
                 child: _bannerInfo(),
             ),
             _imageAvatar(),
@@ -445,6 +446,7 @@ class ProfilePage extends StatelessWidget {
             _prepaid(),
             _whoPrepaid(),
             _btnEdit(),
+
           ]
         )
       )

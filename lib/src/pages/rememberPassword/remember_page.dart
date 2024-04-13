@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vitalhelp_app/src/pages/login/login_controller.dart';
+import 'package:vitalhelp_app/src/pages/rememberPassword/remember_controller.dart';
 
 
+class RememberPage extends StatefulWidget {
+  const RememberPage({super.key});
 
-class LoginPage extends StatefulWidget {
-   const LoginPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginState();
+  State<RememberPage> createState() => _RememberState();
 }
 
 
-// class LoginPage extends StatelessWidget {
-class _LoginState extends State<LoginPage> {
-  LoginController con = Get.put(LoginController());
 
-  // LoginPage({super.key});
+
+class _RememberState extends State<RememberPage>  {
+  RememberController con = Get.put(RememberController());
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +31,10 @@ class _LoginState extends State<LoginPage> {
           _bgDegrade(context),
           Scaffold(
             backgroundColor: Colors.transparent,
-            body: Stack(
+            body: Obx(() => Stack(
               children: [
                 _boxForm(context),
+                _buttonBack(),
                 Column(
                   children:[
                     _imageLogo(),
@@ -42,13 +43,28 @@ class _LoginState extends State<LoginPage> {
                   ]
                 )
               ]
-            )
+            ))
           )
         ]
       );
   }
 
   //Métodos Privados
+  Widget _buttonBack() {
+    return SafeArea(
+      child: Container(
+        margin: const EdgeInsets.only(left: 20),
+        child: IconButton(
+          onPressed: () => Get.back(),
+          icon: const Icon(
+              Icons.arrow_back_ios,
+              color: Color(0xFF243588),
+              size: 30,
+          ),
+        )
+      )
+    );
+  }
   Widget _imageLogo(){
     return SafeArea(
       child: Container(
@@ -103,7 +119,7 @@ class _LoginState extends State<LoginPage> {
 
   Widget _textLogin(){
     return const Text(
-      'Iniciar Sesión',
+      'Recuperar Contraseña',
       style: TextStyle(
         fontSize: 30,
         fontWeight: FontWeight.w300,
@@ -113,38 +129,22 @@ class _LoginState extends State<LoginPage> {
     );
   }
 
- Widget _textDontHaveAccount(){
-  return Container(
-    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-    child: Center( // Aquí envolvemos el Row con un Center
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center, // Alinear los hijos al centro horizontalmente
-        children:[
-          const Text(
-            '¿No tienes cuenta?',
-            style: TextStyle(
-              fontSize: 14,
-              fontFamily: 'AvenirReg',
-            )
+  Widget _textMessageInformation(){
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      child: const Center(
+        child: Text(
+          'Se enviará un código de validación al correo electrónico registrado.',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 14,
+            fontFamily: 'AvenirReg',
           ),
-          const SizedBox(width: 7),
-          GestureDetector(
-            onTap: () => con.goToRegisterPage(),
-            child: const Text(
-              'Regístrate aquí',
-              style: TextStyle(
-                color: Color(0xff243588),
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'AvenirReg',
-              )
-            ),
-          )
-        ]
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
+
 
 
   Widget _textRemmemberPass(BuildContext context){
@@ -157,7 +157,7 @@ class _LoginState extends State<LoginPage> {
         children:[
           const SizedBox(width: 7),
           GestureDetector(
-            onTap: () => con.goToRememberPage(),
+            onTap: () => con.goToRegisterPage(),
             child: const Text(
               'Recuperar contraseña',
               style: TextStyle(
@@ -181,11 +181,30 @@ class _LoginState extends State<LoginPage> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            _textFieldEmail(),
-            _textFieldPassword(),
-            _buttonLogin(context),
-            _textDontHaveAccount(),
-            _textRemmemberPass(context)
+            Visibility(
+                visible: con.showPassInputs.value ? false : true,
+                child: Column(
+                  children: [
+                    _textFieldEmail(),
+                    _textMessageInformation(),  
+                    _buttonValidate(context),
+                  ],
+                ),
+            ),
+            // _textFieldPassword(),
+            Visibility(
+                visible: con.showPassInputs.value ? true : false,
+                child: 
+                  Column(
+                    children: [
+                      _inputPassword(),
+                      _inputConfirmPassword(),
+                      _buttonSavePass(context),
+                    ]
+                  )
+
+            )
+            // _textRemmemberPass(context)
           ]
         ),
       )
@@ -205,18 +224,41 @@ class _LoginState extends State<LoginPage> {
       ),
     );
   }
-  bool hidePassword = true;
-  Widget _textFieldPassword(){
+
+  Widget _buttonValidate(BuildContext context){
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 0),
-      child: TextField(
-          controller: con.passwordController,
-          keyboardType: TextInputType.text,
-          obscureText: hidePassword,
-          decoration: InputDecoration(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+      child: ElevatedButton(
+          onPressed: () =>
+          {
+          con.validateEmail(context),
+          },
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 5)
+          ),
+          child: const Text(
+            'Solicitar código',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w300,
+              fontFamily: 'AvenirReg',
+            ),
+          )
+      ),
+    );
+  }
+  
+  bool hidePassword = true;
+  Widget _inputPassword(){
+    return Container(
+        child: TextField(
+            controller: con.passwordController,
+            obscureText: hidePassword,
+            decoration: InputDecoration(
               // border: OutlineInputBorder(),
-              labelText: 'Contraseña',
-              prefixIcon: const Icon(Icons.lock),
+              labelText: 'Nueva Contraseña',
               suffixIcon: IconButton(
                 onPressed: () {
                   setState(() {
@@ -229,24 +271,35 @@ class _LoginState extends State<LoginPage> {
                 )
               )
             )
-      ),
+        )
     );
   }
-  Widget _buttonLogin(BuildContext context){
+  Widget _inputConfirmPassword(){
+    return Container(
+        child: TextField(
+            controller: con.confirmPasswordController,
+            obscureText: hidePassword,
+            decoration: const InputDecoration(
+            //  border: OutlineInputBorder(),
+              labelText: 'Confirmar contraseña',
+            )
+        )
+    );
+  }
+  Widget _buttonSavePass(BuildContext context){
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
       child: ElevatedButton(
           onPressed: () =>
           {
-            // _showLoading(context)
-          con.login(context),
+            con.savePassword(context),
           },
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(vertical: 5)
           ),
           child: const Text(
-            'Iniciar Sesión',
+            'Guardar',
             style: TextStyle(
               color: Colors.white,
               fontSize: 20,
@@ -257,5 +310,4 @@ class _LoginState extends State<LoginPage> {
       ),
     );
   }
-
 }

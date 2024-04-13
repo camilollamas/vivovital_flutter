@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 // import "package:http/http.dart" as http;
@@ -13,7 +14,9 @@ class WompiProvider extends GetConnect {
           'Content-Type': 'application/json'
         }
     );
-    print('acceptance_token => acceptance_token ${response.body}');
+    if(kDebugMode){
+      print('acceptance_token => acceptance_token ${response.body}');
+    }
     if(response.body == null){
       return {"status":"ERROR"};
     }
@@ -22,7 +25,9 @@ class WompiProvider extends GetConnect {
   }
 
   Future<dynamic> create_card(String UrlWompi, Map data, String pubKey) async {
-    print(data);
+    if(kDebugMode){
+      print(data);
+    }
     dynamic response = await post(
         '$UrlWompi/tokens/cards',
         data,
@@ -31,7 +36,9 @@ class WompiProvider extends GetConnect {
           'Authorization': 'Bearer $pubKey',
         }
     );
-    print('create_card =>  ${response.body}');
+    if(kDebugMode){
+      print('create_card =>  ${response.body}');
+    }
     if(response.statusCode == 201){
       return response.body;
     }else{
@@ -41,8 +48,10 @@ class WompiProvider extends GetConnect {
   }
 
   Future<dynamic> create_pay_source(String UrlWompi, Map data, String prvKey) async {
-    print('create_pay_source data: $data');
-    print('create_pay_source prv_key: $prvKey');
+    if(kDebugMode){
+      print('create_pay_source data: $data');
+      print('create_pay_source prv_key: $prvKey');
+    }
     dynamic response = await post(
         '$UrlWompi/payment_sources',
         data,
@@ -51,8 +60,10 @@ class WompiProvider extends GetConnect {
           'Authorization': 'Bearer $prvKey',
         }
     );
-    print('wompi_provider => create_pay_source statusCode ${response.statusCode}');
-    print('wompi_provider => create_pay_source body ${response.body}');
+    if(kDebugMode){
+      print('wompi_provider => create_pay_source statusCode ${response.statusCode}');
+      print('wompi_provider => create_pay_source body ${response.body}');
+    }
 
     if(response.statusCode == 201){
       return response.body;
@@ -70,9 +81,10 @@ class WompiProvider extends GetConnect {
           'Authorization': 'Bearer $prvKey',
         }
     );
-    print('wompi_provider => create_transaction statusCode ${response.statusCode}');
-    print('wompi_provider => create_transaction body ${response.body}');
-
+    if(kDebugMode){
+      print('wompi_provider => create_transaction statusCode ${response.statusCode}');
+      print('wompi_provider => create_transaction body ${response.body}');
+    }
     if(response.statusCode == 201){
       return response.body;
     }else{
@@ -87,7 +99,9 @@ class WompiProvider extends GetConnect {
           'Content-Type': 'application/json'
         }
     );
-    print('get_transactions => get_transactions ${response.body}');
+    if(kDebugMode){
+      print('get_transactions => get_transactions ${response.body}');
+    }
     if(response.body == null){
       return {"status":"ERROR"};
     }

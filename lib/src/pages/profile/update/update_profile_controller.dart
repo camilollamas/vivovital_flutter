@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -81,11 +82,15 @@ class UpdatePropfileController extends GetxController {
   TextEditingController companyController   = TextEditingController();
 
   UpdatePropfileController(){
-    print('Update Profile Controller -> User -> : ${user.toJson()}');
+    if(kDebugMode){
+      print('Update Profile Controller -> User -> : ${user.toJson()}');
+    }
   }
 
   void setValues(){
-    print('SetValues => ${user.toJson()}');
+    if(kDebugMode){
+      print('SetValues => ${user.toJson()}');
+    }
     pnombreController.text = user.pnombre!;
     snombreController.text = user.snombre!;
     papellidoController.text = user.papellido!;
@@ -125,7 +130,6 @@ class UpdatePropfileController extends GetxController {
   }
 
   void getCountries() async{
-    print('getCountries');
     idCiudad= ''.obs;
     ciuOpt.clear();
 
@@ -164,7 +168,9 @@ class UpdatePropfileController extends GetxController {
     hideLoadingDialog();
 
     if(res.res == 'ok'){
-      print('Respuesta res  -> ${res.result?.recordsets![0]}');
+      if(kDebugMode){
+        print('Respuesta res  -> ${res.result?.recordsets![0]}');
+      }
       var ciu = res.result?.recordsets![0];
       var result = Ciudad.fromJsonList(res.result?.recordsets![0]);
       ciuOpt.addAll(result);
@@ -182,7 +188,9 @@ class UpdatePropfileController extends GetxController {
     );
     ResponseApi res = await jsonProvider.json(json);
     if(res.res == 'ok'){
-      print('Respuesta res  -> ${res.result?.recordsets![0]}');
+      if(kDebugMode){
+        print('Respuesta res  -> ${res.result?.recordsets![0]}');
+      }
       var result = Tgensel.fromJsonList(res.result?.recordsets![0]);
       ocupations.addAll(result);
       if(user.ocupacion != null) {
@@ -203,7 +211,9 @@ class UpdatePropfileController extends GetxController {
     );
     ResponseApi res = await jsonProvider.json(json);
     if(res.res == 'ok'){
-      print('Respuesta res  -> ${res.result?.recordsets![0]}');
+      if(kDebugMode){
+        print('Respuesta res  -> ${res.result?.recordsets![0]}');
+      }
       var result = Tgensel.fromJsonList(res.result?.recordsets![0]);
       schools.addAll(result);
       if(user.idescolaridad != null) {
@@ -224,7 +234,9 @@ class UpdatePropfileController extends GetxController {
     );
     ResponseApi res = await jsonProvider.json(json);
     if(res.res == 'ok'){
-      print('Respuesta res  -> ${res.result?.recordsets![0]}');
+      if(kDebugMode){
+        print('Respuesta res  -> ${res.result?.recordsets![0]}');
+      }
       var result = Tgensel.fromJsonList(res.result?.recordsets![0]);
       epss.addAll(result);
       if(user.aseguradora != null) {
@@ -249,7 +261,9 @@ class UpdatePropfileController extends GetxController {
     );
     ResponseApi res = await jsonProvider.json(json);
     if(res.res == 'ok'){
-      print('Respuesta res  -> ${res.result?.recordsets![0]}');
+      if(kDebugMode){
+        print('Respuesta res  -> ${res.result?.recordsets![0]}');
+      }
       var result = Tgensel.fromJsonList(res.result?.recordsets![0]);
       typesAfi.addAll(result);
       if(user.idtipoafiliacion != null) {
@@ -261,7 +275,9 @@ class UpdatePropfileController extends GetxController {
   }
 
   void onUpdateProfile(){
-    print(' =====>>>> onUpdateProfile <<<<==== ');
+    if(kDebugMode){
+      print(' =====>>>> onUpdateProfile <<<<==== ');
+    }
 
     String firstName = pnombreController.text.trim();
     String secName = snombreController.text.trim();
@@ -323,7 +339,10 @@ class UpdatePropfileController extends GetxController {
           'Formulario correcto.',
           colorText: Colors.white,
           backgroundColor: Colors.green,
-          icon: const Icon(Icons.add_alert)
+          icon: const Icon(
+            Icons.done,
+            color: Colors.white
+          )
       );
 
     }else{
@@ -354,7 +373,10 @@ class UpdatePropfileController extends GetxController {
               'Debe Diligenciar el primer Nombre.',
               colorText: Colors.white,
               backgroundColor: Colors.red,
-              icon: const Icon(Icons.error_outline)
+              icon: const Icon(
+                Icons.error_outline,
+                color: Colors.white
+              )
           );
           return false;
         }
@@ -364,7 +386,10 @@ class UpdatePropfileController extends GetxController {
               'Debe Diligenciar el primer Apellido.',
               colorText: Colors.white,
               backgroundColor: Colors.red,
-              icon: const Icon(Icons.error_outline)
+              icon: const Icon(
+                Icons.error_outline,
+                color: Colors.white
+              )
           );
           return false;
         }
@@ -374,7 +399,10 @@ class UpdatePropfileController extends GetxController {
               'Debe Diligenciar el número de documento.',
               colorText: Colors.white,
               backgroundColor: Colors.red,
-              icon: const Icon(Icons.error_outline)
+              icon: const Icon(
+                Icons.error_outline,
+                color: Colors.white
+              )
           );
           return false;
         }
@@ -384,7 +412,10 @@ class UpdatePropfileController extends GetxController {
               'Debe Diligenciar teléfono.',
               colorText: Colors.white,
               backgroundColor: Colors.red,
-              icon: const Icon(Icons.error_outline)
+              icon: const Icon(
+                Icons.error_outline,
+                color: Colors.white
+              )
           );
           return false;
         }
@@ -394,7 +425,10 @@ class UpdatePropfileController extends GetxController {
               'Debe diligenciar un Email.',
               colorText: Colors.white,
               backgroundColor: Colors.red,
-              icon: const Icon(Icons.error_outline)
+              icon: const Icon(
+                Icons.error_outline,
+                color: Colors.white
+              )
           );
           return false;
         }
@@ -404,7 +438,10 @@ class UpdatePropfileController extends GetxController {
               'Debe ingresar un Email válido.',
               colorText: Colors.white,
               backgroundColor: Colors.red,
-              icon: const Icon(Icons.error_outline)
+             icon: const Icon(
+                Icons.error_outline,
+                color: Colors.white
+              )
           );
           return false;
         }
@@ -414,7 +451,10 @@ class UpdatePropfileController extends GetxController {
               'Debe Seleccionar un departamento.',
               colorText: Colors.white,
               backgroundColor: Colors.red,
-              icon: const Icon(Icons.error_outline)
+              icon: const Icon(
+                Icons.error_outline,
+                color: Colors.white
+              )
           );
           return false;
         }
@@ -424,7 +464,10 @@ class UpdatePropfileController extends GetxController {
               'Debe Seleccionar una Ciudad.',
               colorText: Colors.white,
               backgroundColor: Colors.red,
-              icon: const Icon(Icons.error_outline)
+              icon: const Icon(
+                Icons.error_outline,
+                color: Colors.white
+              )
           );
           return false;
         }
@@ -434,7 +477,10 @@ class UpdatePropfileController extends GetxController {
               'Debe ingresar una dirección.',
               colorText: Colors.white,
               backgroundColor: Colors.red,
-              icon: const Icon(Icons.error_outline)
+              icon: const Icon(
+                Icons.error_outline,
+                color: Colors.white
+              )
           );
           return false;
         }
@@ -444,7 +490,10 @@ class UpdatePropfileController extends GetxController {
               'Debe Seleccionar su estado civil.',
               colorText: Colors.white,
               backgroundColor: Colors.red,
-              icon: const Icon(Icons.error_outline)
+              icon: const Icon(
+                Icons.error_outline,
+                color: Colors.white
+              )
           );
           return false;
         }
@@ -454,7 +503,10 @@ class UpdatePropfileController extends GetxController {
               'Debe Seleccionar su Ocupación.',
               colorText: Colors.white,
               backgroundColor: Colors.red,
-              icon: const Icon(Icons.error_outline)
+              icon: const Icon(
+                Icons.error_outline,
+                color: Colors.white
+              )
           );
           return false;
         }
@@ -464,7 +516,10 @@ class UpdatePropfileController extends GetxController {
               'Debe ingresar Empresa o Institución.',
               colorText: Colors.white,
               backgroundColor: Colors.red,
-              icon: const Icon(Icons.error_outline)
+              icon: const Icon(
+                Icons.error_outline,
+                color: Colors.white
+              )
           );
           return false;
         }
@@ -474,7 +529,10 @@ class UpdatePropfileController extends GetxController {
               'Debe seleccionar Escolaridad.',
               colorText: Colors.white,
               backgroundColor: Colors.red,
-              icon: const Icon(Icons.error_outline)
+              icon: const Icon(
+                Icons.error_outline,
+                color: Colors.white
+              )
           );
           return false;
         }
@@ -484,7 +542,10 @@ class UpdatePropfileController extends GetxController {
               'Debe seleccionar EPS.',
               colorText: Colors.white,
               backgroundColor: Colors.red,
-              icon: const Icon(Icons.error_outline)
+              icon: const Icon(
+                Icons.error_outline,
+                color: Colors.white
+              )
           );
           return false;
         }
@@ -494,7 +555,10 @@ class UpdatePropfileController extends GetxController {
               'Debe seleccionar Tipo Afiliación.',
               colorText: Colors.white,
               backgroundColor: Colors.red,
-              icon: const Icon(Icons.error_outline)
+              icon: const Icon(
+                Icons.error_outline,
+                color: Colors.white
+              )
           );
           return false;
         }
@@ -504,7 +568,10 @@ class UpdatePropfileController extends GetxController {
               'Debe seleccionar si tiene Prepagada/Póliza/Plan Complementario.',
               colorText: Colors.white,
               backgroundColor: Colors.red,
-              icon: const Icon(Icons.error_outline)
+              icon: const Icon(
+                Icons.error_outline,
+                color: Colors.white
+              )
           );
           return false;
         }
@@ -515,14 +582,14 @@ class UpdatePropfileController extends GetxController {
                 'Debe Seleccioanr su Prepagada/Póliza/Plan Complementario.',
                 colorText: Colors.white,
                 backgroundColor: Colors.red,
-                icon: const Icon(Icons.error_outline)
+                icon: const Icon(
+                Icons.error_outline,
+                color: Colors.white
+              )
             );
             return false;
           }
         }
-
-
-
     return true;
   }
 
@@ -535,14 +602,14 @@ class UpdatePropfileController extends GetxController {
     );
 
     ResponseApi res = await jsonProvider.json(json);
-    print('Respuesta => ${res.result?.recordsets!}');
+    // print('Respuesta => ${res.result?.recordsets!}');
     hideLoadingDialog();
     if(res.res == 'ok') {
       if(res.result?.recordset![0].ok == 'OK'){
         List Afiliado = res.result?.recordsets![1];
         Map afi = Afiliado[0];
         GetStorage().write('user', afi);
-        print('Respuesta => ${res.result?.recordsets!}');
+        // print('Respuesta => ${res.result?.recordsets!}');
 
         Get.offNamedUntil('/profile', (route) => false);
       }else{
@@ -553,18 +620,23 @@ class UpdatePropfileController extends GetxController {
             detail['ERROR'],
             colorText: Colors.white,
             backgroundColor: Colors.red,
-            icon: const Icon(Icons.error_outline)
+            icon: const Icon(
+              Icons.error_outline,
+              color: Colors.white
+            )
         );
       }
     }else{
-      print('Ha Error API');
+      if(kDebugMode){
+        print('Ha Error API');
+      }
     }
 
 
   }
 
   void updateValues (){
-    print('prepaid=> $prepaid');
+    // print('prepaid=> $prepaid');
     super.refresh();
   }
 }

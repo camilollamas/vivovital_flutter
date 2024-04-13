@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:load/load.dart';
@@ -245,7 +246,10 @@ class RegisterController extends GetxController {
          'Debe Diligenciar el primer Nombre.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -255,7 +259,10 @@ class RegisterController extends GetxController {
          'Debe Diligenciar el primer Apellido.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -265,7 +272,10 @@ class RegisterController extends GetxController {
          'Debe Diligenciar el tipo de documento.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -275,7 +285,10 @@ class RegisterController extends GetxController {
          'Debe Diligenciar el número de documento.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -285,7 +298,10 @@ class RegisterController extends GetxController {
          'Debe Diligenciar el genero.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -295,7 +311,10 @@ class RegisterController extends GetxController {
          'Debe Diligenciar el día de nacimiento.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -305,7 +324,10 @@ class RegisterController extends GetxController {
          'Debe Diligenciar mes de nacimiento.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -315,7 +337,10 @@ class RegisterController extends GetxController {
          'Debe Diligenciar el año de nacimiento.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -325,7 +350,10 @@ class RegisterController extends GetxController {
          'Debe Diligenciar teléfono.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -335,7 +363,10 @@ class RegisterController extends GetxController {
          'Debe diligenciar un Email.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -345,7 +376,10 @@ class RegisterController extends GetxController {
          'Debe ingresar un Email válido.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -355,7 +389,10 @@ class RegisterController extends GetxController {
          'Debe confirmar el Email.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -365,7 +402,10 @@ class RegisterController extends GetxController {
          'Los Emails no coinciden.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -376,7 +416,10 @@ class RegisterController extends GetxController {
          'Debe Seleccionar un departamento.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -386,7 +429,10 @@ class RegisterController extends GetxController {
          'Debe Seleccionar una Ciudad.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -396,7 +442,10 @@ class RegisterController extends GetxController {
          'Debe ingresar una direccion.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -407,7 +456,10 @@ class RegisterController extends GetxController {
          'Debe ingresar una contraseña.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -417,7 +469,10 @@ class RegisterController extends GetxController {
          'Debe ingresar una contraseña.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -428,7 +483,10 @@ class RegisterController extends GetxController {
          'Las contraseñas deben coincidir.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -439,7 +497,10 @@ class RegisterController extends GetxController {
        'Debe aceptar los términos y condiciones.',
        colorText: Colors.white,
        backgroundColor: Colors.red,
-       icon: const Icon(Icons.error_outline)
+       icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -449,7 +510,10 @@ class RegisterController extends GetxController {
          'Debe aceptar los criterios de exclusión.',
          colorText: Colors.white,
          backgroundColor: Colors.red,
-         icon: const Icon(Icons.error_outline)
+         icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
      );
      return false;
    }
@@ -483,7 +547,10 @@ class RegisterController extends GetxController {
             'Código enviado',
             colorText: Colors.white,
             backgroundColor: Colors.green,
-            icon: const Icon(Icons.send)
+            icon: const Icon(
+              Icons.done,
+              color: Colors.white
+            )
         );
         List code = res.result?.recordsets![1];
         Map validateCode = code[0];
@@ -503,11 +570,16 @@ class RegisterController extends GetxController {
             detail['ERROR'],
             colorText: Colors.white,
             backgroundColor: Colors.red,
-            icon: const Icon(Icons.error_outline)
+            icon: const Icon(
+              Icons.error_outline,
+              color: Colors.white
+            )
         );
       }
     }else{
-      print('Ha Error API');
+      if (kDebugMode) {
+        print('Ha Error API');
+      }
     }
   }
   void showConfirmDialog(email, phone, context){
@@ -614,7 +686,10 @@ class RegisterController extends GetxController {
           'Código correcto',
           colorText: Colors.white,
           backgroundColor: Colors.green,
-          icon: const Icon(Icons.check_circle_outline_outlined)
+          icon: const Icon(
+            Icons.done,
+            color: Colors.white
+          )
       );
       saveUser();
     }else{
@@ -623,7 +698,10 @@ class RegisterController extends GetxController {
           'Código incorrecto',
           colorText: Colors.white,
           backgroundColor: Colors.red,
-          icon: const Icon(Icons.error_outline)
+          icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
       );
     }
   }
@@ -648,11 +726,16 @@ class RegisterController extends GetxController {
             detail['ERROR'],
             colorText: Colors.white,
             backgroundColor: Colors.red,
-            icon: const Icon(Icons.error_outline)
+            icon: const Icon(
+              Icons.error_outline,
+              color: Colors.white
+            )
         );
       }
     }else{
-      print('Ha Error API');
+      if (kDebugMode) {
+        print('Ha ocurrido un error en la API');
+      }
     }
 
 

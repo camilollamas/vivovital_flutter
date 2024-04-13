@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -11,7 +12,9 @@ class LoginController extends GetxController {
 
   LoginController(){
     GetStorage().write('user', {});
-    print('=====>>>> LoginController');
+    if(kDebugMode){
+      print('=====>>>> LoginController');
+    }
   }
 
   TextEditingController emailController = TextEditingController();
@@ -21,6 +24,9 @@ class LoginController extends GetxController {
   //
   void goToRegisterPage(){
     Get.toNamed('/register');
+  }
+  void goToRememberPage(){
+    Get.toNamed('/remember');
   }
   void login(BuildContext context) async{
     FocusManager.instance.primaryFocus?.unfocus();
@@ -64,16 +70,28 @@ class LoginController extends GetxController {
           List Error = res.result?.recordsets![1];
           Map detail = Error[0];
           Get.snackbar(
-              'Aviso: ',
-              detail['ERROR'],
-              colorText: Colors.white,
-              backgroundColor: Colors.red,
-              icon: const Icon(Icons.error_outline)
+            'Aviso: ',
+            detail['ERROR'],
+            colorText: Colors.white,
+            backgroundColor: Colors.red,
+            icon: const Icon(
+              Icons.error_outline,
+              color: Colors.white
+            )
           );
         }
       }else{
         hideLoadingDialog();
-        Get.snackbar('Error: ', 'Hubo un problema con el servidor');
+        Get.snackbar(
+          'Aviso: ',
+          'Revise su conexión a internet y vuelva a intentarlo.',
+          colorText: Colors.white,
+          backgroundColor: Colors.red,
+          icon: const Icon(
+            Icons.error_outline,
+            color: Colors.white
+          )
+        );
       }
     }else{
       hideLoadingDialog();
@@ -86,16 +104,43 @@ class LoginController extends GetxController {
   bool isValidForm(String email, String password){
 
     if(!GetUtils.isEmail(email)){
-      Get.snackbar('Error: ', 'El Email no es válido');
+      Get.snackbar(
+        'Aviso: ',
+        'El Email no es válido',
+        colorText: Colors.white,
+        backgroundColor: Colors.red,
+        icon: const Icon(
+          Icons.error_outline,
+          color: Colors.white
+        )
+      );
       return false;
     }
 
     if(email.isEmpty){
-      Get.snackbar('Error: ', 'Debe ingresar el Email.');
+      Get.snackbar(
+        'Aviso: ',
+        'Debe ingresar el Email',
+        colorText: Colors.white,
+        backgroundColor: Colors.red,
+        icon: const Icon(
+          Icons.error_outline,
+          color: Colors.white
+        )
+      );
       return false;
     }
     if(password.isEmpty){
-      Get.snackbar('Error: ', 'Debe ingresar la contraseña.');
+      Get.snackbar(
+        'Aviso: ',
+        'Debe ingresar la contraseña.',
+        colorText: Colors.white,
+        backgroundColor: Colors.red,
+        icon: const Icon(
+          Icons.error_outline,
+          color: Colors.white
+        )
+      );
       return false;
     }
     return true;

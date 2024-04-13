@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -19,6 +20,7 @@ class DatesController extends GetxController {
 
   var citaValoracion = {}.obs;
   var mostrarAgenda = '0'.obs;
+  var haveDates = false.obs;
 
   List<DateTime> diasDisponibles = <DateTime>[].obs;
   DateTime currentDate = DateTime.now().obs.value;
@@ -89,15 +91,26 @@ class DatesController extends GetxController {
         parametros: {});
     ResponseApi res = await jsonProvider.json(json);
 
-    if(res.res == 'ok'){
-      var dias = Dia.fromJsonList(res.result?.recordsets![0]);
+    if(res.res == 'ok') {
+    // print('res => ${res.result?.recordsets![0]}');
+    // Validar si hay citas
+    if(res.result?.recordsets![0]?.isNotEmpty ?? false) {
+      var dias = Dia.fromJsonList(res.result?.recordsets![0]!);
       diasDisponibles = dias.map((item) {
         DateTime date = DateTime.parse(item.dia!);
         return date;
       }).toList();
-      currentDate=diasDisponibles[0];
+      currentDate = diasDisponibles[0];
+      haveDates.value = true;
       
+    } else {
+      // No hay citas disponibles
+      if(kDebugMode){
+        print('No hay citas disponibles');
+      }
+      // Aquí puedes mostrar un mensaje de "No hay citas"
     }
+  }
     hideLoadingDialog();
   }
 
@@ -139,21 +152,50 @@ class DatesController extends GetxController {
       }
     );
 
-    print(json.toJson());
+    // print(json.toJson());
     ResponseApi res = await jsonProvider.json(json);
+    hideLoadingDialog();
 
     if(res.res == 'ok'){
-      hideLoadingDialog();
-      Get.snackbar('Cita agendada',
-        'Su cita ha sido agendada correctamente.',
-        colorText: Colors.white,
-        backgroundColor: Colors.green,
-        icon: const Icon(Icons.check)
-      );  
-      getStatus();
+      if(res.result?.recordset![0].ok == 'OK'){
+        Get.snackbar(
+          'Cita agendada',
+          'Su cita ha sido agendada correctamente.',
+          colorText: Colors.white,
+          backgroundColor: Colors.green,
+          icon: const Icon(
+            Icons.done,
+            color: Colors.white, // Color del icono
+          ),
+        );  
+        getStatus();
+      }else{
+        List error = res.result?.recordsets![1];
+        Map detail = error[0];
+        Get.snackbar(
+            'Aviso: ',
+            detail['ERROR'],
+            colorText: Colors.white,
+            backgroundColor: Colors.red,
+            icon: const Icon(
+              Icons.error_outline,
+              color: Colors.white, // Color del icono
+            ),
+        );
+      }
+
     }else{
       hideLoadingDialog();
-      Get.snackbar('Error', 'No se pudo agendar su cita');
+      Get.snackbar(
+        'Aviso: ',
+        'No se pudo agendar su cita',
+        colorText: Colors.white,
+        backgroundColor: Colors.red,
+        icon: const Icon(
+          Icons.error_outline,
+          color: Colors.white, // Color del icono
+        ),
+      );
     }
   }
   void getDates() async{
@@ -168,9 +210,9 @@ class DatesController extends GetxController {
     ResponseApi res = await jsonProvider.json(json);
     citas.clear();
     if(res.res == 'ok'){
-      print('[1] citas - citas => ${res.result?.recordsets![0]}');
+      // print('[1] citas - citas => ${res.result?.recordsets![0]}');
       var resu = Cita.fromJsonList(res.result?.recordsets![0]);
-      print('citas.length ${citas.length}');
+      // print('citas.length ${citas.length}');
 
       citas.clear();
       citas.addAll(resu);
@@ -186,7 +228,7 @@ class DatesController extends GetxController {
     // hideLoadingDialog();
   }
   void onCancelarCita(Cita cit) async{
-    print('cita => ${cit.toJson()}');
+    // print('cita => ${cit.toJson()}');
     showLoadingDialog();
     Json json = Json(
         modelo: 'VIVO_CIT',
@@ -206,23 +248,31 @@ class DatesController extends GetxController {
         'Se ha cancelado la cita exitosamente.',
         colorText: Colors.white,
         backgroundColor: Colors.green,
-        icon: const Icon(Icons.check)
+        icon: const Icon(
+          Icons.done,
+          color: Colors.white
+        )
       );  
+
       citas.clear();
       super.refresh();
       getStatus();
     }else{
-      Get.snackbar('Error',
+      Get.snackbar(
+        'Error',
         'No se pudo cancelar su cita.',
-        colorText: const Color.fromARGB(255, 253, 252, 252),
-        backgroundColor: const Color.fromARGB(255, 247, 0, 0),
-        icon: const Icon(Icons.error)
+        colorText: Colors.white,
+        backgroundColor: Colors.red,
+        icon: const Icon(
+          Icons.error_outline,
+          color: Colors.white
+        )
       );  
     }
   }
   
   Future<List<Cita>> getPlanes() async {
-    print('Devolviendo planes=> ${citas.toString()}');
+    // print('Devolviendo planes=> ${citas.toString()}');
     return citas;
   }
 }

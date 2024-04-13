@@ -303,7 +303,7 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-  Widget _planesCard(Planes plan, context){
+  Widget _planesCard2(Planes plan, context){
     final numberFormat = NumberFormat.currency(locale: 'es_MX', symbol:"\$");
     return Container(
       margin: const EdgeInsets.only(top: 20),
@@ -455,6 +455,88 @@ class HomePage extends StatelessWidget {
     );
 
   }
+  Widget _planesCard(Planes plan, context) {
+  final numberFormat = NumberFormat.currency(locale: 'es_MX', symbol: "\$");
+  return Container(
+    margin: const EdgeInsets.only(top: 20),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+      border: Border.all(width: 1, color: Colors.grey), // Borde de 1px
+    ),
+    child: Card(
+      color: const Color(0xFFe3f2fd),
+      margin: const EdgeInsets.all(0), // Sin margen para evitar superposiciones
+      clipBehavior: Clip.hardEdge,
+      child: Container(
+        padding: const EdgeInsets.all(10), // Padding interno
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text(
+              'Plan Asignado:',
+              style: TextStyle(
+                fontSize: 19,
+                color: Color(0xFF243588),
+                fontFamily: 'AvenirReg',
+              ),
+            ),
+            Text(
+              '${plan.descplan ?? ''} ${plan.idplan ?? ''}',
+              style: const TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.w900,
+                color: Color(0xFF243588),
+                fontFamily: 'AvenirReg',
+              ),
+            ),
+            Text(
+              'Inversión: ${numberFormat.format(plan.valor)}',
+              textAlign: TextAlign.left,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w300,
+                color: Color(0xFF243588),
+                fontFamily: 'AvenirBold',
+              ),
+            ),
+
+            const Divider(),
+            const Text(
+              'Enlace de pago:',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w300,
+                color: Color(0xFF243588),
+                fontFamily: 'AvenirReg',
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              child: TextButton(
+                onPressed: () {
+                  final Uri toLaunch = Uri(
+                    scheme: 'https',
+                    host: 'checkout.wompi.co',
+                    path: '/l/${plan.link}',
+                  );
+                  _launched = _launchInBrowser(toLaunch);
+                },
+                child: const Text(
+                  'Abrir enlace de pago',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w300,
+                    fontFamily: 'AvenirReg',
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
 
   Widget _textNotificaciones(BuildContext context){
     return Container(
@@ -836,135 +918,114 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-  Widget _cardDatosPersonales(BuildContext context){
-    return Container(
-      margin: const EdgeInsets.only(top: 20),
-      alignment: Alignment.center,
-      child: Card(
-        color: const Color(0xFFe3f2fd),
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-        clipBehavior: Clip.hardEdge,
-        child: Container(
-          decoration: const BoxDecoration(
-            border: Border.symmetric(
-                vertical: BorderSide(
-                    color: Color(0xFF243588),
-                    width: 5
-                )
-            ),
-          ),
-          child: Container(
-            margin: const EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Text(
-                    'Es hora de actualizar tus datos personales:',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w300,
-                      color: Color(0xFF243588),
-                      fontFamily: 'AvenirReg',
-                    )
-                ),
-                Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                              onPressed: () => { 
-                                Get.toNamed('/profile')
-                                // con.onSignatureHabeasData(context) 
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15)
-                              ),
-                              child: const Text(
-                                'Ir al perfil',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w300,
-                                  fontFamily: 'AvenirReg',
-                                ),
-                              )
-                          )
-                        ]
-                    )
-                )
-              ],
-            ),
-          ),
+  Widget _cardDatosPersonales(BuildContext context) {
+  return Container(
+    margin: const EdgeInsets.only(top: 20),
+    alignment: Alignment.center,
+    child: Card(
+      color: const Color(0xFFe3f2fd),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      clipBehavior: Clip.hardEdge,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: const BorderSide(
+          color: Color(0xFF243588),
+          width: 2,
         ),
       ),
-    );
-  }
-  Widget _cardCitaValoracion(BuildContext context){
-    return Container(
-      margin: const EdgeInsets.only(top: 20),
-      alignment: Alignment.center,
-      child: Card(
-        color: const Color(0xFFe3f2fd),
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-        clipBehavior: Clip.hardEdge,
-        child: Container(
-          decoration: const BoxDecoration(
-            border: Border.symmetric(
-                vertical: BorderSide(
-                    color: Color(0xFF243588),
-                    width: 5
-                )
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Text(
+              'Es hora de completar tus datos personales',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w300,
+                color: const Color(0xFF243588),
+                fontFamily: 'AvenirReg',
+              ),
+              textAlign: TextAlign.center,
             ),
-          ),
-          child: Container(
-            margin: const EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Text(
-                    'Agenda tu cita de Valoración para establecer el programa que mejor se adapte a tus necesidades.',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w300,
-                      color: Color(0xFF243588),
-                      fontFamily: 'AvenirReg',
-                    )
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => Get.toNamed('/profile'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                primary: const Color(0xFF243588),
+              ),
+              child: const Text(
+                'Ir al perfil',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w300,
+                  fontFamily: 'AvenirReg',
                 ),
-                Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                              onPressed: () => { 
-                                Get.toNamed('/dates')
-                                // con.onSignatureHabeasData(context) 
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15)
-                              ),
-                              child: const Text(
-                                'Ir a Citas',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w300,
-                                  fontFamily: 'AvenirReg',
-                                ),
-                              )
-                          )
-                        ]
-                    )
-                )
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
-    );
-  }
- 
+    ),
+  );
+}
+
+  Widget _cardCitaValoracion(BuildContext context) {
+  return Container(
+    margin: const EdgeInsets.only(top: 20),
+    alignment: Alignment.center,
+    child: Card(
+      color: const Color(0xFFe3f2fd),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      clipBehavior: Clip.hardEdge,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: const BorderSide(
+          color: Color(0xFF243588),
+          width: 1,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Text(
+              'Para continuar debes agendar una cita virtual sin costo',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w300,
+                color: const Color(0xFF243588),
+                fontFamily: 'AvenirReg',
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => Get.toNamed('/dates'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                primary: const Color(0xFF243588),
+              ),
+              child: const Text(
+                'Agendar Cita',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w300,
+                  fontFamily: 'AvenirReg',
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
   Widget _notificacionAcivated(BuildContext context){
     return
     Row(
